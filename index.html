@@ -224,6 +224,16 @@
   }
   .memory-note:hover .delete-btn { opacity: 1; }
   .memory-note .delete-btn:hover { color: var(--red-mid); }
+  .memory-note.starter-note {
+    border-style: solid;
+    border-color: var(--amber-mid);
+    background: var(--amber-bg);
+    opacity: 0.92;
+  }
+  .memory-note.starter-note:hover {
+    background: var(--amber-bg);
+    transform: none;
+  }
 
   .add-memory-form { display: flex; flex-direction: column; gap: 10px; }
   .add-memory-form input, .add-memory-form textarea {
@@ -593,24 +603,22 @@
   }
 
   /* ── MEMORIES ── */
-  const defaultMemories = [
-    { id: 'def1', emoji: '☕', text: 'She replied at 5:30am. I thought I was dreaming.', author: 'The team' },
-    { id: 'def2', emoji: '🛡️', text: 'Production was down. She said "we\'ve got this." And somehow, we did.', author: 'Crisis survivor' },
-    { id: 'def3', emoji: '🌙', text: 'Sunday 9pm Slack message. We thought it was a bot. It was her.', author: 'Confused dev' },
-    { id: 'def4', emoji: '🌱', text: 'She let me break things and never made me feel bad about it.', author: 'Grateful teammate' },
-    { id: 'def5', emoji: '🤗', text: '"How are YOU doing?" — she always asked first.', author: 'The whole team' },
-  ];
+  const starterNote = {
+    id: 'starter',
+    emoji: '✏️',
+    text: 'This wall is blank — your move! Write a memory below, add your name & an emoji, then hit Post it! (She\'d probably reply before you finish typing.)',
+    author: 'The wall',
+  };
 
   function renderMemories(mems) {
     const grid = document.getElementById('memory-grid');
-    const all = [...defaultMemories, ...mems];
-    if (all.length === 0) { grid.innerHTML = '<div class="loading">No memories yet — be the first!</div>'; return; }
-    grid.innerHTML = all.map(m => `
-      <div class="memory-note">
+    const notes = mems.length === 0 ? [starterNote] : mems;
+    grid.innerHTML = notes.map(m => `
+      <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}">
         <span class="note-emoji">${m.emoji || '💛'}</span>
         ${escHtml(m.text)}
         <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
-        ${!defaultMemories.find(d=>d.id===m.id) ? `<button class="delete-btn" onclick="deleteMemory('${m.id}')" title="Delete">✕</button>` : ''}
+        ${m.id !== 'starter' ? `<button class="delete-btn" onclick="deleteMemory('${m.id}')" title="Delete">✕</button>` : ''}
       </div>`).join('');
   }
 
