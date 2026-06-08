@@ -389,9 +389,7 @@
     outline: none;
   }
   .memory-wall-toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+    display: none;
   }
   .clear-wall-btn {
     font-family: 'Nunito', sans-serif;
@@ -968,7 +966,7 @@
   <div class="player-bar">
     <label for="player-name">Your name</label>
     <input type="text" id="player-name" placeholder="Required to post, edit & vote" maxlength="30" oninput="savePlayerName()"/>
-    <span class="player-hint">Saved on this device — used for memories, votes & goodbye wishes.</span>
+    <span class="player-hint">We remember your name on this browser — so yes, she'll know it was you. No hiding."</span>
   </div>
 
   <!-- TABS -->
@@ -1295,9 +1293,6 @@
     const grid = document.getElementById('memory-grid');
     const realNotes = stripLegacyDefaults(mems);
     const notes = realNotes.length === 0 ? [starterNote] : realNotes;
-    const toolbar = document.getElementById('memory-toolbar');
-    toolbar.style.display = realNotes.length > 0 ? 'flex' : 'none';
-
     grid.innerHTML = notes.map(m => `
       <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}" data-id="${escAttr(m.id)}">
         <span class="note-emoji">${m.emoji || '💛'}</span>
