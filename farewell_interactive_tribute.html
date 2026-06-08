@@ -1,0 +1,551 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { font-family: 'Caveat', cursive; }
+
+  .wrap {
+    background: #fffef7;
+    border: 2.5px solid #2C2C2A;
+    border-radius: 14px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .hero {
+    background: #EEEDFE;
+    border-bottom: 2px solid #AFA9EC;
+    padding: 28px 32px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #26215C;
+    line-height: 1.1;
+  }
+  .hero-sub {
+    font-size: 19px;
+    color: #534AB7;
+    margin-top: 6px;
+  }
+  .confetti-btn {
+    margin-top: 14px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 9px 28px;
+    border: 2.5px solid #26215C;
+    border-radius: 999px;
+    background: #fffef7;
+    color: #26215C;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .confetti-btn:hover { background: #CECBF6; transform: scale(1.04); }
+  .confetti-btn:active { transform: scale(0.97); }
+
+  .canvas-wrap {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.4s ease;
+  }
+  #confetti-canvas { display: block; }
+
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #D3D1C7;
+    background: #fffef7;
+  }
+  .tab {
+    flex: 1;
+    padding: 13px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 600;
+    color: #888780;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab:hover { color: #534AB7; }
+  .tab.active { color: #26215C; border-bottom: 3px solid #534AB7; }
+
+  .tab-content { display: none; padding: 24px 28px; }
+  .tab-content.active { display: block; }
+
+  .memory-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .memory-card {
+    border: 2px dashed #AFA9EC;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fffef7;
+    font-size: 16px;
+    color: #26215C;
+    font-family: 'Caveat', cursive;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+    position: relative;
+  }
+  .memory-card:hover { background: #EEEDFE; transform: rotate(-1deg) scale(1.02); }
+  .memory-card .card-emoji { font-size: 26px; display: block; margin-bottom: 6px; }
+  .memory-card .card-label { font-size: 13px; color: #888780; margin-top: 6px; display: block; }
+
+  .memory-input-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .memory-input-row input {
+    flex: 1;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    padding: 9px 14px;
+    border: 2px solid #AFA9EC;
+    border-radius: 8px;
+    background: #fffef7;
+    color: #26215C;
+    outline: none;
+  }
+  .memory-input-row input:focus { border-color: #534AB7; }
+  .memory-input-row button {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 9px 20px;
+    border: 2px solid #26215C;
+    border-radius: 8px;
+    background: #EEEDFE;
+    color: #26215C;
+    cursor: pointer;
+  }
+  .memory-input-row button:hover { background: #CECBF6; }
+
+  .trait-section { margin-bottom: 18px; }
+  .trait-title { font-size: 22px; font-weight: 700; color: #2C2C2A; margin-bottom: 12px; }
+  .trait-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .trait-chip {
+    padding: 6px 18px;
+    border-radius: 999px;
+    border: 2px solid;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.15s;
+    user-select: none;
+  }
+  .trait-chip:hover { transform: scale(1.08); }
+  .trait-chip.voted { opacity: 0.55; }
+  .trait-chip .vote-count { font-size: 13px; margin-left: 4px; }
+
+  .farewell-msg-box {
+    background: #E1F5EE;
+    border: 2px dashed #0F6E56;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+    font-size: 22px;
+    color: #04342C;
+    line-height: 1.5;
+    min-height: 80px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .farewell-msg-box:hover { background: #9FE1CB; }
+  .refresh-hint { font-size: 14px; color: #888780; text-align: center; margin-bottom: 10px; }
+
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: #D3D1C7;
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .tl-item:hover { transform: translateX(4px); }
+  .tl-dot {
+    position: absolute;
+    left: -22px;
+    top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2.5px solid #2C2C2A;
+  }
+  .tl-time { font-size: 13px; color: #888780; }
+  .tl-text { font-size: 19px; color: #2C2C2A; line-height: 1.3; }
+  .tl-detail {
+    font-size: 15px;
+    color: #534AB7;
+    margin-top: 4px;
+    display: none;
+    font-style: italic;
+  }
+  .tl-item.open .tl-detail { display: block; }
+
+  .chaos-meter {
+    text-align: center;
+    padding: 10px 0;
+  }
+  .chaos-title { font-size: 24px; font-weight: 700; color: #A32D2D; margin-bottom: 6px; }
+  .chaos-sub { font-size: 16px; color: #888780; margin-bottom: 18px; }
+  .meter-bar-wrap {
+    background: #F1EFE8;
+    border: 2px solid #D3D1C7;
+    border-radius: 999px;
+    height: 32px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .meter-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: #E24B4A;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: #fffef7;
+    font-weight: 700;
+    min-width: 40px;
+  }
+  .chaos-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px 28px;
+    border: 2.5px solid #A32D2D;
+    border-radius: 999px;
+    background: #FCEBEB;
+    color: #A32D2D;
+    cursor: pointer;
+    margin: 8px 4px 0;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .chaos-btn:hover { background: #F7C1C1; transform: scale(1.05); }
+  .chaos-msg { font-size: 18px; color: #A32D2D; margin-top: 12px; min-height: 28px; font-style: italic; }
+
+  .goodbye-card {
+    background: #FBEAF0;
+    border: 2.5px solid #D4537E;
+    border-radius: 12px;
+    padding: 22px 28px;
+    text-align: center;
+  }
+  .goodbye-title { font-size: 32px; font-weight: 700; color: #4B1528; margin-bottom: 10px; }
+  .goodbye-body { font-size: 20px; color: #72243E; line-height: 1.6; margin-bottom: 16px; }
+  .goodbye-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 14px; }
+  .gtag {
+    padding: 5px 16px;
+    border-radius: 999px;
+    border: 2px solid;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .send-love-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 11px 32px;
+    border: 2.5px solid #4B1528;
+    border-radius: 999px;
+    background: #fffef7;
+    color: #4B1528;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .send-love-btn:hover { background: #F4C0D1; transform: scale(1.04); }
+  .love-sent { font-size: 22px; color: #993556; margin-top: 12px; min-height: 30px; }
+</style>
+
+<h2 class="sr-only">An interactive farewell tribute for our lead — with memory wall, trait voting, a chaos meter, and a goodbye card.</h2>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-title">Farewell, Our Lead!</div>
+    <div class="hero-sub">From offshore US to our hearts — always, always there</div>
+    <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
+    <div class="canvas-wrap" id="canvas-wrap">
+      <canvas id="confetti-canvas"></canvas>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('memories')">Memory Wall</button>
+    <button class="tab" onclick="switchTab('traits')">Her Superpowers</button>
+    <button class="tab" onclick="switchTab('timeline')">Her Day</button>
+    <button class="tab" onclick="switchTab('chaos')">Chaos Meter</button>
+    <button class="tab" onclick="switchTab('goodbye')">Goodbye</button>
+  </div>
+
+  <div class="tab-content active" id="tab-memories">
+    <div class="memory-wall" id="memory-wall">
+      <div class="memory-card"><span class="card-emoji">☕</span>"She replied at 5:30am. I thought I was dreaming."<span class="card-label">— the team</span></div>
+      <div class="memory-card"><span class="card-emoji">🛡️</span>"Production was down. She said 'we've got this.' And somehow, we did."<span class="card-label">— crisis survivor</span></div>
+      <div class="memory-card"><span class="card-emoji">🌙</span>"Sunday 9pm Slack message. We thought it was a bot. It was her."<span class="card-label">— confused dev</span></div>
+      <div class="memory-card"><span class="card-emoji">🌱</span>"She let me break things and never made me feel bad about it."<span class="card-label">— grateful teammate</span></div>
+      <div class="memory-card"><span class="card-emoji">🤗</span>"'How are YOU doing?' — she always asked first."<span class="card-label">— the whole team</span></div>
+      <div class="memory-card"><span class="card-emoji">🏖️</span>"Never on PTO. Or if she was, we couldn't tell."<span class="card-label">— suspicious colleague</span></div>
+    </div>
+    <div class="memory-input-row">
+      <input id="memory-input" type="text" placeholder="Add your own memory..." maxlength="80" />
+      <button onclick="addMemory()">Post it!</button>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-traits">
+    <div class="trait-section">
+      <div class="trait-title">Vote for her superpowers</div>
+      <div class="trait-grid" id="trait-grid"></div>
+    </div>
+    <div id="top-trait" style="margin-top:18px; font-size:18px; color:#534AB7; font-style:italic;"></div>
+  </div>
+
+  <div class="tab-content" id="tab-timeline">
+    <div style="font-size:20px; font-weight:700; color:#2C2C2A; margin-bottom:14px;">A day in her life (tap each to reveal)</div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+
+  <div class="tab-content" id="tab-chaos">
+    <div class="chaos-meter">
+      <div class="chaos-title">Team Chaos Level Without Her</div>
+      <div class="chaos-sub">Click to simulate what happens when she's gone</div>
+      <div class="meter-bar-wrap"><div class="meter-bar" id="meter-bar" style="width:5%">5%</div></div>
+      <div style="display:flex; justify-content:space-between; font-size:13px; color:#888780; margin-bottom:10px;"><span>Chill</span><span>Full meltdown</span></div>
+      <button class="chaos-btn" onclick="raiseChoas()">Something broke!</button>
+      <button class="chaos-btn" onclick="raiseChoas()">Need her opinion!</button>
+      <button class="chaos-btn" onclick="raiseChoas()">It's Sunday evening...</button>
+      <button class="chaos-btn" onclick="resetChaos()" style="border-color:#085041; background:#E1F5EE; color:#04342C;">She would have fixed this</button>
+      <div class="chaos-msg" id="chaos-msg"></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-goodbye">
+    <div class="goodbye-card">
+      <div class="goodbye-title">To the best lead we ever had</div>
+      <div class="goodbye-body">You showed up every single day — sometimes at 5am, sometimes on Sunday nights — not because you had to, but because that's just who you are. You gave us space to grow, stayed calm when we couldn't, and always made us feel seen. The team is going to miss you more than words can say. And also more than any Slack message can capture.</div>
+      <div class="goodbye-tags">
+        <span class="gtag" style="background:#E1F5EE; border-color:#0F6E56; color:#04342C;">Always available</span>
+        <span class="gtag" style="background:#EEEDFE; border-color:#534AB7; color:#26215C;">Calm under fire</span>
+        <span class="gtag" style="background:#FAEEDA; border-color:#BA7517; color:#412402;">Hard working</span>
+        <span class="gtag" style="background:#FBEAF0; border-color:#D4537E; color:#4B1528;">Truly caring</span>
+        <span class="gtag" style="background:#E1F5EE; border-color:#1D9E75; color:#04342C;">Southern warmth</span>
+      </div>
+      <button class="send-love-btn" onclick="sendLove()">Send her love!</button>
+      <div class="love-sent" id="love-sent"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const traits = [
+    { label: "Always available", color: "teal", votes: 14 },
+    { label: "Calm under pressure", color: "purple", votes: 11 },
+    { label: "Super supportive", color: "pink", votes: 9 },
+    { label: "Hard working", color: "amber", votes: 8 },
+    { label: "Never micro-manages", color: "teal", votes: 7 },
+    { label: "Genuinely caring", color: "pink", votes: 12 },
+    { label: "Gives full trust", color: "purple", votes: 6 },
+    { label: "Replies at 5am", color: "amber", votes: 5 },
+    { label: "Southern warmth", color: "coral", votes: 10 },
+  ];
+  const traitColors = {
+    teal: { bg: "#E1F5EE", border: "#085041", color: "#04342C" },
+    purple: { bg: "#EEEDFE", border: "#534AB7", color: "#26215C" },
+    pink: { bg: "#FBEAF0", border: "#993556", color: "#4B1528" },
+    amber: { bg: "#FAEEDA", border: "#BA7517", color: "#412402" },
+    coral: { bg: "#FAECE7", border: "#993C1D", color: "#4A1B0C" },
+  };
+
+  const tlItems = [
+    { time: "5:00am", text: "Wakes up. Checks phone. Team already has 3 messages.", detail: "Most people check Wordle. She checked Slack.", dot: "#7F77DD" },
+    { time: "6:00am", text: "Already reviewing pull requests. Coffee in one hand.", detail: "The PRs were thorough. The coffee was probably cold by then.", dot: "#5DCAA5" },
+    { time: "9:00am", text: "Team standup. She asks 'how are you' and means it.", detail: "Not the usual 'how are you'. The real kind.", dot: "#EF9F27" },
+    { time: "1:00pm", text: "Someone breaks production. She's already on it.", detail: "'It's fine, we've got this.' Calmest person in the room.", dot: "#D4537E" },
+    { time: "6:00pm", text: "Signs off... briefly. Checks in one more time at 8pm.", detail: "Just to make sure everyone's okay. That's who she is.", dot: "#7F77DD" },
+    { time: "Sunday 9pm", text: "Back online. Prepping for the week. Sends a 'good evening!' to the team.", detail: "No one asked her to. She just cared that much.", dot: "#5DCAA5" },
+  ];
+
+  const chaosMessages = [
+    "Who do we ping now?!",
+    "Team panic level: ELEVATED",
+    "Checked 3 times. She's really gone.",
+    "Someone called a meeting. It lasted 2 hours. Nothing resolved.",
+    "We just replied-all on an email. She would have stopped us.",
+    "The PRs are piling up... who approves them??",
+    "Someone said 'it's fine' but it is NOT fine.",
+    "We miss her calm energy SO much right now.",
+    "FULL TEAM MELTDOWN IMMINENT",
+  ];
+  const loveMessages = [
+    "Love sent straight to her heart!",
+    "She felt that from across the timezone!",
+    "That's a lot of love. She deserves every bit.",
+    "Sending it all the way to the US South!",
+    "She'd probably say 'y'all are too sweet!'",
+  ];
+
+  let chaosLevel = 5;
+  let chaosIndex = 0;
+
+  function switchTab(name) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const tabs = document.querySelectorAll('.tab');
+    const map = ['memories','traits','timeline','chaos','goodbye'];
+    tabs[map.indexOf(name)].classList.add('active');
+  }
+
+  function addMemory() {
+    const input = document.getElementById('memory-input');
+    const val = input.value.trim();
+    if (!val) return;
+    const card = document.createElement('div');
+    card.className = 'memory-card';
+    card.innerHTML = '<span class="card-emoji">💛</span>' + val + '<span class="card-label">— you</span>';
+    document.getElementById('memory-wall').appendChild(card);
+    input.value = '';
+  }
+
+  function buildTraits() {
+    const grid = document.getElementById('trait-grid');
+    traits.forEach((t, i) => {
+      const c = traitColors[t.color];
+      const btn = document.createElement('button');
+      btn.className = 'trait-chip';
+      btn.id = 'trait-' + i;
+      btn.style.background = c.bg;
+      btn.style.borderColor = c.border;
+      btn.style.color = c.color;
+      btn.innerHTML = t.label + ' <span class="vote-count" id="vc-'+i+'">'+t.votes+'</span>';
+      btn.onclick = () => voteFor(i);
+      grid.appendChild(btn);
+    });
+    updateTopTrait();
+  }
+
+  function voteFor(i) {
+    traits[i].votes++;
+    document.getElementById('vc-' + i).textContent = traits[i].votes;
+    document.getElementById('trait-' + i).classList.add('voted');
+    setTimeout(() => document.getElementById('trait-' + i).classList.remove('voted'), 500);
+    updateTopTrait();
+  }
+
+  function updateTopTrait() {
+    const top = traits.reduce((a, b) => a.votes > b.votes ? a : b);
+    document.getElementById('top-trait').textContent = 'Top superpower right now: "' + top.label + '" (' + top.votes + ' votes)';
+  }
+
+  function buildTimeline() {
+    const tl = document.getElementById('timeline');
+    tlItems.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'tl-item';
+      div.innerHTML = '<div class="tl-dot" style="background:' + item.dot + '; border-color:' + item.dot + ';"></div><div class="tl-time">' + item.time + '</div><div class="tl-text">' + item.text + '</div><div class="tl-detail">' + item.detail + '</div>';
+      div.onclick = () => div.classList.toggle('open');
+      tl.appendChild(div);
+    });
+  }
+
+  function raiseChoas() {
+    chaosLevel = Math.min(100, chaosLevel + Math.floor(Math.random() * 18) + 8);
+    const bar = document.getElementById('meter-bar');
+    bar.style.width = chaosLevel + '%';
+    bar.textContent = chaosLevel + '%';
+    if (chaosLevel >= 90) bar.style.background = '#A32D2D';
+    else if (chaosLevel >= 60) bar.style.background = '#D85A30';
+    else bar.style.background = '#E24B4A';
+    document.getElementById('chaos-msg').textContent = chaosMessages[Math.min(chaosIndex, chaosMessages.length - 1)];
+    chaosIndex++;
+  }
+
+  function resetChaos() {
+    chaosLevel = 5;
+    chaosIndex = 0;
+    const bar = document.getElementById('meter-bar');
+    bar.style.width = '5%';
+    bar.style.background = '#E24B4A';
+    bar.textContent = '5%';
+    document.getElementById('chaos-msg').textContent = 'She fixed it. Somehow. From the past.';
+  }
+
+  function sendLove() {
+    const msg = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+    document.getElementById('love-sent').textContent = msg;
+  }
+
+  function launchConfetti() {
+    const wrap = document.getElementById('canvas-wrap');
+    const canvas = document.getElementById('confetti-canvas');
+    wrap.style.height = '120px';
+    canvas.width = wrap.offsetWidth || 600;
+    canvas.height = 120;
+    const ctx = canvas.getContext('2d');
+    const pieces = [];
+    const colors = ['#534AB7','#D4537E','#1D9E75','#EF9F27','#D85A30','#7F77DD','#5DCAA5'];
+    for (let i = 0; i < 80; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * -60,
+        w: Math.random() * 10 + 5,
+        h: Math.random() * 6 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * 360,
+        vx: (Math.random() - 0.5) * 2,
+        vy: Math.random() * 2 + 1.5,
+        vr: (Math.random() - 0.5) * 6,
+      });
+    }
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+      });
+      frame++;
+      if (frame < 90) requestAnimationFrame(draw);
+      else {
+        setTimeout(() => { wrap.style.height = '0'; }, 400);
+      }
+    }
+    draw();
+  }
+
+  buildTraits();
+  buildTimeline();
+</script>
