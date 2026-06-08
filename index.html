@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Farewell, Our Lead!</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream: #fffef7;
+    --ink: #2C2C2A;
+    --muted: #888780;
+    --border: #D3D1C7;
+    --purple-bg: #EEEDFE;
+    --purple-mid: #534AB7;
+    --purple-dark: #26215C;
+    --teal-bg: #E1F5EE;
+    --teal-mid: #0F6E56;
+    --teal-dark: #04342C;
+    --pink-bg: #FBEAF0;
+    --pink-mid: #993556;
+    --pink-dark: #4B1528;
+    --amber-bg: #FAEEDA;
+    --amber-mid: #BA7517;
+    --amber-dark: #412402;
+    --coral-bg: #FAECE7;
+    --coral-mid: #993C1D;
+    --red-bg: #FCEBEB;
+    --red-mid: #A32D2D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    background-image: radial-gradient(circle, #D3D1C7 1px, transparent 1px);
+    background-size: 28px 28px;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    color: var(--ink);
+  }
+
+  .container { max-width: 760px; margin: 0 auto; }
+
+  /* HERO */
+  .hero {
+    background: var(--purple-bg);
+    border: 2.5px solid var(--purple-dark);
+    border-radius: 16px;
+    padding: 36px 32px 28px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '★ ★ ★';
+    position: absolute;
+    top: 14px; right: 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--purple-mid);
+    opacity: 0.5;
+  }
+  .hero-title {
+    font-family: 'Caveat', cursive;
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--purple-mid);
+    margin-bottom: 20px;
+  }
+  .confetti-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 10px 32px;
+    border: 2.5px solid var(--purple-dark);
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--purple-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .confetti-btn:hover { background: #CECBF6; transform: scale(1.04); }
+  #confetti-canvas { display: block; width: 100%; height: 100px; margin-top: 0; }
+
+  /* SETUP BANNER */
+  .setup-banner {
+    background: var(--amber-bg);
+    border: 2px dashed var(--amber-mid);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: var(--amber-dark);
+    line-height: 1.6;
+  }
+  .setup-banner strong { font-weight: 700; }
+  .setup-banner code {
+    background: #fff;
+    border: 1px solid var(--amber-mid);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  .setup-banner a { color: var(--amber-mid); font-weight: 700; }
+  .api-input-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .api-input-row input {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--amber-mid);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    outline: none;
+  }
+  .api-input-row input:focus { border-color: var(--amber-dark); }
+  .api-save-btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border: 2px solid var(--amber-dark);
+    border-radius: 8px;
+    background: var(--amber-bg);
+    color: var(--amber-dark);
+    cursor: pointer;
+  }
+  .api-save-btn:hover { background: #FAC775; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab:hover { border-color: var(--purple-mid); color: var(--purple-mid); }
+  .tab.active { background: var(--purple-bg); border-color: var(--purple-mid); color: var(--purple-dark); }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* CARD */
+  .card {
+    background: var(--cream);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  /* MEMORY WALL */
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .memory-note {
+    background: var(--cream);
+    border: 2px dashed #AFA9EC;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.4;
+    position: relative;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .memory-note:hover { background: var(--purple-bg); transform: rotate(-1deg) scale(1.02); }
+  .memory-note .note-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+  .memory-note .note-author { font-size: 13px; color: var(--muted); margin-top: 8px; display: block; }
+  .memory-note .delete-btn {
+    position: absolute;
+    top: 8px; right: 10px;
+    font-size: 16px;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Caveat', cursive;
+    opacity: 0;
+    transition: opacity 0.15s;
+    padding: 2px 6px;
+  }
+  .memory-note:hover .delete-btn { opacity: 1; }
+  .memory-note .delete-btn:hover { color: var(--red-mid); }
+
+  .add-memory-form { display: flex; flex-direction: column; gap: 10px; }
+  .add-memory-form input, .add-memory-form textarea {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+  }
+  .add-memory-form input:focus, .add-memory-form textarea:focus { border-color: var(--purple-mid); }
+  .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .form-row input { flex: 1; min-width: 140px; }
+  .doodle-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    background: var(--teal-bg);
+    color: var(--teal-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .doodle-btn:hover { background: #9FE1CB; transform: scale(1.03); }
+  .doodle-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  .status-msg {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--teal-mid);
+    min-height: 22px;
+    margin-top: 4px;
+  }
+  .status-msg.error { color: var(--red-mid); }
+
+  /* TRAITS */
+  .trait-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .trait-chip {
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 2.5px solid;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .trait-chip:hover { transform: scale(1.07); }
+  .trait-chip .vc { font-size: 14px; opacity: 0.8; }
+  .top-trait-msg {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--purple-mid);
+    font-style: italic;
+    min-height: 24px;
+  }
+
+  /* TIMELINE */
+  .tl-wrap { position: relative; padding-left: 30px; }
+  .tl-wrap::before {
+    content: '';
+    position: absolute;
+    left: 11px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 22px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .tl-item:hover { transform: translateX(4px); }
+  .tl-dot {
+    position: absolute;
+    left: -24px; top: 5px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2.5px solid var(--ink);
+  }
+  .tl-time { font-family: 'Caveat', cursive; font-size: 13px; color: var(--muted); }
+  .tl-text { font-family: 'Caveat', cursive; font-size: 20px; color: var(--ink); }
+  .tl-reveal {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--purple-mid);
+    font-style: italic;
+    margin-top: 4px;
+    display: none;
+  }
+  .tl-item.open .tl-reveal { display: block; }
+
+  /* CHAOS */
+  .chaos-section { text-align: center; padding: 10px 0; }
+  .chaos-h { font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; color: var(--red-mid); margin-bottom: 6px; }
+  .chaos-sub { font-size: 15px; color: var(--muted); margin-bottom: 18px; }
+  .meter-wrap {
+    background: #F1EFE8;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    height: 36px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .meter-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: #E24B4A;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: white;
+    font-weight: 700;
+    min-width: 48px;
+  }
+  .meter-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .chaos-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .cbtn {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2.5px solid var(--red-mid);
+    border-radius: 999px;
+    background: var(--red-bg);
+    color: var(--red-mid);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .cbtn:hover { background: #F7C1C1; transform: scale(1.05); }
+  .cbtn.calm {
+    border-color: var(--teal-mid);
+    background: var(--teal-bg);
+    color: var(--teal-dark);
+  }
+  .cbtn.calm:hover { background: #9FE1CB; }
+  .chaos-msg { font-family: 'Caveat', cursive; font-size: 19px; color: var(--red-mid); margin-top: 14px; min-height: 28px; font-style: italic; }
+
+  /* GOODBYE */
+  .goodbye-card {
+    background: var(--pink-bg);
+    border: 2.5px solid var(--pink-mid);
+    border-radius: 14px;
+    padding: 28px 30px;
+    text-align: center;
+  }
+  .goodbye-title { font-family: 'Caveat', cursive; font-size: 36px; font-weight: 700; color: var(--pink-dark); margin-bottom: 12px; }
+  .goodbye-body { font-size: 18px; color: #72243E; line-height: 1.7; margin-bottom: 20px; }
+  .goodbye-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px; }
+  .gtag {
+    padding: 6px 18px;
+    border-radius: 999px;
+    border: 2px solid;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .love-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 12px 36px;
+    border: 2.5px solid var(--pink-dark);
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--pink-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .love-btn:hover { background: #F4C0D1; transform: scale(1.04); }
+  .love-sent { font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); margin-top: 12px; min-height: 28px; }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--muted);
+    padding: 32px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 500px) {
+    .hero-title { font-size: 38px; }
+    .memory-grid { grid-template-columns: 1fr; }
+    .tabs { gap: 4px; }
+    .tab { font-size: 16px; padding: 7px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-title">Farewell, Our Lead!</div>
+    <div class="hero-sub">From offshore US to our hearts — always, always there</div>
+    <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
+    <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
+  </div>
+
+  <!-- SETUP BANNER -->
+  <div class="setup-banner" id="setup-banner">
+    <strong>One-time setup needed!</strong> This page uses <a href="https://jsonbin.io" target="_blank">JSONBin.io</a> (free) to save memories for everyone.
+    <br/>Steps: 1) Create a free account at jsonbin.io &nbsp; 2) Go to API Keys → create one &nbsp; 3) Go to Bins → Create a new bin with <code>{"memories":[],"votes":{}}</code> &nbsp; 4) Copy your Bin ID and API key below.
+    <div class="api-input-row">
+      <input type="text" id="bin-id-input" placeholder="Bin ID (e.g. 64abc123...)" />
+      <input type="text" id="api-key-input" placeholder="API Key (X-Access-Key)" />
+      <button class="api-save-btn" onclick="saveConfig()">Save & Connect</button>
+    </div>
+    <div id="config-status" style="margin-top:8px; font-size:14px;"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('memories')">Memory Wall</button>
+    <button class="tab" onclick="switchTab('traits')">Her Superpowers</button>
+    <button class="tab" onclick="switchTab('timeline')">Her Day</button>
+    <button class="tab" onclick="switchTab('chaos')">Chaos Meter</button>
+    <button class="tab" onclick="switchTab('goodbye')">Goodbye</button>
+  </div>
+
+  <!-- MEMORY WALL -->
+  <div class="panel active" id="panel-memories">
+    <div class="card">
+      <div class="card-title">Memory Wall</div>
+      <div class="memory-grid" id="memory-grid">
+        <div class="loading">Loading memories...</div>
+      </div>
+      <div class="add-memory-form">
+        <textarea id="mem-text" rows="2" placeholder="Write your memory or message..."></textarea>
+        <div class="form-row">
+          <input type="text" id="mem-author" placeholder="Your name" maxlength="30"/>
+          <input type="text" id="mem-emoji" placeholder="Emoji (e.g. ☕)" maxlength="4"/>
+          <button class="doodle-btn" id="post-btn" onclick="postMemory()">Post it!</button>
+        </div>
+        <div class="status-msg" id="mem-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPERPOWERS -->
+  <div class="panel" id="panel-traits">
+    <div class="card">
+      <div class="card-title">Vote for her superpowers</div>
+      <div class="trait-grid" id="trait-grid"></div>
+      <div class="top-trait-msg" id="top-trait"></div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="panel" id="panel-timeline">
+    <div class="card">
+      <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">(tap each to reveal)</span></div>
+      <div class="tl-wrap" id="timeline"></div>
+    </div>
+  </div>
+
+  <!-- CHAOS -->
+  <div class="panel" id="panel-chaos">
+    <div class="card">
+      <div class="chaos-section">
+        <div class="chaos-h">Team Chaos Level Without Her</div>
+        <div class="chaos-sub">Click to simulate life without her calm energy</div>
+        <div class="meter-wrap"><div class="meter-fill" id="meter" style="width:5%">5%</div></div>
+        <div class="meter-labels"><span>Totally chill</span><span>Full meltdown</span></div>
+        <div class="chaos-btns">
+          <button class="cbtn" onclick="addChaos()">Something broke!</button>
+          <button class="cbtn" onclick="addChaos()">Need her opinion!</button>
+          <button class="cbtn" onclick="addChaos()">It's Sunday evening...</button>
+          <button class="cbtn" onclick="addChaos()">Who approves this PR?!</button>
+          <button class="cbtn calm" onclick="resetChaos()">She would've fixed this</button>
+        </div>
+        <div class="chaos-msg" id="chaos-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOODBYE -->
+  <div class="panel" id="panel-goodbye">
+    <div class="goodbye-card">
+      <div class="goodbye-title">To the best lead we ever had</div>
+      <div class="goodbye-body">You showed up every single day — sometimes at 5am, sometimes on Sunday nights — not because you had to, but because that's just who you are. You gave us space to grow, stayed calm when we couldn't, and always made us feel seen. The team will miss you more than words can say. And also more than any Slack message can capture.</div>
+      <div class="goodbye-tags">
+        <span class="gtag" style="background:var(--teal-bg);border-color:var(--teal-mid);color:var(--teal-dark);">Always available</span>
+        <span class="gtag" style="background:var(--purple-bg);border-color:var(--purple-mid);color:var(--purple-dark);">Calm under fire</span>
+        <span class="gtag" style="background:var(--amber-bg);border-color:var(--amber-mid);color:var(--amber-dark);">Hard working</span>
+        <span class="gtag" style="background:var(--pink-bg);border-color:var(--pink-mid);color:var(--pink-dark);">Truly caring</span>
+        <span class="gtag" style="background:var(--teal-bg);border-color:var(--teal-mid);color:var(--teal-dark);">Southern warmth</span>
+      </div>
+      <button class="love-btn" onclick="sendLove()">Send her love!</button>
+      <div class="love-sent" id="love-sent"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ── CONFIG ── */
+  const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
+  let BIN_ID = localStorage.getItem('farewell_bin_id') || '';
+  let API_KEY = localStorage.getItem('farewell_api_key') || '';
+
+  function saveConfig() {
+    BIN_ID = document.getElementById('bin-id-input').value.trim();
+    API_KEY = document.getElementById('api-key-input').value.trim();
+    if (!BIN_ID || !API_KEY) { document.getElementById('config-status').textContent = 'Please fill in both fields.'; return; }
+    localStorage.setItem('farewell_bin_id', BIN_ID);
+    localStorage.setItem('farewell_api_key', API_KEY);
+    document.getElementById('config-status').style.color = 'green';
+    document.getElementById('config-status').textContent = 'Connected! Loading data...';
+    document.getElementById('setup-banner').style.display = 'none';
+    loadData();
+  }
+
+  function checkConfig() {
+    if (BIN_ID && API_KEY) {
+      document.getElementById('setup-banner').style.display = 'none';
+    } else {
+      document.getElementById('bin-id-input').value = BIN_ID;
+      document.getElementById('api-key-input').value = API_KEY;
+    }
+  }
+
+  /* ── DATA ── */
+  let appData = { memories: [], votes: {} };
+
+  async function loadData() {
+    if (!BIN_ID || !API_KEY) { renderMemories([]); return; }
+    try {
+      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`, {
+        headers: { 'X-Access-Key': API_KEY }
+      });
+      const j = await r.json();
+      appData = j.record || { memories: [], votes: {} };
+      if (!appData.memories) appData.memories = [];
+      if (!appData.votes) appData.votes = {};
+      renderMemories(appData.memories);
+      renderVotes();
+    } catch(e) {
+      document.getElementById('memory-grid').innerHTML = '<div class="loading" style="color:var(--red-mid)">Could not load data. Check your Bin ID and API Key.</div>';
+    }
+  }
+
+  async function saveData() {
+    if (!BIN_ID || !API_KEY) return;
+    await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
+      body: JSON.stringify(appData)
+    });
+  }
+
+  /* ── MEMORIES ── */
+  const defaultMemories = [
+    { id: 'def1', emoji: '☕', text: 'She replied at 5:30am. I thought I was dreaming.', author: 'The team' },
+    { id: 'def2', emoji: '🛡️', text: 'Production was down. She said "we\'ve got this." And somehow, we did.', author: 'Crisis survivor' },
+    { id: 'def3', emoji: '🌙', text: 'Sunday 9pm Slack message. We thought it was a bot. It was her.', author: 'Confused dev' },
+    { id: 'def4', emoji: '🌱', text: 'She let me break things and never made me feel bad about it.', author: 'Grateful teammate' },
+    { id: 'def5', emoji: '🤗', text: '"How are YOU doing?" — she always asked first.', author: 'The whole team' },
+  ];
+
+  function renderMemories(mems) {
+    const grid = document.getElementById('memory-grid');
+    const all = [...defaultMemories, ...mems];
+    if (all.length === 0) { grid.innerHTML = '<div class="loading">No memories yet — be the first!</div>'; return; }
+    grid.innerHTML = all.map(m => `
+      <div class="memory-note">
+        <span class="note-emoji">${m.emoji || '💛'}</span>
+        ${escHtml(m.text)}
+        <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
+        ${!defaultMemories.find(d=>d.id===m.id) ? `<button class="delete-btn" onclick="deleteMemory('${m.id}')" title="Delete">✕</button>` : ''}
+      </div>`).join('');
+  }
+
+  async function postMemory() {
+    const text = document.getElementById('mem-text').value.trim();
+    const author = document.getElementById('mem-author').value.trim() || 'Anonymous';
+    const emoji = document.getElementById('mem-emoji').value.trim() || '💛';
+    if (!text) { setStatus('mem-status', 'Write something first!', true); return; }
+    const btn = document.getElementById('post-btn');
+    btn.disabled = true;
+    setStatus('mem-status', 'Saving...');
+    const mem = { id: 'u_' + Date.now(), emoji, text, author };
+    appData.memories.push(mem);
+    await saveData();
+    renderMemories(appData.memories);
+    document.getElementById('mem-text').value = '';
+    document.getElementById('mem-emoji').value = '';
+    setStatus('mem-status', 'Posted!');
+    btn.disabled = false;
+    setTimeout(() => setStatus('mem-status', ''), 2000);
+  }
+
+  async function deleteMemory(id) {
+    if (!confirm('Delete this memory?')) return;
+    appData.memories = appData.memories.filter(m => m.id !== id);
+    await saveData();
+    renderMemories(appData.memories);
+  }
+
+  /* ── TRAITS / VOTES ── */
+  const traits = [
+    { key: 'available', label: 'Always available', bg:'var(--teal-bg)', border:'var(--teal-mid)', color:'var(--teal-dark)' },
+    { key: 'calm', label: 'Calm under pressure', bg:'var(--purple-bg)', border:'var(--purple-mid)', color:'var(--purple-dark)' },
+    { key: 'support', label: 'Super supportive', bg:'var(--pink-bg)', border:'var(--pink-mid)', color:'var(--pink-dark)' },
+    { key: 'hardwork', label: 'Hard working', bg:'var(--amber-bg)', border:'var(--amber-mid)', color:'var(--amber-dark)' },
+    { key: 'trust', label: 'Gives full trust', bg:'var(--purple-bg)', border:'var(--purple-mid)', color:'var(--purple-dark)' },
+    { key: 'caring', label: 'Genuinely caring', bg:'var(--pink-bg)', border:'var(--pink-mid)', color:'var(--pink-dark)' },
+    { key: 'nomicro', label: 'Never micro-manages', bg:'var(--teal-bg)', border:'var(--teal-mid)', color:'var(--teal-dark)' },
+    { key: 'warmth', label: 'Southern warmth', bg:'var(--coral-bg)', border:'var(--coral-mid)', color:'#4A1B0C' },
+  ];
+
+  function buildTraitGrid() {
+    const grid = document.getElementById('trait-grid');
+    grid.innerHTML = traits.map(t => `
+      <button class="trait-chip" id="chip-${t.key}" onclick="voteFor('${t.key}')"
+        style="background:${t.bg};border-color:${t.border};color:${t.color}">
+        ${t.label} <span class="vc" id="vc-${t.key}">0</span>
+      </button>`).join('');
+  }
+
+  function renderVotes() {
+    traits.forEach(t => {
+      const el = document.getElementById('vc-' + t.key);
+      if (el) el.textContent = appData.votes[t.key] || 0;
+    });
+    updateTopTrait();
+  }
+
+  async function voteFor(key) {
+    appData.votes[key] = (appData.votes[key] || 0) + 1;
+    renderVotes();
+    await saveData();
+  }
+
+  function updateTopTrait() {
+    const top = traits.reduce((a, b) => (appData.votes[b.key]||0) > (appData.votes[a.key]||0) ? b : a);
+    const count = appData.votes[top.key] || 0;
+    document.getElementById('top-trait').textContent = count > 0
+      ? `Top superpower: "${top.label}" (${count} votes)`
+      : 'Vote for her superpowers above!';
+  }
+
+  /* ── TIMELINE ── */
+  const tlData = [
+    { time: '5:00am', text: 'Wakes up. Checks phone. Team already has messages.', reveal: 'Most people check Wordle. She checked Slack.', dot: '#7F77DD' },
+    { time: '6:00am', text: 'Reviewing pull requests. Coffee in hand (probably cold).', reveal: 'Thorough reviews. Warm feedback. Always.', dot: '#5DCAA5' },
+    { time: '9:00am', text: 'Standup. She asks "how are you" and genuinely means it.', reveal: 'Not the usual kind. The real kind.', dot: '#EF9F27' },
+    { time: '1:00pm', text: 'Something breaks. She\'s already on it before you panic.', reveal: '"It\'s fine, we\'ve got this." Calmest person alive.', dot: '#D4537E' },
+    { time: '6:00pm', text: 'Signs off... but checks in once more at 8pm.', reveal: 'Just to make sure everyone\'s okay. That\'s who she is.', dot: '#7F77DD' },
+    { time: 'Sunday 9pm', text: 'Back online. Preps for the week. Says "good evening!" to the team.', reveal: 'No one asked her to. She just cared that much.', dot: '#5DCAA5' },
+  ];
+
+  function buildTimeline() {
+    const tl = document.getElementById('timeline');
+    tl.innerHTML = tlData.map((item, i) => `
+      <div class="tl-item" onclick="this.classList.toggle('open')">
+        <div class="tl-dot" style="background:${item.dot};border-color:${item.dot};"></div>
+        <div class="tl-time">${item.time}</div>
+        <div class="tl-text">${item.text}</div>
+        <div class="tl-reveal">${item.reveal}</div>
+      </div>`).join('');
+  }
+
+  /* ── CHAOS ── */
+  const chaosMsgs = [
+    'Who do we ping now?!', 'Team panic: ELEVATED', 'She\'s really gone... isn\'t she.',
+    'Someone replied-all on an email. She would have stopped this.', 'The PRs are piling up...',
+    'We called a 2hr meeting. Nothing resolved.', 'Someone said "it\'s fine". It is NOT fine.',
+    'We miss her calm energy SO much right now.', 'FULL TEAM MELTDOWN IMMINENT'
+  ];
+  let chaosLevel = 5, chaosIdx = 0;
+
+  function addChaos() {
+    chaosLevel = Math.min(100, chaosLevel + Math.floor(Math.random() * 16) + 8);
+    updateMeter();
+    document.getElementById('chaos-msg').textContent = chaosMsgs[Math.min(chaosIdx++, chaosMsgs.length-1)];
+  }
+  function resetChaos() {
+    chaosLevel = 5; chaosIdx = 0;
+    updateMeter();
+    document.getElementById('chaos-msg').textContent = 'She fixed it. Somehow. From the past.';
+  }
+  function updateMeter() {
+    const m = document.getElementById('meter');
+    m.style.width = chaosLevel + '%';
+    m.textContent = chaosLevel + '%';
+    m.style.background = chaosLevel >= 80 ? '#791F1F' : chaosLevel >= 55 ? '#D85A30' : '#E24B4A';
+  }
+
+  /* ── LOVE ── */
+  const loveMsgs = [
+    'Love sent straight to her heart!', 'She felt that from across the timezone!',
+    'That\'s a lot of love. She deserves every bit.', 'Sending it all the way to the US South!',
+    'She\'d probably say "y\'all are too sweet!"'
+  ];
+  function sendLove() {
+    document.getElementById('love-sent').textContent = loveMsgs[Math.floor(Math.random() * loveMsgs.length)];
+  }
+
+  /* ── CONFETTI ── */
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.style.display = 'block';
+    canvas.width = canvas.offsetWidth;
+    const ctx = canvas.getContext('2d');
+    const colors = ['#534AB7','#D4537E','#1D9E75','#EF9F27','#D85A30','#7F77DD','#5DCAA5'];
+    const pieces = Array.from({length: 90}, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * -80,
+      w: Math.random()*10+5, h: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*360, vx: (Math.random()-.5)*2,
+      vy: Math.random()*2+1.5, vr: (Math.random()-.5)*6
+    }));
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      pieces.forEach(p => {
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+        p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+      });
+      if (++frame < 100) requestAnimationFrame(draw);
+      else { setTimeout(()=>{ canvas.style.display='none'; }, 300); }
+    }
+    draw();
+  }
+
+  /* ── TABS ── */
+  function switchTab(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    const map = ['memories','traits','timeline','chaos','goodbye'];
+    document.querySelectorAll('.tab')[map.indexOf(name)].classList.add('active');
+  }
+
+  /* ── UTILS ── */
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function setStatus(id, msg, isError) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'status-msg' + (isError ? ' error' : '');
+  }
+
+  /* ── INIT ── */
+  checkConfig();
+  buildTraitGrid();
+  buildTimeline();
+  loadData();
+</script>
+</body>
+</html>
