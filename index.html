@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="A farewell tribute for our lead — share memories, vote for her superpowers, and send goodbye wishes."/>
+<meta name="robots" content="index, follow"/>
+<meta property="og:title" content="Farewell, Our Lead!"/>
+<meta property="og:description" content="Team farewell page — memories, superpowers, chaos meter & wishes."/>
+<meta property="og:type" content="website"/>
 <title>Farewell, Our Lead!</title>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -1031,6 +1036,160 @@
   }
   .love-sent { font-family: 'Caveat', cursive; font-size: 18px; color: var(--pink-mid); margin-top: 10px; min-height: 24px; }
 
+  /* COUNTDOWN */
+  .countdown-bar {
+    background: var(--amber-bg);
+    border: 2px dashed var(--amber-mid);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .countdown-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .countdown-emoji { font-size: 22px; line-height: 1; }
+  .countdown-text {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--amber-dark);
+    line-height: 1.3;
+  }
+  .countdown-text strong { font-weight: 700; font-size: 26px; }
+  .countdown-done .countdown-text { color: var(--purple-dark); }
+
+  /* LESSONS */
+  .lessons-sub { font-size: 15px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .lesson-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+    align-items: stretch;
+  }
+  .lesson-form input {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    padding: 10px 14px;
+    border: 2px dashed var(--teal-mid);
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--ink);
+    outline: none;
+  }
+  .lesson-form input:focus { border-color: var(--teal-dark); border-style: solid; }
+  .lesson-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border: 2.5px solid var(--teal-dark);
+    border-radius: 999px;
+    background: var(--teal-bg);
+    color: var(--teal-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .lesson-btn:hover { background: #9FE1CB; transform: scale(1.03); }
+  .lessons-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .lesson-card {
+    background: var(--teal-bg);
+    border: 2px solid var(--teal-mid);
+    border-radius: 12px;
+    padding: 16px 18px;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .lesson-card:hover { transform: rotate(-0.5deg) scale(1.02); }
+  .lesson-card.starter-lesson {
+    border-style: dashed;
+    opacity: 0.92;
+  }
+  .lesson-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .lesson-quote::before { content: '“'; color: var(--teal-mid); }
+  .lesson-quote::after { content: '”'; color: var(--teal-mid); }
+  .lesson-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal-mid);
+  }
+  .lessons-empty {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--muted);
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* WORD CLOUD */
+  .cloud-sub { font-size: 15px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .cloud-meta {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--purple-mid);
+    margin-bottom: 14px;
+    min-height: 22px;
+  }
+  .word-cloud-wrap {
+    min-height: 280px;
+    background: linear-gradient(135deg, var(--purple-bg) 0%, var(--cream) 45%, var(--teal-bg) 100%);
+    border: 2px dashed var(--purple-mid);
+    border-radius: 14px;
+    padding: 24px 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 14px;
+    line-height: 1.1;
+  }
+  .cloud-word {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    cursor: default;
+    display: inline-block;
+    padding: 2px 4px;
+    animation: cloud-float 6s ease-in-out infinite;
+    transform: rotate(var(--rot, 0deg));
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .cloud-word:hover {
+    transform: rotate(0deg) scale(1.12);
+    z-index: 2;
+  }
+  @keyframes cloud-float {
+    0%, 100% { transform: rotate(var(--rot, 0deg)) translateY(0); }
+    50%      { transform: rotate(var(--rot, 0deg)) translateY(-5px); }
+  }
+  .cloud-empty {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--muted);
+    text-align: center;
+    padding: 40px 16px;
+    width: 100%;
+  }
+
   /* LOADING */
   .loading {
     text-align: center;
@@ -1043,6 +1202,7 @@
   @media (prefers-reduced-motion: reduce) {
     .celebrate-bg, .float-deco { display: none; }
     .hero { animation: none; }
+    .cloud-word { animation: none; }
   }
 
   /* RESPONSIVE */
@@ -1067,6 +1227,14 @@
     <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
   </div>
 
+  <!-- COUNTDOWN -->
+  <div class="countdown-bar" id="countdown-bar" aria-live="polite">
+    <div class="countdown-inner">
+      <span class="countdown-emoji">⏳</span>
+      <span class="countdown-text">Counting down…</span>
+    </div>
+  </div>
+
   <!-- YOUR NAME (shared) -->
   <div class="player-bar">
     <label for="player-name">Your name</label>
@@ -1080,6 +1248,8 @@
     <button class="tab" onclick="switchTab('traits')">Her Superpowers</button>
     <button class="tab" onclick="switchTab('timeline')">Her Day</button>
     <button class="tab" onclick="switchTab('chaos')">Chaos Meter</button>
+    <button class="tab" onclick="switchTab('lessons')">Lessons</button>
+    <button class="tab" onclick="switchTab('cloud')">Word Cloud</button>
     <button class="tab" onclick="switchTab('vibes')">Good Vibes</button>
     <button class="tab" onclick="switchTab('goodbye')">Goodbye</button>
   </div>
@@ -1163,6 +1333,34 @@
     </div>
   </div>
 
+  <!-- LESSONS -->
+  <div class="panel" id="panel-lessons">
+    <div class="card">
+      <div class="card-title">Lessons she taught us</div>
+      <p class="lessons-sub">One line each — what did you learn from working with her? Yours updates if you post again.</p>
+      <div class="lesson-form">
+        <input type="text" id="lesson-text" maxlength="140" placeholder="Listen before you fix." onkeydown="if(event.key==='Enter')postLesson()"/>
+        <button class="lesson-btn" onclick="postLesson()">Add yours</button>
+      </div>
+      <div class="status-msg" id="lesson-status"></div>
+      <div class="lessons-wall" id="lessons-wall">
+        <div class="lessons-empty">Loading lessons…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORD CLOUD -->
+  <div class="panel" id="panel-cloud">
+    <div class="card">
+      <div class="card-title">Living word cloud</div>
+      <p class="cloud-sub">Grows as people post — pulled from memories, lessons & goodbye wishes.</p>
+      <div class="cloud-meta" id="cloud-meta"></div>
+      <div class="word-cloud-wrap" id="word-cloud">
+        <div class="cloud-empty">Gathering words…</div>
+      </div>
+    </div>
+  </div>
+
   <!-- GOOD VIBES -->
   <div class="panel" id="panel-vibes">
     <div class="card">
@@ -1227,10 +1425,48 @@
   const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
   const BIN_ID = '6a267faef5f4af5e29ca0226';
   const MASTER_KEY = '$2a$10$.Fu497nt0d3lh2dfOSG.lOYAj3zsAlseRqIKa1I1ASkn1jqrD/9Ae';
+  const CACHE_KEY = 'farewell_data_cache';
+  const READ_ONLY_KEY = 'farewell_read_only';
+  // Change to her actual last day (local time)
+  const COUNTDOWN_TARGET = new Date('2026-06-09T18:45:00');
 
   /* ── DATA ── */
-  let appData = { memories: [], votePicks: {}, goodbyes: [], chaos: { level: 5, log: [] } };
+  let appData = { memories: [], votePicks: {}, goodbyes: [], lessons: [], chaos: { level: 5, log: [] } };
   let lastSaveError = '';
+  let readOnlyMode = false;
+
+  function normalizeAppData(data) {
+    const d = data || {};
+    if (!d.memories) d.memories = [];
+    if (!d.votePicks) d.votePicks = {};
+    if (!d.goodbyes) d.goodbyes = [];
+    if (!d.lessons) d.lessons = [];
+    if (!d.chaos) d.chaos = { level: 5, log: [] };
+    if (!d.chaos.log) d.chaos.log = [];
+    return d;
+  }
+
+  function cacheAppData() {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(appData)); } catch (_) {}
+  }
+
+  function loadCachedAppData() {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      return raw ? normalizeAppData(JSON.parse(raw)) : null;
+    } catch (_) { return null; }
+  }
+
+  function applyAppData(data) {
+    appData = normalizeAppData(data);
+    renderMemories(appData.memories);
+    renderVotes();
+    renderGoodbyes();
+    renderLessons();
+    renderWordCloud();
+    renderChaos();
+    updateCountdown();
+  }
 
   function showBinSync(type, msg) {
     const el = document.getElementById('bin-sync-bar');
@@ -1252,75 +1488,118 @@
     return true;
   }
 
+  function fetchWithTimeout(url, opts = {}, ms = 6000) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { ...opts, signal: ctrl.signal })
+      .finally(() => clearTimeout(timer));
+  }
+
+  async function fetchJsonBin() {
+    const r = await fetchWithTimeout(`${JSONBIN_BASE}/${BIN_ID}/latest`, { cache: 'no-store' });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.message || `JSONBin ${r.status}`);
+    }
+    const j = await r.json();
+    return normalizeAppData(j.record);
+  }
+
+  async function fetchLocalData() {
+    const r = await fetchWithTimeout('./data.json', { cache: 'no-store' }, 4000);
+    if (!r.ok) throw new Error('local data.json missing');
+    return normalizeAppData(await r.json());
+  }
+
   async function loadData() {
     checkHowPageIsOpened();
+    readOnlyMode = false;
+
+    const cached = loadCachedAppData();
+    if (cached) applyAppData(cached);
+
+    let source = '';
     try {
-      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`);
-      if (!r.ok) {
-        const err = await r.json().catch(() => ({}));
-        throw new Error(err.message || `Load failed (${r.status})`);
+      appData = await fetchJsonBin();
+      source = 'live';
+      readOnlyMode = false;
+      localStorage.removeItem(READ_ONLY_KEY);
+    } catch (binErr) {
+      try {
+        appData = await fetchLocalData();
+        source = 'local';
+        readOnlyMode = true;
+      } catch (_) {
+        if (cached) {
+          appData = cached;
+          source = 'cache';
+          readOnlyMode = true;
+        } else {
+          showBinSync('err', 'Blocked network? Try mobile data. Share exact GitHub Pages URL ending in /');
+          document.getElementById('memory-grid').innerHTML =
+            '<div class="loading" style="color:var(--red-mid)">Could not load — try another network or check the page URL.</div>';
+          return;
+        }
       }
-      const j = await r.json();
-      appData = j.record || { memories: [], votePicks: {}, goodbyes: [] };
-      if (!appData.memories) appData.memories = [];
-      if (!appData.votePicks) appData.votePicks = {};
-      if (!appData.goodbyes) appData.goodbyes = [];
-      if (!appData.chaos) appData.chaos = { level: 5, log: [] };
-      if (!appData.chaos.log) appData.chaos.log = [];
-      if (migrateVotePicks()) await saveData();
-      const cleaned = stripLegacyDefaults(appData.memories);
-      if (cleaned.length !== appData.memories.length) {
-        appData.memories = cleaned;
-        await saveData();
-      }
-      renderMemories(appData.memories);
-      renderVotes();
-      renderGoodbyes();
-      renderChaos();
-      await testBinSave();
-    } catch(e) {
-      showBinSync('err', 'Could not load shared data.');
-      document.getElementById('memory-grid').innerHTML =
-        '<div class="loading" style="color:var(--red-mid)">Could not load data. Check bin ID.</div>';
+    }
+
+    const migrated = migrateVotePicks();
+    const cleaned = stripLegacyDefaults(appData.memories);
+    const memsChanged = cleaned.length !== appData.memories.length;
+    if (memsChanged) appData.memories = cleaned;
+
+    applyAppData(appData);
+    cacheAppData();
+
+    if (readOnlyMode) {
+      showBinSync('warn', source === 'cache'
+        ? 'Showing last saved copy — live sync blocked on this network.'
+        : 'Read-only backup — saves need api.jsonbin.io (try home WiFi / phone data).');
+      localStorage.setItem(READ_ONLY_KEY, '1');
+    } else if (migrated || memsChanged) {
+      saveData();
     }
   }
 
   async function saveData() {
+    if (readOnlyMode) {
+      lastSaveError = 'Read-only — api.jsonbin.io blocked on this network';
+      return false;
+    }
     if (!MASTER_KEY) {
       lastSaveError = 'MASTER_KEY is empty in index.html';
       return false;
     }
     if (location.protocol === 'file:') {
-      lastSaveError = 'Page opened as file:// — use a local server (npx serve .)';
+      lastSaveError = 'Page opened as file:// — use GitHub Pages URL';
       return false;
     }
     try {
-      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
+      const r = await fetchWithTimeout(`${JSONBIN_BASE}/${BIN_ID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'X-Master-Key': MASTER_KEY,
+          'X-Bin-Versioning': 'false',
         },
         body: JSON.stringify(appData),
-      });
+      }, 8000);
       const j = await r.json().catch(() => ({}));
       if (!r.ok) {
-        lastSaveError = j.message || 'Save failed (HTTP ' + r.status + ')';
+        if (r.status === 401) {
+          lastSaveError = 'Unauthorized — check Master Key on jsonbin.io';
+          readOnlyMode = true;
+        } else {
+          lastSaveError = j.message || 'Save failed (HTTP ' + r.status + ')';
+        }
         return false;
       }
+      cacheAppData();
       return true;
     } catch(e) {
-      lastSaveError = e.message || 'Network error — cannot reach jsonbin.io';
+      lastSaveError = 'Cannot reach api.jsonbin.io — try another network';
+      readOnlyMode = true;
       return false;
-    }
-  }
-
-  async function testBinSave() {
-    const saved = await saveData();
-    if (saved) {
-      showBinSync('ok');
-    } else if (location.protocol !== 'file:') {
-      showBinSync('err', 'Save issue — ' + (lastSaveError || 'check config'));
     }
   }
 
@@ -1533,6 +1812,7 @@
     }
     cancelEdit();
     renderMemories(appData.memories);
+    renderWordCloud();
     setStatus('mem-status', wasEditing ? 'Updated!' : 'Posted!');
     btn.disabled = false;
     setTimeout(() => setStatus('mem-status', ''), 2000);
@@ -1550,6 +1830,7 @@
       return;
     }
     renderMemories(appData.memories);
+    renderWordCloud();
   }
 
   async function clearWall() {
@@ -1564,6 +1845,7 @@
       return;
     }
     renderMemories(appData.memories);
+    renderWordCloud();
     setStatus('mem-status', 'Wall cleared — add the first note!');
     setTimeout(() => setStatus('mem-status', ''), 2500);
   }
@@ -1909,6 +2191,158 @@
     text.textContent = fortunes[Math.floor(Math.random() * fortunes.length)];
   }
 
+  /* ── COUNTDOWN ── */
+  function updateCountdown() {
+    const bar = document.getElementById('countdown-bar');
+    if (!bar) return;
+    const diff = COUNTDOWN_TARGET.getTime() - Date.now();
+    if (diff <= 0) {
+      bar.innerHTML = '<div class="countdown-inner countdown-done"><span class="countdown-emoji">🎉</span><span class="countdown-text">Her last day is here — fill the wall with love!</span></div>';
+      return;
+    }
+    const days = Math.floor(diff / 86400000);
+    const hrs = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const dayWord = days === 1 ? 'day' : 'days';
+    const hrWord = hrs === 1 ? 'hr' : 'hrs';
+    bar.innerHTML = `<div class="countdown-inner">
+      <span class="countdown-emoji">⏳</span>
+      <span class="countdown-text"><strong>${days}</strong> ${dayWord} · <strong>${hrs}</strong> ${hrWord} · <strong>${mins}</strong> min until her last day</span>
+    </div>`;
+  }
+
+  /* ── LESSONS ── */
+  const starterLesson = {
+    id: 'lesson-starter',
+    text: 'Listen first. Fix second. Trust always.',
+    author: 'The team',
+  };
+
+  function findLessonByAuthor(name) {
+    const norm = normalizeName(name);
+    return (appData.lessons || []).find(l => normalizeName(l.author) === norm);
+  }
+
+  function renderLessons() {
+    const wall = document.getElementById('lessons-wall');
+    if (!wall) return;
+    const items = [...(appData.lessons || [])].sort((a, b) =>
+      new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+    const showStarter = items.length === 0;
+    const list = showStarter ? [starterLesson] : items;
+    wall.innerHTML = list.map(l => `
+      <div class="lesson-card${l.id === 'lesson-starter' ? ' starter-lesson' : ''}">
+        <div class="lesson-quote">${escHtml(l.text)}</div>
+        <div class="lesson-author">— ${escHtml(l.author)}</div>
+      </div>`).join('');
+  }
+
+  async function postLesson() {
+    const player = requirePlayerName('add a lesson', 'lesson-status');
+    if (!player) return;
+    const text = document.getElementById('lesson-text').value.trim();
+    if (!text) {
+      setStatus('lesson-status', 'Write your lesson first!', true);
+      return;
+    }
+    const now = new Date().toISOString();
+    const existing = findLessonByAuthor(player);
+    const backup = JSON.parse(JSON.stringify(appData.lessons || []));
+    if (!appData.lessons) appData.lessons = [];
+    if (existing) {
+      existing.text = text;
+      existing.updatedAt = now;
+    } else {
+      appData.lessons.push({
+        id: 'l_' + Date.now(),
+        text,
+        author: player,
+        createdAt: now,
+      });
+    }
+    if (!(await saveData())) {
+      appData.lessons = backup;
+      renderLessons();
+      renderWordCloud();
+      setStatus('lesson-status', 'Save failed: ' + (lastSaveError || 'check bin'), true);
+      return;
+    }
+    document.getElementById('lesson-text').value = '';
+    renderLessons();
+    renderWordCloud();
+    setStatus('lesson-status', existing ? 'Lesson updated!' : 'Lesson added — nice one.');
+    setTimeout(() => setStatus('lesson-status', ''), 2500);
+  }
+
+  /* ── WORD CLOUD ── */
+  const CLOUD_STOP = new Set([
+    'the','a','an','and','or','but','in','on','at','to','for','of','is','it','that','this','was','are','be',
+    'with','she','her','you','your','we','our','i','me','my','they','them','so','as','if','when','had','has',
+    'have','been','would','could','about','from','up','out','all','just','not','what','who','how','there',
+    'their','will','can','do','did','get','got','one','really','always','also','than','then','too','very',
+    'into','over','after','before','still','more','much','some','any','no','yes','like','know','think','said',
+    'because','even','every','never','ever','its','him','his','us','am','im','ive','youre','shes','were','being',
+  ]);
+
+  function extractCloudWords(text) {
+    return String(text || '').toLowerCase()
+      .replace(/[^a-z0-9\s'-]/g, ' ')
+      .split(/\s+/)
+      .map(w => w.replace(/^'+|'+$/g, ''))
+      .filter(w => w.length > 2 && !CLOUD_STOP.has(w));
+  }
+
+  function buildWordFreqs() {
+    const texts = [
+      ...(appData.memories || []).map(m => m.text),
+      ...(appData.goodbyes || []).map(g => g.text),
+      ...(appData.lessons || []).map(l => l.text),
+    ].filter(Boolean);
+    const freq = {};
+    texts.forEach(t => {
+      extractCloudWords(t).forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+    });
+    return Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 55);
+  }
+
+  function cloudSourceCount() {
+    const mems = (appData.memories || []).filter(m => m.id !== 'starter').length;
+    const wishes = (appData.goodbyes || []).length;
+    const lessons = (appData.lessons || []).length;
+    return mems + wishes + lessons;
+  }
+
+  function renderWordCloud() {
+    const wrap = document.getElementById('word-cloud');
+    const meta = document.getElementById('cloud-meta');
+    if (!wrap) return;
+    const freq = buildWordFreqs();
+    const sources = cloudSourceCount();
+    if (meta) {
+      meta.textContent = freq.length
+        ? `${freq.length} words from ${sources} post${sources === 1 ? '' : 's'} — updates live`
+        : '';
+    }
+    if (!freq.length) {
+      wrap.innerHTML = '<div class="cloud-empty">Post memories, lessons & wishes — words will gather here.</div>';
+      return;
+    }
+    const max = freq[0][1];
+    const min = freq[freq.length - 1][1] || 1;
+    const colors = [
+      'var(--purple-dark)', 'var(--teal-dark)', 'var(--pink-mid)',
+      'var(--amber-mid)', 'var(--coral-mid)', 'var(--purple-mid)', 'var(--teal-mid)',
+    ];
+    wrap.innerHTML = freq.map(([word, count], i) => {
+      const size = 15 + Math.round(((count - min) / (max - min || 1)) * 30);
+      const rot = ((i * 17) % 11) - 5;
+      const delay = ((i * 0.37) % 4).toFixed(2);
+      const color = colors[i % colors.length];
+      const title = count === 1 ? '1 mention' : count + ' mentions';
+      return `<span class="cloud-word" style="font-size:${size}px;color:${color};--rot:${rot}deg;animation-delay:${delay}s" title="${title}">${escHtml(word)}</span>`;
+    }).join('');
+  }
+
   /* ── GOODBYE WISHES ── */
   function findGoodbyeByAuthor(name) {
     const norm = normalizeName(name);
@@ -1967,6 +2401,7 @@
     }
     document.getElementById('goodbye-text').value = '';
     renderGoodbyes();
+    renderWordCloud();
     setStatus('goodbye-status', existing ? 'Wish updated — sent with love!' : 'Wish sent — she\'ll love this!');
     setTimeout(() => setStatus('goodbye-status', ''), 2800);
   }
@@ -2032,10 +2467,16 @@
     resize();
     window.addEventListener('resize', resize);
 
-    ambientParticles = Array.from({ length: 50 }, () =>
+    ambientParticles = Array.from({ length: 24 }, () =>
       makeParticle(celebrateCanvas.width, celebrateCanvas.height));
 
+    let animRunning = true;
+    document.addEventListener('visibilitychange', () => {
+      animRunning = !document.hidden;
+    });
+
     function tick() {
+      if (!animRunning) { requestAnimationFrame(tick); return; }
       const w = celebrateCanvas.width;
       const h = celebrateCanvas.height;
       celebrateCtx.clearRect(0, 0, w, h);
@@ -2068,7 +2509,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const wrap = document.getElementById('float-deco');
     if (!wrap) return;
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 8; i++) {
       const el = document.createElement('span');
       el.className = 'float-piece';
       el.textContent = FLOAT_EMOJIS[i % FLOAT_EMOJIS.length];
@@ -2131,8 +2572,10 @@
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById('panel-' + name).classList.add('active');
-    const map = ['memories','traits','timeline','chaos','vibes','goodbye'];
-    document.querySelectorAll('.tab')[map.indexOf(name)].classList.add('active');
+    const map = ['memories','traits','timeline','chaos','lessons','cloud','vibes','goodbye'];
+    const idx = map.indexOf(name);
+    if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+    if (name === 'cloud') renderWordCloud();
   }
 
   /* ── UTILS ── */
@@ -2149,12 +2592,13 @@
   }
 
   /* ── INIT ── */
-  initCelebrateBg();
-  spawnFloatDeco();
   loadPlayerName();
   buildTraitGrid();
   buildTimeline();
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
   loadData();
+  setTimeout(() => { initCelebrateBg(); spawnFloatDeco(); }, 400);
 </script>
 </body>
 </html>
