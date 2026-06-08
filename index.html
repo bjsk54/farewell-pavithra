@@ -1013,7 +1013,7 @@
   <!-- TIMELINE -->
   <div class="panel" id="panel-timeline">
     <div class="card">
-      <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">— leader first, wonder woman always (tap each)</span></div>
+      <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">— her time, start to finish (tap each)</span></div>
       <div class="tl-wrap" id="timeline"></div>
     </div>
   </div>
@@ -1562,13 +1562,13 @@
 
   /* ── TIMELINE ── */
   const tlData = [
-    { time: 'Early morning', text: 'Lead mode: ON. Opens Microsoft Teams before <s>coffee</s> — <span class="tl-kidding">kidding, she doesn\'t drink coffee or tea. STRANGE, I KNOW!</span>', reveal: 'Immaculate start to the day. She wanted to see what the team sent overnight — and make sure everyone\'s aligned.', dot: '#7F77DD' },
-    { time: 'Our morning', text: 'Our standup is her late night. She\'s there — never misses it.', reveal: 'Connects with all of us. Makes sure things are aligned. Tries not to nudge too hard… okay, maybe one gentle nudge. We needed it.', dot: '#EF9F27' },
-    { time: 'Midday', text: 'Full lead mode. Curious, supportive, always positive about the effort.', reveal: 'She manages the team in an immaculate way — sees the work behind the work and never takes it for granted.', dot: '#D4537E' },
-    { time: 'Always on the run', text: 'School drop-off, next thing, next meeting — all handled. Nothing slips.', reveal: 'Wonder woman energy outside work too. We don\'t know how she juggles it all. We\'re just grateful she does.', dot: '#5DCAA5' },
-    { time: 'Our afternoon', text: 'While we\'re signing off, she\'s tying loose ends — for us, and for everything else.', reveal: 'Manages life and work with the same precision. Nothing falls through the cracks.', dot: '#7F77DD' },
-    { time: 'Our evening', text: 'Our end-of-day is her second wind. Back on Teams, making sure we\'re good.', reveal: 'Considerate of every timezone. Supportive even when she\'s running on fumes.', dot: '#5DCAA5' },
-    { time: 'Midnight', text: 'Wakes up half-asleep, pings on Teams, goes back to sleep.', reveal: 'Still checking on the team. Still curious. Still caring. Classic her.', dot: '#D4537E' },
+    { time: '5:00am', text: 'Lead mode: ON. Opens Microsoft Teams before <s>coffee</s> — <span class="tl-kidding">kidding, she doesn\'t drink coffee or tea. STRANGE, I KNOW!</span>', reveal: 'Immaculate start to the day. She wanted to see what the team sent overnight — and make sure everyone\'s aligned.', dot: '#7F77DD' },
+    { time: '6:30am', text: 'While we\'re signing off, she\'s tying loose ends — for us, and for everything else.', reveal: 'Manages life and work with the same precision. Nothing falls through the cracks.', dot: '#7F77DD' },
+    { time: '7:00am', text: 'School drop-off, next thing, next meeting — all handled. Nothing slips.', reveal: 'Wonder woman energy outside work too. We don\'t know how she juggles it all. We\'re just grateful she does.', dot: '#5DCAA5' },
+    { time: '10:00am', text: 'Full lead mode. Curious, supportive, always positive about the effort.', reveal: 'She manages the team in an immaculate way — sees the work behind the work and never takes it for granted.', dot: '#D4537E' },
+    { time: '9:00pm', text: 'Our standup is her late night. She\'s there — never misses it.', reveal: 'Connects with all of us. Makes sure things are aligned. Tries not to nudge too hard… okay, maybe one gentle nudge. We needed it.', dot: '#EF9F27' },
+    { time: '11:00pm', text: 'Our end-of-day is her second wind. Back on Teams, making sure we\'re good.', reveal: 'Considerate of every timezone. Supportive even when she\'s running on fumes.', dot: '#5DCAA5' },
+    { time: '2:00am', text: 'Wakes up half-asleep, pings on Teams, goes back to sleep.', reveal: 'Still checking on the team. Still curious. Still caring. Classic her.', dot: '#D4537E' },
   ];
 
   function buildTimeline() {
