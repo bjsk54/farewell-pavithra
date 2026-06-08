@@ -209,21 +209,75 @@
   .memory-note:hover { background: var(--purple-bg); transform: rotate(-1deg) scale(1.02); }
   .memory-note .note-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
   .memory-note .note-author { font-size: 13px; color: var(--muted); margin-top: 8px; display: block; }
-  .memory-note .delete-btn {
+  .memory-note .note-actions {
     position: absolute;
-    top: 8px; right: 10px;
-    font-size: 16px;
+    top: 6px; right: 6px;
+    display: flex;
+    gap: 2px;
+  }
+  .memory-note .edit-btn,
+  .memory-note .delete-btn {
+    font-size: 14px;
     color: var(--muted);
     cursor: pointer;
-    background: none;
-    border: none;
-    font-family: 'Caveat', cursive;
-    opacity: 0;
-    transition: opacity 0.15s;
-    padding: 2px 6px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Nunito', sans-serif;
+    padding: 2px 8px;
+    line-height: 1.4;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
-  .memory-note:hover .delete-btn { opacity: 1; }
-  .memory-note .delete-btn:hover { color: var(--red-mid); }
+  .memory-note .edit-btn:hover {
+    color: var(--purple-mid);
+    border-color: var(--purple-mid);
+    background: var(--purple-bg);
+  }
+  .memory-note .delete-btn:hover {
+    color: var(--red-mid);
+    border-color: var(--red-mid);
+    background: var(--red-bg);
+  }
+  .memory-wall-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  .clear-wall-btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .clear-wall-btn:hover {
+    color: var(--red-mid);
+    border-color: var(--red-mid);
+    background: var(--red-bg);
+  }
+  .add-memory-form.editing-mode {
+    border: 2px dashed var(--purple-mid);
+    border-radius: 10px;
+    padding: 12px;
+    background: var(--purple-bg);
+  }
+  .cancel-edit-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .cancel-edit-btn:hover { border-color: var(--ink); color: var(--ink); }
   .memory-note.starter-note {
     border-style: solid;
     border-color: var(--amber-mid);
@@ -475,15 +529,19 @@
   <div class="panel active" id="panel-memories">
     <div class="card">
       <div class="card-title">Memory Wall</div>
+      <div class="memory-wall-toolbar" id="memory-toolbar" style="display:none">
+        <button class="clear-wall-btn" onclick="clearWall()">Clear all notes</button>
+      </div>
       <div class="memory-grid" id="memory-grid">
         <div class="loading">Loading memories...</div>
       </div>
-      <div class="add-memory-form">
+      <div class="add-memory-form" id="memory-form">
         <textarea id="mem-text" rows="2" placeholder="Write your memory or message..."></textarea>
         <div class="form-row">
           <input type="text" id="mem-author" placeholder="Your name" maxlength="30"/>
           <input type="text" id="mem-emoji" placeholder="Emoji (e.g. ☕)" maxlength="4"/>
           <button class="doodle-btn" id="post-btn" onclick="postMemory()">Post it!</button>
+          <button class="cancel-edit-btn" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">Cancel</button>
         </div>
         <div class="status-msg" id="mem-status"></div>
       </div>
@@ -586,6 +644,11 @@
       appData = j.record || { memories: [], votes: {} };
       if (!appData.memories) appData.memories = [];
       if (!appData.votes) appData.votes = {};
+      const cleaned = stripLegacyDefaults(appData.memories);
+      if (cleaned.length !== appData.memories.length) {
+        appData.memories = cleaned;
+        await saveData();
+      }
       renderMemories(appData.memories);
       renderVotes();
     } catch(e) {
@@ -603,6 +666,9 @@
   }
 
   /* ── MEMORIES ── */
+  const LEGACY_DEFAULT_IDS = new Set(['def1', 'def2', 'def3', 'def4', 'def5']);
+  let editingMemoryId = null;
+
   const starterNote = {
     id: 'starter',
     emoji: '✏️',
@@ -610,16 +676,53 @@
     author: 'The wall',
   };
 
+  function stripLegacyDefaults(mems) {
+    return mems.filter(m => !LEGACY_DEFAULT_IDS.has(m.id));
+  }
+
   function renderMemories(mems) {
     const grid = document.getElementById('memory-grid');
-    const notes = mems.length === 0 ? [starterNote] : mems;
+    const realNotes = stripLegacyDefaults(mems);
+    const notes = realNotes.length === 0 ? [starterNote] : realNotes;
+    const toolbar = document.getElementById('memory-toolbar');
+    toolbar.style.display = realNotes.length > 0 ? 'flex' : 'none';
+
     grid.innerHTML = notes.map(m => `
-      <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}">
+      <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}" data-id="${escAttr(m.id)}">
         <span class="note-emoji">${m.emoji || '💛'}</span>
         ${escHtml(m.text)}
         <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
-        ${m.id !== 'starter' ? `<button class="delete-btn" onclick="deleteMemory('${m.id}')" title="Delete">✕</button>` : ''}
+        ${m.id !== 'starter' ? `
+          <div class="note-actions">
+            <button class="edit-btn" type="button" data-action="edit" title="Edit">Edit</button>
+            <button class="delete-btn" type="button" data-action="delete" title="Delete">Delete</button>
+          </div>` : ''}
       </div>`).join('');
+  }
+
+  function startEdit(id) {
+    const mem = appData.memories.find(m => m.id === id);
+    if (!mem) return;
+    editingMemoryId = id;
+    document.getElementById('mem-text').value = mem.text;
+    document.getElementById('mem-author').value = mem.author === 'Anonymous' ? '' : mem.author;
+    document.getElementById('mem-emoji').value = mem.emoji || '';
+    document.getElementById('post-btn').textContent = 'Save changes';
+    document.getElementById('cancel-edit-btn').style.display = '';
+    document.getElementById('memory-form').classList.add('editing-mode');
+    document.getElementById('mem-text').focus();
+    setStatus('mem-status', 'Editing — change the fields below, then save.');
+  }
+
+  function cancelEdit() {
+    editingMemoryId = null;
+    document.getElementById('mem-text').value = '';
+    document.getElementById('mem-author').value = '';
+    document.getElementById('mem-emoji').value = '';
+    document.getElementById('post-btn').textContent = 'Post it!';
+    document.getElementById('cancel-edit-btn').style.display = 'none';
+    document.getElementById('memory-form').classList.remove('editing-mode');
+    setStatus('mem-status', '');
   }
 
   async function postMemory() {
@@ -630,23 +733,49 @@
     const btn = document.getElementById('post-btn');
     btn.disabled = true;
     setStatus('mem-status', 'Saving...');
-    const mem = { id: 'u_' + Date.now(), emoji, text, author };
-    appData.memories.push(mem);
+
+    if (editingMemoryId) {
+      const mem = appData.memories.find(m => m.id === editingMemoryId);
+      if (mem) { mem.text = text; mem.author = author; mem.emoji = emoji; }
+    } else {
+      appData.memories.push({ id: 'u_' + Date.now(), emoji, text, author });
+    }
+
     await saveData();
+    cancelEdit();
     renderMemories(appData.memories);
-    document.getElementById('mem-text').value = '';
-    document.getElementById('mem-emoji').value = '';
-    setStatus('mem-status', 'Posted!');
+    setStatus('mem-status', editingMemoryId ? 'Updated!' : 'Posted!');
     btn.disabled = false;
     setTimeout(() => setStatus('mem-status', ''), 2000);
   }
 
   async function deleteMemory(id) {
     if (!confirm('Delete this memory?')) return;
+    if (editingMemoryId === id) cancelEdit();
     appData.memories = appData.memories.filter(m => m.id !== id);
     await saveData();
     renderMemories(appData.memories);
   }
+
+  async function clearWall() {
+    if (!confirm('Clear every note on the wall? This cannot be undone.')) return;
+    cancelEdit();
+    appData.memories = [];
+    await saveData();
+    renderMemories(appData.memories);
+    setStatus('mem-status', 'Wall cleared — add the first note!');
+    setTimeout(() => setStatus('mem-status', ''), 2500);
+  }
+
+  document.getElementById('memory-grid').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const note = btn.closest('.memory-note');
+    if (!note) return;
+    const id = note.dataset.id;
+    if (btn.dataset.action === 'edit') startEdit(id);
+    if (btn.dataset.action === 'delete') deleteMemory(id);
+  });
 
   /* ── TRAITS / VOTES ── */
   const traits = [
@@ -789,6 +918,9 @@
   /* ── UTILS ── */
   function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
   function setStatus(id, msg, isError) {
     const el = document.getElementById(id);
