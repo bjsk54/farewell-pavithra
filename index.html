@@ -970,16 +970,18 @@
   /* ── CONFIG ── */
   const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
   const BIN_ID = '6a267faef5f4af5e29ca0226';
-  const API_KEY = '$2a$10$ebTFbXnW6TTeQkY68iHNnu3ftNiRofiOAvpzzstoJ/MxdcE8pQrni';
+  const MASTER_KEY = '$2a$10$.Fu497nt0d3lh2dfOSG.lOYAj3zsAlseRqIKa1I1ASkn1jqrD/9Ae'; // ← paste your jsonbin.io Master Key here (API Keys → Master Key)
 
   /* ── DATA ── */
   let appData = { memories: [], votePicks: {}, goodbyes: [] };
 
   async function loadData() {
     try {
-      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`, {
-        headers: { 'X-Access-Key': API_KEY }
-      });
+      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`);
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        throw new Error(err.message || `Load failed (${r.status})`);
+      }
       const j = await r.json();
       appData = j.record || { memories: [], votePicks: {}, goodbyes: [] };
       if (!appData.memories) appData.memories = [];
@@ -995,16 +997,36 @@
       renderVotes();
       renderGoodbyes();
     } catch(e) {
-      document.getElementById('memory-grid').innerHTML = '<div class="loading" style="color:var(--red-mid)">Could not load data. Check your Bin ID and API Key.</div>';
+      document.getElementById('memory-grid').innerHTML =
+        '<div class="loading" style="color:var(--red-mid)">Could not load data. Check bin ID.</div>';
     }
   }
 
   async function saveData() {
-    await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
-      body: JSON.stringify(appData)
-    });
+    if (!MASTER_KEY) {
+      console.error('Set MASTER_KEY in index.html to save to JSONBin.');
+      return false;
+    }
+    try {
+      const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': MASTER_KEY,
+          'X-Bin-Versioning': 'false',
+        },
+        body: JSON.stringify(appData),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        console.error('JSONBin save failed:', j.message || r.status);
+        return false;
+      }
+      return true;
+    } catch(e) {
+      console.error('JSONBin network error:', e);
+      return false;
+    }
   }
 
   /* ── MEMORIES ── */
@@ -1163,7 +1185,14 @@
       });
     }
 
-    await saveData();
+    const saved = await saveData();
+    if (!saved) {
+      if (wasEditing) { /* keep edit state */ }
+      else appData.memories.pop();
+      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      btn.disabled = false;
+      return;
+    }
     cancelEdit();
     renderMemories(appData.memories);
     setStatus('mem-status', wasEditing ? 'Updated!' : 'Posted!');
@@ -1175,8 +1204,13 @@
     if (!requirePlayerName('delete')) return;
     if (!confirm('Delete this memory?')) return;
     if (editingMemoryId === id) cancelEdit();
+    const backup = appData.memories;
     appData.memories = appData.memories.filter(m => m.id !== id);
-    await saveData();
+    if (!(await saveData())) {
+      appData.memories = backup;
+      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      return;
+    }
     renderMemories(appData.memories);
   }
 
@@ -1184,8 +1218,13 @@
     if (!requirePlayerName('clear the wall')) return;
     if (!confirm('Clear every note on the wall? This cannot be undone.')) return;
     cancelEdit();
+    const backup = appData.memories;
     appData.memories = [];
-    await saveData();
+    if (!(await saveData())) {
+      appData.memories = backup;
+      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      return;
+    }
     renderMemories(appData.memories);
     setStatus('mem-status', 'Wall cleared — add the first note!');
     setTimeout(() => setStatus('mem-status', ''), 2500);
@@ -1337,6 +1376,7 @@
     if (!player) return;
     const myPicks = getMyPicks(player);
     const trait = traits.find(t => t.key === key);
+    const backup = JSON.parse(JSON.stringify(appData.votePicks));
     let msg;
     if (myPicks.includes(key)) {
       setUserPicks(player, myPicks.filter(k => k !== key));
@@ -1346,7 +1386,12 @@
       msg = `Added "${trait.label}"`;
     }
     renderVotes();
-    await saveData();
+    if (!(await saveData())) {
+      appData.votePicks = backup;
+      renderVotes();
+      setStatus('vote-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      return;
+    }
     setStatus('vote-status', msg);
     setTimeout(() => setStatus('vote-status', ''), 2200);
   }
@@ -1441,6 +1486,8 @@
     }
     const now = new Date().toISOString();
     const existing = findGoodbyeByAuthor(player);
+    const backup = JSON.parse(JSON.stringify(appData.goodbyes));
+    const oldText = existing ? existing.text : null;
     if (existing) {
       existing.text = text;
       existing.updatedAt = now;
@@ -1452,7 +1499,12 @@
         createdAt: now,
       });
     }
-    await saveData();
+    if (!(await saveData())) {
+      appData.goodbyes = backup;
+      renderGoodbyes();
+      setStatus('goodbye-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      return;
+    }
     document.getElementById('goodbye-text').value = '';
     renderGoodbyes();
     setStatus('goodbye-status', existing ? 'Wish updated — sent with love!' : 'Wish sent — she\'ll love this!');
