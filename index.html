@@ -333,32 +333,56 @@
   }
   .memory-note .note-actions {
     position: absolute;
-    top: 6px; right: 6px;
+    top: 8px; right: 8px;
     display: flex;
-    gap: 2px;
+    gap: 5px;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
+  }
+  .memory-note:hover .note-actions,
+  .memory-note:focus-within .note-actions {
+    opacity: 1;
   }
   .memory-note .edit-btn,
   .memory-note .delete-btn {
-    font-size: 14px;
-    color: var(--muted);
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1.5px dashed #C5C0F0;
+    background: rgba(255, 254, 247, 0.75);
+    color: #AFA9EC;
     cursor: pointer;
-    background: var(--cream);
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    font-family: 'Nunito', sans-serif;
-    padding: 2px 8px;
-    line-height: 1.4;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.1s;
   }
-  .memory-note .edit-btn:hover {
+  .memory-note .edit-btn:hover,
+  .memory-note .edit-btn:focus-visible {
     color: var(--purple-mid);
     border-color: var(--purple-mid);
+    border-style: solid;
     background: var(--purple-bg);
+    transform: scale(1.08);
+    outline: none;
   }
-  .memory-note .delete-btn:hover {
-    color: var(--red-mid);
-    border-color: var(--red-mid);
-    background: var(--red-bg);
+  .memory-note .delete-btn {
+    border-color: #E8C4CF;
+    color: #D4A0B0;
+  }
+  .memory-note .delete-btn:hover,
+  .memory-note .delete-btn:focus-visible {
+    color: var(--pink-mid);
+    border-color: var(--pink-mid);
+    border-style: solid;
+    background: var(--pink-bg);
+    transform: scale(1.08);
+    outline: none;
   }
   .memory-wall-toolbar {
     display: flex;
@@ -891,8 +915,8 @@
         ${renderNoteMeta(m)}
         ${m.id !== 'starter' ? `
           <div class="note-actions">
-            <button class="edit-btn" type="button" data-action="edit" title="Edit">Edit</button>
-            <button class="delete-btn" type="button" data-action="delete" title="Delete">Delete</button>
+            <button class="edit-btn" type="button" data-action="edit" title="Edit">✎</button>
+            <button class="delete-btn" type="button" data-action="delete" title="Delete">×</button>
           </div>` : ''}
       </div>`).join('');
   }
