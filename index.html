@@ -674,6 +674,8 @@
   }
   .tl-time { font-family: 'Caveat', cursive; font-size: 13px; color: var(--muted); }
   .tl-text { font-family: 'Caveat', cursive; font-size: 20px; color: var(--ink); }
+  .tl-text s { color: var(--muted); }
+  .tl-text .tl-kidding { font-size: 17px; color: var(--purple-mid); font-style: italic; }
   .tl-reveal {
     font-family: 'Caveat', cursive;
     font-size: 16px;
@@ -1011,7 +1013,7 @@
   <!-- TIMELINE -->
   <div class="panel" id="panel-timeline">
     <div class="card">
-      <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">(tap each to reveal)</span></div>
+      <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">— leader first, wonder woman always (tap each)</span></div>
       <div class="tl-wrap" id="timeline"></div>
     </div>
   </div>
@@ -1058,7 +1060,7 @@
   <div class="panel" id="panel-goodbye">
     <div class="goodbye-card">
       <div class="goodbye-title">To the best lead we ever had</div>
-      <div class="goodbye-body">You showed up every single day — sometimes at 5am, sometimes at midnight half-asleep on Teams — not because you had to, but because that's just who you are. Super mom, super lead. You gave us space to grow, stayed calm when we couldn't, and always made us feel seen. The team will miss you more than words can say.</div>
+      <div class="goodbye-body">You led this team in the most immaculate way — calm, curious, always positive, always considerate of the effort. Sometimes at 5am, sometimes at midnight half-asleep on Teams, you still showed up. And outside of work? You manage everything else like wonder woman too. You gave us space to grow and made us feel seen. We'll miss you more than words can say.</div>
       <div class="goodbye-tags">
         <span class="gtag" style="background:var(--teal-bg);border-color:var(--teal-mid);color:var(--teal-dark);">Always available</span>
         <span class="gtag" style="background:var(--purple-bg);border-color:var(--purple-mid);color:var(--purple-dark);">Calm under fire</span>
@@ -1560,13 +1562,13 @@
 
   /* ── TIMELINE ── */
   const tlData = [
-    { time: 'Early morning', text: 'Wakes up — super mom, always on the run. Opens Microsoft Teams before coffee.', reveal: 'First thought: are the kids okay? Second thought: did the team send anything overnight? Both answered.', dot: '#7F77DD' },
-    { time: 'School run', text: 'Drives the kids to school. Still somehow never misses a meeting.', reveal: 'We don\'t know how she does it. We\'re just grateful she does.', dot: '#5DCAA5' },
-    { time: 'Our morning', text: 'Our standup is her late night. She\'s there — connected, aligned, warm.', reveal: 'Makes sure we\'re all on the same page. Tries not to nudge too hard… okay, maybe one gentle nudge. We needed it.', dot: '#EF9F27' },
-    { time: 'Midday', text: 'Work mode. Curious questions, real support, always positive about the effort.', reveal: 'She sees the work behind the work. Never takes it for granted.', dot: '#D4537E' },
-    { time: 'Afternoon', text: 'While we\'re wrapping up, she\'s on to the next thing — kids, dinner, life.', reveal: 'Super mom doesn\'t clock out. She just changes hats.', dot: '#7F77DD' },
-    { time: 'Our evening', text: 'Our end-of-day is her second wind. Checks Teams, ties up loose ends for us.', reveal: 'Considerate of everyone\'s timezone. Supportive even when she\'s tired.', dot: '#5DCAA5' },
-    { time: 'Midnight', text: 'Wakes up half-asleep, pings on Teams, goes back to sleep.', reveal: 'She thought it was urgent. It was just her making sure we\'re okay. Classic her.', dot: '#D4537E' },
+    { time: 'Early morning', text: 'Lead mode: ON. Opens Microsoft Teams before <s>coffee</s> — <span class="tl-kidding">kidding, she doesn\'t drink coffee or tea. STRANGE, I KNOW!</span>', reveal: 'Immaculate start to the day. She wanted to see what the team sent overnight — and make sure everyone\'s aligned.', dot: '#7F77DD' },
+    { time: 'Our morning', text: 'Our standup is her late night. She\'s there — never misses it.', reveal: 'Connects with all of us. Makes sure things are aligned. Tries not to nudge too hard… okay, maybe one gentle nudge. We needed it.', dot: '#EF9F27' },
+    { time: 'Midday', text: 'Full lead mode. Curious, supportive, always positive about the effort.', reveal: 'She manages the team in an immaculate way — sees the work behind the work and never takes it for granted.', dot: '#D4537E' },
+    { time: 'Always on the run', text: 'School drop-off, next thing, next meeting — all handled. Nothing slips.', reveal: 'Wonder woman energy outside work too. We don\'t know how she juggles it all. We\'re just grateful she does.', dot: '#5DCAA5' },
+    { time: 'Our afternoon', text: 'While we\'re signing off, she\'s tying loose ends — for us, and for everything else.', reveal: 'Manages life and work with the same precision. Nothing falls through the cracks.', dot: '#7F77DD' },
+    { time: 'Our evening', text: 'Our end-of-day is her second wind. Back on Teams, making sure we\'re good.', reveal: 'Considerate of every timezone. Supportive even when she\'s running on fumes.', dot: '#5DCAA5' },
+    { time: 'Midnight', text: 'Wakes up half-asleep, pings on Teams, goes back to sleep.', reveal: 'Still checking on the team. Still curious. Still caring. Classic her.', dot: '#D4537E' },
   ];
 
   function buildTimeline() {
@@ -1669,7 +1671,7 @@
     'She remembers things you forgot you even told her.',
     'Always curious — never judges, just listens.',
     'Makes you feel like your effort actually matters.',
-    'Super mom energy AND super lead energy. Unfair combo.',
+    'Leads the team in an immaculate way — we\'ve seen it up close.',
     'Never misses a beat — or a meeting — or your birthday.',
     'Positive even when the day is not.',
     'Checks Teams like other people check the weather.',
@@ -1680,7 +1682,7 @@
     'The calm in the storm — we\'ll miss that most.',
   ];
   const fortunes = [
-    'Go drink some water. Then check in with your team.',
+    'Go drink some water — not coffee or tea, she wouldn\'t approve. Kidding! Then check in with your team.',
     'You\'re doing better than you think. I mean it.',
     'Take a breath. We\'ve got this.',
     'Your effort matters — don\'t forget that.',
