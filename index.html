@@ -39,9 +39,44 @@
     min-height: 100vh;
     padding: 24px 16px 60px;
     color: var(--ink);
+    position: relative;
+    overflow-x: hidden;
   }
 
-  .container { max-width: 760px; margin: 0 auto; }
+  .celebrate-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .float-deco {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .float-piece {
+    position: absolute;
+    font-size: 18px;
+    opacity: 0;
+    animation: float-drift linear infinite;
+    filter: blur(0.2px);
+  }
+  @keyframes float-drift {
+    0%   { transform: translateY(105vh) rotate(0deg) scale(0.6); opacity: 0; }
+    8%   { opacity: 0.45; }
+    92%  { opacity: 0.35; }
+    100% { transform: translateY(-8vh) rotate(300deg) scale(1); opacity: 0; }
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
 
   /* HERO */
   .hero {
@@ -53,6 +88,11 @@
     margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    animation: hero-glow 5s ease-in-out infinite;
+  }
+  @keyframes hero-glow {
+    0%, 100% { box-shadow: 0 0 0 rgba(83, 74, 183, 0); }
+    50%      { box-shadow: 0 8px 32px rgba(83, 74, 183, 0.18); }
   }
   .hero::before {
     content: '★ ★ ★';
@@ -789,6 +829,11 @@
     padding: 32px;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .celebrate-bg, .float-deco { display: none; }
+    .hero { animation: none; }
+  }
+
   /* RESPONSIVE */
   @media (max-width: 500px) {
     .hero-title { font-size: 38px; }
@@ -799,6 +844,8 @@
 </style>
 </head>
 <body>
+<canvas id="celebrate-bg" class="celebrate-bg" aria-hidden="true"></canvas>
+<div class="float-deco" id="float-deco" aria-hidden="true"></div>
 <div class="container">
 
   <!-- HERO -->
@@ -1412,17 +1459,142 @@
     setTimeout(() => setStatus('goodbye-status', ''), 2800);
   }
 
-  /* ── CONFETTI ── */
+  /* ── CELEBRATE ANIMATIONS ── */
+  const CELEBRATE_COLORS = ['#534AB7','#D4537E','#1D9E75','#EF9F27','#D85A30','#7F77DD','#5DCAA5','#F4C0D1'];
+  const FLOAT_EMOJIS = ['✨','★','💜','🎉','💛','🌟','♥','✦'];
+  let ambientParticles = [];
+  let burstParticles = [];
+  let celebrateCtx = null;
+  let celebrateCanvas = null;
+
+  function makeParticle(w, h, opts = {}) {
+    return {
+      x: opts.x ?? Math.random() * w,
+      y: opts.y ?? Math.random() * h,
+      w: Math.random() * 9 + 4,
+      h: Math.random() * 5 + 3,
+      color: CELEBRATE_COLORS[Math.floor(Math.random() * CELEBRATE_COLORS.length)],
+      rot: Math.random() * 360,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: Math.random() * 0.55 + 0.25,
+      vr: (Math.random() - 0.5) * 2.5,
+      opacity: opts.opacity ?? (Math.random() * 0.22 + 0.12),
+      circle: Math.random() > 0.65,
+      life: opts.life ?? Infinity,
+    };
+  }
+
+  function resetAmbientParticle(p, w, h) {
+    p.x = Math.random() * w;
+    p.y = -16;
+    p.vy = Math.random() * 0.55 + 0.25;
+    p.vx = (Math.random() - 0.5) * 0.6;
+  }
+
+  function drawCelebrateParticle(ctx, p) {
+    ctx.save();
+    ctx.globalAlpha = p.opacity;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    if (p.circle) {
+      ctx.beginPath();
+      ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    }
+    ctx.restore();
+  }
+
+  function initCelebrateBg() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    celebrateCanvas = document.getElementById('celebrate-bg');
+    if (!celebrateCanvas) return;
+    celebrateCtx = celebrateCanvas.getContext('2d');
+
+    function resize() {
+      celebrateCanvas.width = window.innerWidth;
+      celebrateCanvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    ambientParticles = Array.from({ length: 50 }, () =>
+      makeParticle(celebrateCanvas.width, celebrateCanvas.height));
+
+    function tick() {
+      const w = celebrateCanvas.width;
+      const h = celebrateCanvas.height;
+      celebrateCtx.clearRect(0, 0, w, h);
+
+      ambientParticles.forEach(p => {
+        drawCelebrateParticle(celebrateCtx, p);
+        p.y += p.vy;
+        p.x += p.vx;
+        p.rot += p.vr;
+        if (p.y > h + 20) resetAmbientParticle(p, w, h);
+      });
+
+      burstParticles = burstParticles.filter(p => {
+        p.life--;
+        p.y += p.vy;
+        p.x += p.vx;
+        p.rot += p.vr;
+        p.vy += 0.04;
+        p.opacity = Math.min(p.opacity, p.life / 80);
+        drawCelebrateParticle(celebrateCtx, p);
+        return p.life > 0 && p.y < h + 40;
+      });
+
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  function spawnFloatDeco() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const wrap = document.getElementById('float-deco');
+    if (!wrap) return;
+    for (let i = 0; i < 14; i++) {
+      const el = document.createElement('span');
+      el.className = 'float-piece';
+      el.textContent = FLOAT_EMOJIS[i % FLOAT_EMOJIS.length];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.animationDuration = (14 + Math.random() * 18) + 's';
+      el.style.animationDelay = (Math.random() * 20) + 's';
+      el.style.fontSize = (14 + Math.random() * 14) + 'px';
+      wrap.appendChild(el);
+    }
+  }
+
+  function celebrateBurst() {
+    if (!celebrateCanvas) return;
+    const w = celebrateCanvas.width;
+    const cx = w / 2;
+    for (let i = 0; i < 110; i++) {
+      burstParticles.push({
+        ...makeParticle(w, celebrateCanvas.height, {
+          x: cx + (Math.random() - 0.5) * w * 0.5,
+          y: celebrateCanvas.height * 0.35 + (Math.random() - 0.5) * 80,
+          opacity: Math.random() * 0.55 + 0.35,
+          life: 100 + Math.floor(Math.random() * 60),
+        }),
+        vy: -(Math.random() * 4 + 2),
+        vx: (Math.random() - 0.5) * 5,
+      });
+    }
+  }
+
   function launchConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     canvas.style.display = 'block';
     canvas.width = canvas.offsetWidth;
     const ctx = canvas.getContext('2d');
-    const colors = ['#534AB7','#D4537E','#1D9E75','#EF9F27','#D85A30','#7F77DD','#5DCAA5'];
     const pieces = Array.from({length: 90}, () => ({
       x: Math.random() * canvas.width, y: Math.random() * -80,
       w: Math.random()*10+5, h: Math.random()*6+3,
-      color: colors[Math.floor(Math.random()*colors.length)],
+      color: CELEBRATE_COLORS[Math.floor(Math.random()*CELEBRATE_COLORS.length)],
       rot: Math.random()*360, vx: (Math.random()-.5)*2,
       vy: Math.random()*2+1.5, vr: (Math.random()-.5)*6
     }));
@@ -1439,6 +1611,7 @@
       else { setTimeout(()=>{ canvas.style.display='none'; }, 300); }
     }
     draw();
+    celebrateBurst();
   }
 
   /* ── TABS ── */
@@ -1464,6 +1637,8 @@
   }
 
   /* ── INIT ── */
+  initCelebrateBg();
+  spawnFloatDeco();
   loadPlayerName();
   buildTraitGrid();
   buildTimeline();
