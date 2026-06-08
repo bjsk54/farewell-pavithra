@@ -499,6 +499,82 @@
     color: var(--purple-mid);
     font-style: italic;
     min-height: 24px;
+    margin-bottom: 4px;
+  }
+  .trait-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .trait-chip:disabled,
+  .trait-chip.voted-out {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .trait-chip.my-pick {
+    box-shadow: 0 0 0 3px var(--purple-mid);
+    opacity: 1;
+  }
+  .voter-board {
+    margin-top: 18px;
+    border-top: 2px dashed var(--border);
+    padding-top: 14px;
+  }
+  .voter-board-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .voter-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .voter-list:empty::after {
+    content: 'No votes yet — be the first!';
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--muted);
+    grid-column: 1 / -1;
+    padding: 8px 0;
+  }
+  .voter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: #F1EFE8;
+    border: 1.5px solid var(--border);
+    min-width: 0;
+  }
+  .voter-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+    max-width: 42%;
+  }
+  .voter-pick {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   /* TIMELINE */
@@ -653,13 +729,20 @@
   <!-- SETUP BANNER -->
   <div class="setup-banner" id="setup-banner">
     <strong>One-time setup needed!</strong> This page uses <a href="https://jsonbin.io" target="_blank">JSONBin.io</a> (free) to save memories for everyone.
-    <br/>Steps: 1) Create a free account at jsonbin.io &nbsp; 2) Go to API Keys → create one &nbsp; 3) Go to Bins → Create a new bin with <code>{"memories":[],"votes":{}}</code> &nbsp; 4) Copy your Bin ID and API key below.
+    <br/>Steps: 1) Create a free account at jsonbin.io &nbsp; 2) Go to API Keys → create one &nbsp; 3) Go to Bins → Create a new bin with <code>{"memories":[],"votePicks":{}}</code> &nbsp; 4) Copy your Bin ID and API key below.
     <div class="api-input-row">
       <input type="text" id="bin-id-input" placeholder="Bin ID (e.g. 64abc123...)" />
       <input type="text" id="api-key-input" placeholder="API Key (X-Access-Key)" />
       <button class="api-save-btn" onclick="saveConfig()">Save & Connect</button>
     </div>
     <div id="config-status" style="margin-top:8px; font-size:14px;"></div>
+  </div>
+
+  <!-- YOUR NAME (shared) -->
+  <div class="player-bar">
+    <label for="player-name">Your name</label>
+    <input type="text" id="player-name" placeholder="Required to post, edit & vote" maxlength="30" oninput="savePlayerName()"/>
+    <span class="player-hint">Saved on this device — used for memories & superpower votes.</span>
   </div>
 
   <!-- TABS -->
@@ -675,11 +758,6 @@
   <div class="panel active" id="panel-memories">
     <div class="card">
       <div class="card-title">Memory Wall <span style="font-size:16px;color:var(--muted);font-weight:400;">— everyone's playground</span></div>
-      <div class="player-bar">
-        <label for="player-name">You're playing as</label>
-        <input type="text" id="player-name" placeholder="Your name (required to post & edit)" maxlength="30" oninput="savePlayerName()"/>
-        <span class="player-hint">Your name is saved on this device. Edits are tracked — everyone can see who changed what!</span>
-      </div>
       <div class="memory-wall-toolbar" id="memory-toolbar" style="display:none">
         <button class="clear-wall-btn" onclick="clearWall()">Clear all notes</button>
       </div>
@@ -689,8 +767,6 @@
       <div class="add-memory-form" id="memory-form">
         <textarea id="mem-text" rows="2" placeholder="Write your memory or message..."></textarea>
         <div class="form-row">
-          <input type="text" id="mem-author" placeholder="Your name" maxlength="30"/>
-          <input type="text" id="mem-emoji" placeholder="Emoji (e.g. ☕)" maxlength="4"/>
           <button class="doodle-btn" id="post-btn" onclick="postMemory()">Post it!</button>
           <button class="cancel-edit-btn" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">Cancel</button>
         </div>
@@ -703,8 +779,14 @@
   <div class="panel" id="panel-traits">
     <div class="card">
       <div class="card-title">Vote for her superpowers</div>
+      <p class="trait-sub">Pick one superpower — one vote per person, saved with your name.</p>
+      <div class="status-msg" id="vote-status"></div>
       <div class="trait-grid" id="trait-grid"></div>
       <div class="top-trait-msg" id="top-trait"></div>
+      <div class="voter-board">
+        <div class="voter-board-title">Who picked what</div>
+        <div class="voter-list" id="voter-list"></div>
+      </div>
     </div>
   </div>
 
@@ -783,7 +865,7 @@
   }
 
   /* ── DATA ── */
-  let appData = { memories: [], votes: {} };
+  let appData = { memories: [], votePicks: {} };
 
   async function loadData() {
     if (!BIN_ID || !API_KEY) { renderMemories([]); return; }
@@ -792,9 +874,9 @@
         headers: { 'X-Access-Key': API_KEY }
       });
       const j = await r.json();
-      appData = j.record || { memories: [], votes: {} };
+      appData = j.record || { memories: [], votePicks: {} };
       if (!appData.memories) appData.memories = [];
-      if (!appData.votes) appData.votes = {};
+      if (!appData.votePicks) appData.votePicks = {};
       const cleaned = stripLegacyDefaults(appData.memories);
       if (cleaned.length !== appData.memories.length) {
         appData.memories = cleaned;
@@ -818,12 +900,17 @@
 
   /* ── MEMORIES ── */
   const LEGACY_DEFAULT_IDS = new Set(['def1', 'def2', 'def3', 'def4', 'def5']);
+  const NOTE_EMOJIS = ['☕','🛡️','🌙','🌱','🤗','💛','⭐','🎉','💜','🌸','✨','🙌','💪','🫶','😊','🌟','💖','🎯','🔥','🌈'];
   let editingMemoryId = null;
+
+  function randomEmoji() {
+    return NOTE_EMOJIS[Math.floor(Math.random() * NOTE_EMOJIS.length)];
+  }
 
   const starterNote = {
     id: 'starter',
     emoji: '✏️',
-    text: 'This wall is yours to play with! Set your name above, write a note below, post it — then edit anyone\'s note and watch who changed what. (She\'d probably reply before you finish typing.)',
+    text: 'Set your name above, write a note, hit Post — you\'ll get a random emoji! Edit anyone\'s note and see who changed what. (She\'d probably reply before you finish typing.)',
     author: 'The wall',
   };
 
@@ -838,8 +925,11 @@
   function savePlayerName() {
     const name = getPlayerName();
     if (name) localStorage.setItem('farewell_username', name);
-    const authorField = document.getElementById('mem-author');
-    if (authorField && !authorField.value.trim()) authorField.placeholder = name || 'Your name';
+    renderVotes();
+  }
+
+  function normalizeName(name) {
+    return name.trim().toLowerCase();
   }
 
   function loadPlayerName() {
@@ -849,10 +939,10 @@
     savePlayerName();
   }
 
-  function requirePlayerName(action) {
+  function requirePlayerName(action, statusId = 'mem-status') {
     const name = getPlayerName();
     if (!name) {
-      setStatus('mem-status', `Set your name above before you ${action}!`, true);
+      setStatus(statusId, `Set your name above before you ${action}!`, true);
       document.getElementById('player-name').focus();
       return null;
     }
@@ -874,30 +964,21 @@
     if (m.id === 'starter') {
       return `<span class="note-author">— ${escHtml(m.author)}</span>`;
     }
-    const postedBy = m.createdBy || m.author || 'Anonymous';
-    const postedWhen = m.createdAt ? formatWhen(m.createdAt) : '';
-    const postedTip = `Posted by ${postedBy}${postedWhen ? ' · ' + postedWhen : ''}`;
-
-    let badges = `<span class="meta-pill" tabindex="0">
-      posted · ${escHtml(postedBy)}
-      <span class="meta-tip">${escHtml(postedTip)}</span>
-    </span>`;
-
+    let badges = '';
     if (m.editedBy) {
       const when = formatWhen(m.editedAt);
-      let tip = `Last edited by ${m.editedBy}${when ? ' · ' + when : ''}`;
+      let tip = `Edited by ${m.editedBy}${when ? ' · ' + when : ''}`;
       if (m.editHistory && m.editHistory.length > 1) {
         tip += ' — ' + m.editHistory.map(e => e.by).join(' → ');
       }
-      badges += `<span class="meta-pill meta-pill-edited" tabindex="0">
+      badges = `<span class="meta-badges"><span class="meta-pill meta-pill-edited" tabindex="0">
         ✏️ ${escHtml(m.editedBy)}
         <span class="meta-tip">${escHtml(tip)}</span>
-      </span>`;
+      </span></span>`;
     }
-
     return `<div class="note-meta-row">
       <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
-      <span class="meta-badges">${badges}</span>
+      ${badges}
     </div>`;
   }
 
@@ -927,8 +1008,6 @@
     if (!mem) return;
     editingMemoryId = id;
     document.getElementById('mem-text').value = mem.text;
-    document.getElementById('mem-author').value = mem.author === 'Anonymous' ? '' : mem.author;
-    document.getElementById('mem-emoji').value = mem.emoji || '';
     document.getElementById('post-btn').textContent = 'Save changes';
     document.getElementById('cancel-edit-btn').style.display = '';
     document.getElementById('memory-form').classList.add('editing-mode');
@@ -939,8 +1018,6 @@
   function cancelEdit() {
     editingMemoryId = null;
     document.getElementById('mem-text').value = '';
-    document.getElementById('mem-author').value = '';
-    document.getElementById('mem-emoji').value = '';
     document.getElementById('post-btn').textContent = 'Post it!';
     document.getElementById('cancel-edit-btn').style.display = 'none';
     document.getElementById('memory-form').classList.remove('editing-mode');
@@ -951,8 +1028,6 @@
     const player = requirePlayerName('post');
     if (!player) return;
     const text = document.getElementById('mem-text').value.trim();
-    const author = document.getElementById('mem-author').value.trim() || player;
-    const emoji = document.getElementById('mem-emoji').value.trim() || '💛';
     if (!text) { setStatus('mem-status', 'Write something first!', true); return; }
     const btn = document.getElementById('post-btn');
     btn.disabled = true;
@@ -964,8 +1039,6 @@
       const mem = appData.memories.find(m => m.id === editingMemoryId);
       if (mem) {
         mem.text = text;
-        mem.author = author;
-        mem.emoji = emoji;
         mem.editedBy = player;
         mem.editedAt = now;
         if (!mem.editHistory) mem.editHistory = [];
@@ -974,8 +1047,9 @@
     } else {
       appData.memories.push({
         id: 'u_' + Date.now(),
-        emoji, text, author,
-        createdBy: player,
+        emoji: randomEmoji(),
+        text,
+        author: player,
         createdAt: now,
       });
     }
@@ -1030,6 +1104,26 @@
     { key: 'warmth', label: 'Southern warmth', bg:'var(--coral-bg)', border:'var(--coral-mid)', color:'#4A1B0C' },
   ];
 
+  function getMyVoteKey() {
+    const player = getPlayerName();
+    if (!player) return null;
+    const norm = normalizeName(player);
+    const entry = Object.entries(appData.votePicks || {}).find(([name]) => normalizeName(name) === norm);
+    if (!entry) return null;
+    const pick = entry[1];
+    return typeof pick === 'string' ? pick : pick.trait;
+  }
+
+  function getVoteCounts() {
+    const counts = {};
+    traits.forEach(t => { counts[t.key] = 0; });
+    Object.values(appData.votePicks || {}).forEach(pick => {
+      const key = typeof pick === 'string' ? pick : pick.trait;
+      if (counts[key] !== undefined) counts[key]++;
+    });
+    return counts;
+  }
+
   function buildTraitGrid() {
     const grid = document.getElementById('trait-grid');
     grid.innerHTML = traits.map(t => `
@@ -1039,26 +1133,70 @@
       </button>`).join('');
   }
 
+  function renderVoterBoard() {
+    const list = document.getElementById('voter-list');
+    if (!list) return;
+    const entries = Object.entries(appData.votePicks || {})
+      .map(([name, pick]) => {
+        const key = typeof pick === 'string' ? pick : pick.trait;
+        const trait = traits.find(t => t.key === key);
+        return { name, label: trait ? trait.label : key, color: trait ? trait.color : 'var(--muted)' };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+    list.innerHTML = entries.map(e => `
+      <div class="voter-row">
+        <span class="voter-name">${escHtml(e.name)}</span>
+        <span class="voter-pick" style="color:${e.color}">${escHtml(e.label)}</span>
+      </div>`).join('');
+  }
+
   function renderVotes() {
+    const counts = getVoteCounts();
+    const myVote = getMyVoteKey();
+    const alreadyVoted = !!myVote;
+
     traits.forEach(t => {
       const el = document.getElementById('vc-' + t.key);
-      if (el) el.textContent = appData.votes[t.key] || 0;
+      const chip = document.getElementById('chip-' + t.key);
+      if (el) el.textContent = counts[t.key] || 0;
+      if (chip) {
+        chip.classList.toggle('my-pick', myVote === t.key);
+        chip.classList.toggle('voted-out', alreadyVoted && myVote !== t.key);
+        chip.disabled = alreadyVoted;
+      }
     });
-    updateTopTrait();
+    updateTopTrait(counts);
+    renderVoterBoard();
   }
 
   async function voteFor(key) {
-    appData.votes[key] = (appData.votes[key] || 0) + 1;
+    const player = requirePlayerName('vote', 'vote-status');
+    if (!player) return;
+    if (getMyVoteKey()) {
+      const trait = traits.find(t => t.key === getMyVoteKey());
+      setStatus('vote-status', `You already picked "${trait ? trait.label : 'one'}" — one vote only!`, true);
+      return;
+    }
+    const norm = normalizeName(player);
+    const existingKey = Object.keys(appData.votePicks).find(n => normalizeName(n) === norm);
+    if (existingKey) delete appData.votePicks[existingKey];
+    appData.votePicks[player] = { trait: key, at: new Date().toISOString() };
     renderVotes();
     await saveData();
+    const trait = traits.find(t => t.key === key);
+    setStatus('vote-status', `Locked in: "${trait.label}" — saved as ${player}`);
+    setTimeout(() => setStatus('vote-status', ''), 3000);
   }
 
-  function updateTopTrait() {
-    const top = traits.reduce((a, b) => (appData.votes[b.key]||0) > (appData.votes[a.key]||0) ? b : a);
-    const count = appData.votes[top.key] || 0;
-    document.getElementById('top-trait').textContent = count > 0
-      ? `Top superpower: "${top.label}" (${count} votes)`
-      : 'Vote for her superpowers above!';
+  function updateTopTrait(counts) {
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    if (total === 0) {
+      document.getElementById('top-trait').textContent = 'Pick her superpower above!';
+      return;
+    }
+    const top = traits.reduce((a, b) => (counts[b.key] || 0) > (counts[a.key] || 0) ? b : a);
+    document.getElementById('top-trait').textContent =
+      `Top superpower: "${top.label}" (${counts[top.key]} of ${total} votes)`;
   }
 
   /* ── TIMELINE ── */
