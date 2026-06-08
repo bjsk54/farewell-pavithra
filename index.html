@@ -1142,52 +1142,213 @@
   }
 
   /* WORD CLOUD */
-  .cloud-sub { font-size: 15px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .cloud-sub { font-size: 15px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+  .cloud-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--purple-mid);
+    text-align: center;
+    margin-bottom: 12px;
+  }
   .cloud-meta {
     font-family: 'Caveat', cursive;
     font-size: 17px;
     color: var(--purple-mid);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     min-height: 22px;
+    text-align: center;
   }
-  .word-cloud-wrap {
-    min-height: 280px;
-    background: linear-gradient(135deg, var(--purple-bg) 0%, var(--cream) 45%, var(--teal-bg) 100%);
+  .cloud-stage-wrap {
+    position: relative;
+  }
+  .cloud-stage {
+    position: relative;
+    height: 360px;
+    max-width: 700px;
+    margin: 0 auto 14px;
+    overflow: visible;
+    transition: transform 0.5s ease;
+  }
+  .cloud-stage.shaking {
+    animation: cloud-shake-wobble 0.55s ease;
+  }
+  @keyframes cloud-shake-wobble {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    20% { transform: translateX(-6px) rotate(-1deg); }
+    40% { transform: translateX(8px) rotate(1.2deg); }
+    60% { transform: translateX(-4px) rotate(-0.6deg); }
+    80% { transform: translateX(5px) rotate(0.8deg); }
+  }
+  .cloud-sky {
+    position: absolute;
+    inset: -8px -12px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #E8F4FC 0%, var(--purple-bg) 38%, var(--cream) 100%);
     border: 2px dashed var(--purple-mid);
-    border-radius: 14px;
-    padding: 24px 18px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 10px 14px;
-    line-height: 1.1;
+    pointer-events: none;
   }
-  .cloud-word {
-    font-family: 'Caveat', cursive;
-    font-weight: 700;
-    cursor: default;
-    display: inline-block;
-    padding: 2px 4px;
-    animation: cloud-float 6s ease-in-out infinite;
-    transform: rotate(var(--rot, 0deg));
-    transition: transform 0.2s, opacity 0.2s;
+  .cloud-puffs {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 94%;
+    height: 82%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: drop-shadow(0 10px 24px rgba(83, 74, 183, 0.14));
+    animation: cloud-drift-slow 14s ease-in-out infinite;
   }
-  .cloud-word:hover {
-    transform: rotate(0deg) scale(1.12);
+  @keyframes cloud-drift-slow {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+    50%      { transform: translate(-50%, -50%) translateX(10px); }
+  }
+  .puff {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #fff 0%, #F7F6FF 42%, #E8F8F2 100%);
+    opacity: 0.95;
+  }
+  .puff-1 { width: 38%; height: 48%; left: 6%;  top: 26%; }
+  .puff-2 { width: 44%; height: 54%; left: 22%; top: 16%; }
+  .puff-3 { width: 40%; height: 50%; left: 48%; top: 20%; }
+  .puff-4 { width: 34%; height: 42%; left: 62%; top: 34%; }
+  .puff-5 { width: 36%; height: 44%; left: 14%; top: 44%; }
+  .puff-6 { width: 42%; height: 46%; left: 36%; top: 40%; }
+  .cloud-words-layer {
+    position: absolute;
+    inset: 0;
     z-index: 2;
   }
-  @keyframes cloud-float {
-    0%, 100% { transform: rotate(var(--rot, 0deg)) translateY(0); }
-    50%      { transform: rotate(var(--rot, 0deg)) translateY(-5px); }
+  .cloud-word-tag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    padding: 2px 6px;
+    white-space: nowrap;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.75), 0 2px 8px rgba(255,255,255,0.4);
+    will-change: transform;
+    transition: filter 0.2s, opacity 0.25s;
+  }
+  .cloud-word-tag:active { cursor: grabbing; }
+  .cloud-word-tag:hover,
+  .cloud-word-tag.selected {
+    z-index: 20;
+    filter: drop-shadow(0 3px 10px rgba(83, 74, 183, 0.4));
+  }
+  .cloud-word-tag.selected { transform-origin: center; }
+  .cloud-stage.dim-others .cloud-word-tag:not(:hover):not(.selected) {
+    opacity: 0.38;
+  }
+  .cloud-shake-btn {
+    display: block;
+    margin: 0 auto 14px;
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    font-weight: 700;
+    padding: 10px 26px;
+    border: 2.5px solid var(--purple-mid);
+    border-radius: 999px;
+    background: var(--purple-bg);
+    color: var(--purple-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .cloud-shake-btn:hover { background: #CECBF6; transform: scale(1.04); }
+  .cloud-detail {
+    background: var(--cream);
+    border: 2px solid var(--purple-mid);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-top: 4px;
+    animation: modal-pop 0.2s ease;
+  }
+  .cloud-detail[hidden] { display: none; }
+  .cloud-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed var(--border);
+  }
+  .cloud-detail-word {
+    font-family: 'Caveat', cursive;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+  .cloud-detail-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    background: #F1EFE8;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .cloud-detail-close {
+    margin-left: auto;
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    background: var(--cream);
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .cloud-detail-close:hover { color: var(--ink); border-color: var(--ink); }
+  .cloud-detail-list { display: flex; flex-direction: column; gap: 10px; }
+  .cloud-snippet {
+    background: var(--purple-bg);
+    border: 1.5px dashed #C5C0F0;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .cloud-snippet-type {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--purple-mid);
+    margin-bottom: 4px;
+  }
+  .cloud-snippet-text {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .cloud-snippet-text mark {
+    background: #FAC775;
+    color: var(--amber-dark);
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+  .cloud-snippet-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-top: 6px;
   }
   .cloud-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'Caveat', cursive;
     font-size: 20px;
     color: var(--muted);
     text-align: center;
-    padding: 40px 16px;
-    width: 100%;
+    padding: 24px;
+    z-index: 3;
   }
 
   /* LOADING */
@@ -1202,7 +1363,8 @@
   @media (prefers-reduced-motion: reduce) {
     .celebrate-bg, .float-deco { display: none; }
     .hero { animation: none; }
-    .cloud-word { animation: none; }
+    .cloud-puffs { animation: none; }
+    .cloud-stage.shaking { animation: none; }
   }
 
   /* RESPONSIVE */
@@ -1354,9 +1516,24 @@
     <div class="card">
       <div class="card-title">Living word cloud</div>
       <p class="cloud-sub">Grows as people post — pulled from memories, lessons & goodbye wishes.</p>
+      <p class="cloud-hint">Tap a word to see where it came from · drag to play · shake to reshuffle ☁️</p>
       <div class="cloud-meta" id="cloud-meta"></div>
-      <div class="word-cloud-wrap" id="word-cloud">
-        <div class="cloud-empty">Gathering words…</div>
+      <div class="cloud-stage-wrap">
+        <div class="cloud-stage" id="cloud-stage">
+          <div class="cloud-sky" aria-hidden="true"></div>
+          <div class="cloud-puffs" aria-hidden="true">
+            <span class="puff puff-1"></span>
+            <span class="puff puff-2"></span>
+            <span class="puff puff-3"></span>
+            <span class="puff puff-4"></span>
+            <span class="puff puff-5"></span>
+            <span class="puff puff-6"></span>
+          </div>
+          <div class="cloud-words-layer" id="cloud-words"></div>
+          <div class="cloud-empty" id="cloud-empty" style="display:none">Post memories, lessons & wishes — words will gather here.</div>
+        </div>
+        <button type="button" class="cloud-shake-btn" id="cloud-shake-btn" onclick="shakeCloud()" style="display:none">Shake the cloud ☁️</button>
+        <div class="cloud-detail" id="cloud-detail" hidden></div>
       </div>
     </div>
   </div>
@@ -2283,6 +2460,14 @@
     'into','over','after','before','still','more','much','some','any','no','yes','like','know','think','said',
     'because','even','every','never','ever','its','him','his','us','am','im','ive','youre','shes','were','being',
   ]);
+  const CLOUD_COLORS = ['#26215C','#04342C','#993556','#BA7517','#993C1D','#534AB7','#0F6E56','#7F77DD'];
+  let cloudPlacements = [];
+  let cloudShuffleSeed = 0;
+  let cloudAnimId = null;
+  let cloudAnimOn = false;
+  let cloudDrag = null;
+  let cloudDragMoved = false;
+  let cloudMeasureCtx = null;
 
   function extractCloudWords(text) {
     return String(text || '').toLowerCase()
@@ -2293,55 +2478,333 @@
   }
 
   function buildWordFreqs() {
-    const texts = [
-      ...(appData.memories || []).map(m => m.text),
-      ...(appData.goodbyes || []).map(g => g.text),
-      ...(appData.lessons || []).map(l => l.text),
-    ].filter(Boolean);
     const freq = {};
-    texts.forEach(t => {
-      extractCloudWords(t).forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+    (appData.memories || []).forEach(m => {
+      if (m.id === 'starter') return;
+      extractCloudWords(m.text).forEach(w => { freq[w] = (freq[w] || 0) + 1; });
     });
-    return Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 55);
+    (appData.goodbyes || []).forEach(g => {
+      extractCloudWords(g.text).forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+    });
+    (appData.lessons || []).forEach(l => {
+      extractCloudWords(l.text).forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+    });
+    return Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 45);
   }
 
   function cloudSourceCount() {
     const mems = (appData.memories || []).filter(m => m.id !== 'starter').length;
-    const wishes = (appData.goodbyes || []).length;
-    const lessons = (appData.lessons || []).length;
-    return mems + wishes + lessons;
+    return mems + (appData.goodbyes || []).length + (appData.lessons || []).length;
+  }
+
+  function getCloudMeasureCtx() {
+    if (!cloudMeasureCtx) {
+      const c = document.createElement('canvas');
+      cloudMeasureCtx = c.getContext('2d');
+    }
+    return cloudMeasureCtx;
+  }
+
+  function measureCloudWord(word, fontSize) {
+    const ctx = getCloudMeasureCtx();
+    ctx.font = `700 ${fontSize}px Caveat, cursive`;
+    const m = ctx.measureText(word);
+    return { w: m.width + 14, h: fontSize * 1.2 };
+  }
+
+  function cloudInEllipse(x, y, cx, cy, rx, ry) {
+    const dx = (x - cx) / rx;
+    const dy = (y - cy) / ry;
+    return dx * dx + dy * dy <= 1;
+  }
+
+  function cloudBoxOverlap(x, y, w, h, boxes) {
+    const pad = 5;
+    for (const b of boxes) {
+      if (Math.abs(x - b.x) < (w + b.w) / 2 + pad && Math.abs(y - b.y) < (h + b.h) / 2 + pad) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function layoutCloudWords(freq, stageW, stageH) {
+    const cx = stageW / 2;
+    const cy = stageH / 2;
+    const rx = stageW * 0.41;
+    const ry = stageH * 0.36;
+    const max = freq[0][1];
+    const min = freq[freq.length - 1][1] || 1;
+    const boxes = [];
+    const placed = [];
+
+    freq.forEach(([word, count], i) => {
+      const size = 16 + Math.round(((count - min) / (max - min || 1)) * 34);
+      const dim = measureCloudWord(word, size);
+      let found = false;
+      for (let t = 0; t < 900 && !found; t++) {
+        const angle = t * 0.42 + cloudShuffleSeed + i * 0.7;
+        const r = 4 + t * 1.65;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r * 0.82;
+        if (!cloudInEllipse(x, y, cx, cy, rx, ry)) continue;
+        if (cloudBoxOverlap(x, y, dim.w, dim.h, boxes)) continue;
+        const rot = ((angle * 40) % 24) - 12;
+        placed.push({
+          word, count, size, w: dim.w, h: dim.h,
+          x, y, rot,
+          color: CLOUD_COLORS[i % CLOUD_COLORS.length],
+          phase: Math.random() * Math.PI * 2,
+          offX: 0, offY: 0,
+        });
+        boxes.push({ x, y, w: dim.w, h: dim.h });
+        found = true;
+      }
+    });
+    return placed;
+  }
+
+  function buildWordSources() {
+    const map = {};
+    const add = (word, type, author, text) => {
+      if (!map[word]) map[word] = [];
+      const lower = text.toLowerCase();
+      const idx = lower.indexOf(word);
+      let excerpt = text;
+      if (idx >= 0) {
+        const start = Math.max(0, idx - 28);
+        const end = Math.min(text.length, idx + word.length + 36);
+        excerpt = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      } else if (text.length > 90) {
+        excerpt = text.slice(0, 90) + '…';
+      }
+      map[word].push({ type, author, excerpt, raw: text });
+    };
+    (appData.memories || []).forEach(m => {
+      if (m.id === 'starter') return;
+      extractCloudWords(m.text).forEach(w => add(w, 'Memory', m.author, m.text));
+    });
+    (appData.goodbyes || []).forEach(g => {
+      extractCloudWords(g.text).forEach(w => add(w, 'Wish', g.author, g.text));
+    });
+    (appData.lessons || []).forEach(l => {
+      extractCloudWords(l.text).forEach(w => add(w, 'Lesson', l.author, l.text));
+    });
+    return map;
+  }
+
+  function highlightWordInExcerpt(excerpt, word) {
+    const re = new RegExp('(' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return escHtml(excerpt).replace(re, '<mark>$1</mark>');
+  }
+
+  function closeCloudDetail() {
+    const panel = document.getElementById('cloud-detail');
+    if (panel) panel.hidden = true;
+    document.querySelectorAll('.cloud-word-tag.selected').forEach(el => el.classList.remove('selected'));
+    document.getElementById('cloud-stage')?.classList.remove('dim-others');
+  }
+
+  function showCloudDetail(word, count) {
+    const panel = document.getElementById('cloud-detail');
+    const sources = (buildWordSources()[word] || []).slice(0, 6);
+    const unique = [];
+    const seen = new Set();
+    sources.forEach(s => {
+      const key = s.type + s.author + s.raw;
+      if (seen.has(key)) return;
+      seen.add(key);
+      unique.push(s);
+    });
+    panel.hidden = false;
+    panel.innerHTML = `
+      <div class="cloud-detail-head">
+        <span class="cloud-detail-word">${escHtml(word)}</span>
+        <span class="cloud-detail-count">${count} mention${count === 1 ? '' : 's'}</span>
+        <button type="button" class="cloud-detail-close" onclick="closeCloudDetail()" aria-label="Close">×</button>
+      </div>
+      <div class="cloud-detail-list">
+        ${unique.length ? unique.map(s => `
+          <div class="cloud-snippet">
+            <div class="cloud-snippet-type">${escHtml(s.type)}</div>
+            <div class="cloud-snippet-text">${highlightWordInExcerpt(s.excerpt, word)}</div>
+            <div class="cloud-snippet-author">— ${escHtml(s.author)}</div>
+          </div>`).join('') : '<div class="cloud-snippet-text">This word is floating around the cloud…</div>'}
+      </div>`;
+    document.getElementById('cloud-stage')?.classList.add('dim-others');
+    document.querySelectorAll('.cloud-word-tag').forEach(el => {
+      el.classList.toggle('selected', el.dataset.word === word);
+    });
+  }
+
+  function applyCloudWordTransform(el, p, floatX, floatY) {
+    const scale = el.classList.contains('selected') ? 1.18 : (el.matches(':hover') ? 1.12 : 1);
+    const ox = p.offX + (cloudDrag && cloudDrag.word === p.word ? cloudDrag.dx : floatX);
+    const oy = p.offY + (cloudDrag && cloudDrag.word === p.word ? cloudDrag.dy : floatY);
+    el.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px)) rotate(${p.rot}deg) scale(${scale})`;
+  }
+
+  function mountCloudWords() {
+    const layer = document.getElementById('cloud-words');
+    const stage = document.getElementById('cloud-stage');
+    if (!layer || !stage) return;
+    layer.innerHTML = '';
+    cloudPlacements.forEach(p => {
+      const el = document.createElement('span');
+      el.className = 'cloud-word-tag';
+      el.id = 'cw-' + p.word;
+      el.dataset.word = p.word;
+      el.textContent = p.word;
+      el.style.left = p.x + 'px';
+      el.style.top = p.y + 'px';
+      el.style.fontSize = p.size + 'px';
+      el.style.color = p.color;
+      el.title = p.count === 1 ? '1 mention — tap or drag' : p.count + ' mentions — tap or drag';
+
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        cloudDragMoved = false;
+        cloudDrag = {
+          word: p.word,
+          startX: e.clientX,
+          startY: e.clientY,
+          dx: 0,
+          dy: 0,
+          el,
+        };
+        el.setPointerCapture(e.pointerId);
+        el.classList.add('selected');
+        stage.classList.add('dim-others');
+      });
+      el.addEventListener('pointermove', (e) => {
+        if (!cloudDrag || cloudDrag.word !== p.word) return;
+        const dx = e.clientX - cloudDrag.startX;
+        const dy = e.clientY - cloudDrag.startY;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) cloudDragMoved = true;
+        cloudDrag.dx = dx;
+        cloudDrag.dy = dy;
+        applyCloudWordTransform(el, p, 0, 0);
+      });
+      el.addEventListener('pointerup', (e) => {
+        if (!cloudDrag || cloudDrag.word !== p.word) return;
+        if (cloudDragMoved) {
+          p.offX += cloudDrag.dx;
+          p.offY += cloudDrag.dy;
+          el.classList.remove('selected');
+          stage.classList.remove('dim-others');
+        } else {
+          showCloudDetail(p.word, p.count);
+        }
+        cloudDrag = null;
+        try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+      });
+      el.addEventListener('pointercancel', () => {
+        if (cloudDrag && cloudDrag.word === p.word) {
+          cloudDrag = null;
+          el.classList.remove('selected');
+          stage.classList.remove('dim-others');
+        }
+      });
+      el.addEventListener('pointerenter', () => {
+        if (!cloudDrag) stage.classList.add('dim-others');
+      });
+      el.addEventListener('pointerleave', () => {
+        if (!cloudDrag && !document.querySelector('.cloud-word-tag.selected')) {
+          stage.classList.remove('dim-others');
+        }
+      });
+
+      layer.appendChild(el);
+    });
+  }
+
+  function startCloudAnim() {
+    if (cloudAnimOn || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    cloudAnimOn = true;
+    const stage = document.getElementById('cloud-stage');
+    function tick(t) {
+      if (!cloudAnimOn) return;
+      cloudPlacements.forEach(p => {
+        const el = document.getElementById('cw-' + p.word);
+        if (!el) return;
+        if (cloudDrag && cloudDrag.word === p.word) {
+          applyCloudWordTransform(el, p, 0, 0);
+          return;
+        }
+        const fx = Math.sin(t / 1100 + p.phase) * 5;
+        const fy = Math.cos(t / 1300 + p.phase) * 4;
+        applyCloudWordTransform(el, p, fx, fy);
+      });
+      cloudAnimId = requestAnimationFrame(tick);
+    }
+    cloudAnimId = requestAnimationFrame(tick);
+  }
+
+  function stopCloudAnim() {
+    cloudAnimOn = false;
+    if (cloudAnimId) cancelAnimationFrame(cloudAnimId);
+    cloudAnimId = null;
+  }
+
+  function shakeCloud() {
+    cloudShuffleSeed = Math.random() * 20;
+    closeCloudDetail();
+    const stage = document.getElementById('cloud-stage');
+    stage?.classList.remove('shaking');
+    void stage?.offsetWidth;
+    stage?.classList.add('shaking');
+    setTimeout(() => stage?.classList.remove('shaking'), 600);
+    renderWordCloud();
   }
 
   function renderWordCloud() {
-    const wrap = document.getElementById('word-cloud');
+    const stage = document.getElementById('cloud-stage');
+    const empty = document.getElementById('cloud-empty');
+    const shakeBtn = document.getElementById('cloud-shake-btn');
     const meta = document.getElementById('cloud-meta');
-    if (!wrap) return;
+    if (!stage) return;
+
     const freq = buildWordFreqs();
     const sources = cloudSourceCount();
     if (meta) {
       meta.textContent = freq.length
-        ? `${freq.length} words from ${sources} post${sources === 1 ? '' : 's'} — updates live`
+        ? `${freq.length} words floating from ${sources} post${sources === 1 ? '' : 's'}`
         : '';
     }
+
     if (!freq.length) {
-      wrap.innerHTML = '<div class="cloud-empty">Post memories, lessons & wishes — words will gather here.</div>';
+      cloudPlacements = [];
+      document.getElementById('cloud-words').innerHTML = '';
+      if (empty) empty.style.display = 'flex';
+      if (shakeBtn) shakeBtn.style.display = 'none';
+      closeCloudDetail();
+      stopCloudAnim();
       return;
     }
-    const max = freq[0][1];
-    const min = freq[freq.length - 1][1] || 1;
-    const colors = [
-      'var(--purple-dark)', 'var(--teal-dark)', 'var(--pink-mid)',
-      'var(--amber-mid)', 'var(--coral-mid)', 'var(--purple-mid)', 'var(--teal-mid)',
-    ];
-    wrap.innerHTML = freq.map(([word, count], i) => {
-      const size = 15 + Math.round(((count - min) / (max - min || 1)) * 30);
-      const rot = ((i * 17) % 11) - 5;
-      const delay = ((i * 0.37) % 4).toFixed(2);
-      const color = colors[i % colors.length];
-      const title = count === 1 ? '1 mention' : count + ' mentions';
-      return `<span class="cloud-word" style="font-size:${size}px;color:${color};--rot:${rot}deg;animation-delay:${delay}s" title="${title}">${escHtml(word)}</span>`;
-    }).join('');
+
+    if (empty) empty.style.display = 'none';
+    if (shakeBtn) shakeBtn.style.display = 'block';
+
+    const w = stage.clientWidth || 680;
+    const h = stage.clientHeight || 360;
+    cloudPlacements = layoutCloudWords(freq, w, h);
+    mountCloudWords();
+
+    const cloudPanel = document.getElementById('panel-cloud');
+    if (cloudPanel?.classList.contains('active')) startCloudAnim();
   }
+
+  let cloudResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(cloudResizeTimer);
+    cloudResizeTimer = setTimeout(() => {
+      if (document.getElementById('panel-cloud')?.classList.contains('active')) renderWordCloud();
+    }, 200);
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCloudAnim();
+    else if (document.getElementById('panel-cloud')?.classList.contains('active')) startCloudAnim();
+  });
 
   /* ── GOODBYE WISHES ── */
   function findGoodbyeByAuthor(name) {
@@ -2575,7 +3038,13 @@
     const map = ['memories','traits','timeline','chaos','lessons','cloud','vibes','goodbye'];
     const idx = map.indexOf(name);
     if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
-    if (name === 'cloud') renderWordCloud();
+    if (name === 'cloud') {
+      renderWordCloud();
+      startCloudAnim();
+    } else {
+      stopCloudAnim();
+      closeCloudDetail();
+    }
   }
 
   /* ── UTILS ── */
