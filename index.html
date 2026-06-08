@@ -699,7 +699,86 @@
     transition: background 0.15s, transform 0.1s;
   }
   .love-btn:hover { background: #F4C0D1; transform: scale(1.04); }
-  .love-sent { font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); margin-top: 12px; min-height: 28px; }
+  .goodbye-form {
+    text-align: left;
+    margin-top: 8px;
+    margin-bottom: 20px;
+  }
+  .goodbye-form textarea {
+    width: 100%;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    padding: 12px 14px;
+    border: 2px dashed var(--pink-mid);
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+    min-height: 72px;
+    margin-bottom: 10px;
+  }
+  .goodbye-form textarea:focus { border-color: var(--pink-dark); border-style: solid; }
+  .goodbye-form-hint {
+    font-size: 13px;
+    color: #9E4A66;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .goodbye-wall-title {
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--pink-dark);
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .goodbye-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+    text-align: left;
+    padding-right: 4px;
+  }
+  .goodbye-wall::-webkit-scrollbar { width: 5px; }
+  .goodbye-wall::-webkit-scrollbar-thumb {
+    background: #E8B4C4;
+    border-radius: 999px;
+  }
+  .goodbye-msg {
+    background: rgba(255, 254, 247, 0.9);
+    border: 2px dashed #E8B4C4;
+    border-radius: 12px;
+    padding: 14px;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .goodbye-msg:hover {
+    background: var(--cream);
+    transform: rotate(-0.5deg);
+  }
+  .goodbye-msg-text {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: #72243E;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .goodbye-msg-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--pink-mid);
+  }
+  .goodbye-empty {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: #9E4A66;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 16px;
+  }
+  .love-sent { font-family: 'Caveat', cursive; font-size: 18px; color: var(--pink-mid); margin-top: 10px; min-height: 24px; }
 
   /* LOADING */
   .loading {
@@ -734,7 +813,7 @@
   <div class="player-bar">
     <label for="player-name">Your name</label>
     <input type="text" id="player-name" placeholder="Required to post, edit & vote" maxlength="30" oninput="savePlayerName()"/>
-    <span class="player-hint">Saved on this device — used for memories & superpower votes.</span>
+    <span class="player-hint">Saved on this device — used for memories, votes & goodbye wishes.</span>
   </div>
 
   <!-- TABS -->
@@ -825,8 +904,16 @@
         <span class="gtag" style="background:var(--pink-bg);border-color:var(--pink-mid);color:var(--pink-dark);">Truly caring</span>
         <span class="gtag" style="background:var(--teal-bg);border-color:var(--teal-mid);color:var(--teal-dark);">Southern warmth</span>
       </div>
-      <button class="love-btn" onclick="sendLove()">Send her love!</button>
-      <div class="love-sent" id="love-sent"></div>
+      <div class="goodbye-form">
+        <p class="goodbye-form-hint">Write something for her next chapter — your wish is saved for everyone to see.</p>
+        <textarea id="goodbye-text" rows="3" placeholder="Wishing you all the best in your future endeavours..."></textarea>
+        <button class="love-btn" onclick="sendGoodbye()">Send your wishes ✨</button>
+        <div class="love-sent" id="goodbye-status"></div>
+      </div>
+      <div class="goodbye-wall-title">Wishes from the team</div>
+      <div class="goodbye-wall" id="goodbye-wall">
+        <div class="goodbye-empty">Loading wishes...</div>
+      </div>
     </div>
   </div>
 
@@ -835,11 +922,11 @@
 <script>
   /* ── CONFIG ── */
   const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
-  const BIN_ID = '6a2669a1da38895dfe9823b4';
+  const BIN_ID = '6a267faef5f4af5e29ca0226';
   const API_KEY = '$2a$10$ebTFbXnW6TTeQkY68iHNnu3ftNiRofiOAvpzzstoJ/MxdcE8pQrni';
 
   /* ── DATA ── */
-  let appData = { memories: [], votePicks: {} };
+  let appData = { memories: [], votePicks: {}, goodbyes: [] };
 
   async function loadData() {
     try {
@@ -847,9 +934,10 @@
         headers: { 'X-Access-Key': API_KEY }
       });
       const j = await r.json();
-      appData = j.record || { memories: [], votePicks: {} };
+      appData = j.record || { memories: [], votePicks: {}, goodbyes: [] };
       if (!appData.memories) appData.memories = [];
       if (!appData.votePicks) appData.votePicks = {};
+      if (!appData.goodbyes) appData.goodbyes = [];
       if (migrateVotePicks()) await saveData();
       const cleaned = stripLegacyDefaults(appData.memories);
       if (cleaned.length !== appData.memories.length) {
@@ -858,6 +946,7 @@
       }
       renderMemories(appData.memories);
       renderVotes();
+      renderGoodbyes();
     } catch(e) {
       document.getElementById('memory-grid').innerHTML = '<div class="loading" style="color:var(--red-mid)">Could not load data. Check your Bin ID and API Key.</div>';
     }
@@ -1273,14 +1362,54 @@
     m.style.background = chaosLevel >= 80 ? '#791F1F' : chaosLevel >= 55 ? '#D85A30' : '#E24B4A';
   }
 
-  /* ── LOVE ── */
-  const loveMsgs = [
-    'Love sent straight to her heart!', 'She felt that from across the timezone!',
-    'That\'s a lot of love. She deserves every bit.', 'Sending it all the way to the US South!',
-    'She\'d probably say "y\'all are too sweet!"'
-  ];
-  function sendLove() {
-    document.getElementById('love-sent').textContent = loveMsgs[Math.floor(Math.random() * loveMsgs.length)];
+  /* ── GOODBYE WISHES ── */
+  function findGoodbyeByAuthor(name) {
+    const norm = normalizeName(name);
+    return appData.goodbyes.find(g => normalizeName(g.author) === norm);
+  }
+
+  function renderGoodbyes() {
+    const wall = document.getElementById('goodbye-wall');
+    if (!wall) return;
+    const msgs = [...(appData.goodbyes || [])].sort((a, b) =>
+      new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+    if (!msgs.length) {
+      wall.innerHTML = '<div class="goodbye-empty">No wishes yet — be the first to write one!</div>';
+      return;
+    }
+    wall.innerHTML = msgs.map(g => `
+      <div class="goodbye-msg">
+        <div class="goodbye-msg-text">${escHtml(g.text)}</div>
+        <div class="goodbye-msg-author">— ${escHtml(g.author)}</div>
+      </div>`).join('');
+  }
+
+  async function sendGoodbye() {
+    const player = requirePlayerName('send wishes', 'goodbye-status');
+    if (!player) return;
+    const text = document.getElementById('goodbye-text').value.trim();
+    if (!text) {
+      setStatus('goodbye-status', 'Write something first!', true);
+      return;
+    }
+    const now = new Date().toISOString();
+    const existing = findGoodbyeByAuthor(player);
+    if (existing) {
+      existing.text = text;
+      existing.updatedAt = now;
+    } else {
+      appData.goodbyes.push({
+        id: 'g_' + Date.now(),
+        author: player,
+        text,
+        createdAt: now,
+      });
+    }
+    await saveData();
+    document.getElementById('goodbye-text').value = '';
+    renderGoodbyes();
+    setStatus('goodbye-status', existing ? 'Wish updated — sent with love!' : 'Wish sent — she\'ll love this!');
+    setTimeout(() => setStatus('goodbye-status', ''), 2800);
   }
 
   /* ── CONFETTI ── */
