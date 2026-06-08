@@ -132,6 +132,34 @@
   .confetti-btn:hover { background: #CECBF6; transform: scale(1.04); }
   #confetti-canvas { display: block; width: 100%; height: 100px; margin-top: 0; }
 
+  /* BIN SYNC STATUS */
+  .bin-sync-bar {
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    line-height: 1.4;
+    display: none;
+  }
+  .bin-sync-bar.ok {
+    display: block;
+    background: var(--teal-bg);
+    border: 1.5px solid var(--teal-mid);
+    color: var(--teal-dark);
+  }
+  .bin-sync-bar.warn {
+    display: block;
+    background: var(--amber-bg);
+    border: 1.5px dashed var(--amber-mid);
+    color: var(--amber-dark);
+  }
+  .bin-sync-bar.err {
+    display: block;
+    background: var(--red-bg);
+    border: 1.5px solid var(--red-mid);
+    color: #5C1A1A;
+  }
+
   /* TABS */
   .tabs {
     display: flex;
@@ -856,6 +884,8 @@
     <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
   </div>
 
+  <div class="bin-sync-bar" id="bin-sync-bar"></div>
+
   <!-- YOUR NAME (shared) -->
   <div class="player-bar">
     <label for="player-name">Your name</label>
@@ -968,14 +998,33 @@
 
 <script>
   /* ── CONFIG ── */
+  // JSONBIN_BASE is correct — "/v3/" is JSONBin's API version (not your bin). Don't change this.
   const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
   const BIN_ID = '6a267faef5f4af5e29ca0226';
-  const MASTER_KEY = '$2a$10$.Fu497nt0d3lh2dfOSG.lOYAj3zsAlseRqIKa1I1ASkn1jqrD/9Ae'; // ← paste your jsonbin.io Master Key here (API Keys → Master Key)
+  const MASTER_KEY = '$2a$10$.Fu497nt0d3lh2dfOSG.lOYAj3zsAlseRqIKa1I1ASkn1jqrD/9Ae';
 
   /* ── DATA ── */
   let appData = { memories: [], votePicks: {}, goodbyes: [] };
+  let lastSaveError = '';
+
+  function showBinSync(type, msg) {
+    const el = document.getElementById('bin-sync-bar');
+    if (!el) return;
+    el.className = 'bin-sync-bar ' + type;
+    el.textContent = msg;
+  }
+
+  function checkHowPageIsOpened() {
+    if (location.protocol === 'file:') {
+      showBinSync('warn',
+        'Opened as a local file — saves often fail this way. Run in terminal: npx serve . then open http://localhost:3000');
+      return false;
+    }
+    return true;
+  }
 
   async function loadData() {
+    checkHowPageIsOpened();
     try {
       const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`);
       if (!r.ok) {
@@ -996,7 +1045,9 @@
       renderMemories(appData.memories);
       renderVotes();
       renderGoodbyes();
+      await testBinSave();
     } catch(e) {
+      showBinSync('err', 'Cannot read bin: ' + e.message);
       document.getElementById('memory-grid').innerHTML =
         '<div class="loading" style="color:var(--red-mid)">Could not load data. Check bin ID.</div>';
     }
@@ -1004,7 +1055,11 @@
 
   async function saveData() {
     if (!MASTER_KEY) {
-      console.error('Set MASTER_KEY in index.html to save to JSONBin.');
+      lastSaveError = 'MASTER_KEY is empty in index.html';
+      return false;
+    }
+    if (location.protocol === 'file:') {
+      lastSaveError = 'Page opened as file:// — use a local server (npx serve .)';
       return false;
     }
     try {
@@ -1013,19 +1068,27 @@
         headers: {
           'Content-Type': 'application/json',
           'X-Master-Key': MASTER_KEY,
-          'X-Bin-Versioning': 'false',
         },
         body: JSON.stringify(appData),
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) {
-        console.error('JSONBin save failed:', j.message || r.status);
+        lastSaveError = j.message || 'Save failed (HTTP ' + r.status + ')';
         return false;
       }
       return true;
     } catch(e) {
-      console.error('JSONBin network error:', e);
+      lastSaveError = e.message || 'Network error — cannot reach jsonbin.io';
       return false;
+    }
+  }
+
+  async function testBinSave() {
+    const saved = await saveData();
+    if (saved) {
+      showBinSync('ok', 'Bin connected — reads & saves working (public bin ' + BIN_ID + ')');
+    } else if (location.protocol !== 'file:') {
+      showBinSync('err', 'Read OK but save failed: ' + (lastSaveError || 'check MASTER_KEY'));
     }
   }
 
@@ -1189,7 +1252,7 @@
     if (!saved) {
       if (wasEditing) { /* keep edit state */ }
       else appData.memories.pop();
-      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      setStatus('mem-status', 'Save failed: ' + (lastSaveError || 'check MASTER_KEY'), true);
       btn.disabled = false;
       return;
     }
@@ -1208,7 +1271,7 @@
     appData.memories = appData.memories.filter(m => m.id !== id);
     if (!(await saveData())) {
       appData.memories = backup;
-      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      setStatus('mem-status', 'Save failed: ' + (lastSaveError || 'check MASTER_KEY'), true);
       return;
     }
     renderMemories(appData.memories);
@@ -1222,7 +1285,7 @@
     appData.memories = [];
     if (!(await saveData())) {
       appData.memories = backup;
-      setStatus('mem-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      setStatus('mem-status', 'Save failed: ' + (lastSaveError || 'check MASTER_KEY'), true);
       return;
     }
     renderMemories(appData.memories);
@@ -1389,7 +1452,7 @@
     if (!(await saveData())) {
       appData.votePicks = backup;
       renderVotes();
-      setStatus('vote-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      setStatus('vote-status', 'Save failed: ' + (lastSaveError || 'check MASTER_KEY'), true);
       return;
     }
     setStatus('vote-status', msg);
@@ -1502,7 +1565,7 @@
     if (!(await saveData())) {
       appData.goodbyes = backup;
       renderGoodbyes();
-      setStatus('goodbye-status', 'Could not save — check MASTER_KEY in index.html.', true);
+      setStatus('goodbye-status', 'Save failed: ' + (lastSaveError || 'check MASTER_KEY'), true);
       return;
     }
     document.getElementById('goodbye-text').value = '';
