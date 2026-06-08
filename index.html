@@ -742,6 +742,29 @@
     margin-top: 10px;
     line-height: 1.4;
   }
+  .chaos-her-role {
+    text-align: left;
+    background: rgba(255, 254, 247, 0.7);
+    border: 2px dashed #E8B4B4;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    color: #72243E;
+    line-height: 1.55;
+  }
+  .chaos-her-role strong {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--red-mid);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .chaos-her-role ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .chaos-her-role li { margin-bottom: 4px; }
   .chaos-contributors {
     font-family: 'Caveat', cursive;
     font-size: 17px;
@@ -1023,15 +1046,24 @@
     <div class="card">
       <div class="chaos-section">
         <div class="chaos-h">Team Chaos Level Without Her</div>
-        <div class="chaos-sub">Everyone adds to the same meter — one shared meltdown for the whole team</div>
+        <div class="chaos-sub">She's usually the glue — click what falls apart when she's not there</div>
+        <div class="chaos-her-role">
+          <strong>What she normally holds together:</strong>
+          <ul>
+            <li>Checks in with <strong>Foundation</strong> & <strong>Platform</strong> — makes sure everything's working fine</li>
+            <li>Our <strong>Skills team bridge</strong> to other teams — she's always in the middle connecting</li>
+            <li>Talks to <strong>business</strong>, listens first, then crafts the fix — with full trust in the team</li>
+          </ul>
+        </div>
         <div class="meter-wrap" id="meter-wrap"><div class="meter-fill" id="meter" style="width:5%">5%</div></div>
-        <div class="meter-labels"><span>Totally chill</span><span>Y'all need a nap</span></div>
+        <div class="meter-labels"><span>Totally aligned</span><span>Who's the bridge now?!</span></div>
         <div class="chaos-btns">
-          <button class="cbtn" onclick="addChaos()">Group chat went off the rails</button>
-          <button class="cbtn" onclick="addChaos()">Nobody picked lunch</button>
-          <button class="cbtn" onclick="addChaos()">Someone said "quick question"</button>
-          <button class="cbtn" onclick="addChaos()">Our morning = her night</button>
-          <button class="cbtn calm" onclick="resetChaos()">She'd have handled this</button>
+          <button class="cbtn" onclick="addChaos()">Foundation & Platform out of sync</button>
+          <button class="cbtn" onclick="addChaos()">Skills team has no bridge</button>
+          <button class="cbtn" onclick="addChaos()">Business is asking — who's on it?</button>
+          <button class="cbtn" onclick="addChaos()">Nobody listened before fixing</button>
+          <button class="cbtn" onclick="addChaos()">She'd have checked in by now</button>
+          <button class="cbtn calm" onclick="resetChaos()">She'd have connected the dots</button>
         </div>
         <div class="chaos-msg" id="chaos-msg"></div>
         <div class="status-msg" id="chaos-status"></div>
@@ -1584,10 +1616,11 @@
 
   /* ── CHAOS (shared via bin) ── */
   const chaosMsgs = [
-    'Who do we ping now?!', 'Team vibe: mildly unhinged', 'She\'d have known what to do.',
-    'Group chat energy: chaotic good', 'Someone said "it\'s fine". It is NOT fine.',
-    'We miss her calm so much right now.', 'FULL TEAM MELTDOWN IMMINENT',
-    'Y\'all need water and a nap.', 'She felt that chaos from across the timezone.'
+    'Who checks Foundation & Platform now?!', 'Skills team is an island — no bridge.',
+    'Business pinged. Crickets.', 'Someone fixed it without listening first. She would NOT.',
+    'She\'d have synced the teams by now.', 'Trust + craft + listen — that was her magic.',
+    'We miss her connecting the dots.', 'FULL CHAOS — nobody\'s holding the middle.',
+    'She felt that from across the timezone.', 'She\'d have made everyone feel heard.'
   ];
   let chaosIdx = 0;
 
@@ -1645,7 +1678,7 @@
     appData.chaos.level = 5;
     chaosIdx = 0;
     updateMeter(5);
-    document.getElementById('chaos-msg').textContent = player + ' channeled her energy. Chaos: handled.';
+    document.getElementById('chaos-msg').textContent = player + ' channeled her — listened, connected, trusted. Chaos: handled.';
     renderChaos();
     if (!(await saveData())) {
       appData.chaos = backup;
