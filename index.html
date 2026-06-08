@@ -212,6 +212,111 @@
   }
   .memory-note:hover { background: var(--purple-bg); transform: rotate(-1deg) scale(1.02); }
   .memory-note .note-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+  .note-body {
+    cursor: default;
+    margin-bottom: 4px;
+  }
+  .note-body.can-read {
+    cursor: pointer;
+  }
+  .note-body.can-read:hover .read-more { color: var(--purple-mid); }
+  .read-more {
+    display: block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .goodbye-msg.can-read { cursor: pointer; }
+  .goodbye-msg.can-read:hover { border-color: var(--pink-mid); }
+  .goodbye-msg .read-more {
+    font-size: 12px;
+    color: var(--pink-mid);
+    margin-top: 6px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+  }
+
+  /* READ MODAL */
+  .msg-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(44, 44, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .msg-modal-overlay.open { display: flex; }
+  .msg-modal-box {
+    background: var(--cream);
+    border: 2.5px solid var(--purple-mid);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(83, 74, 183, 0.2);
+    position: relative;
+    animation: modal-pop 0.2s ease;
+  }
+  @keyframes modal-pop {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .msg-modal-close {
+    position: absolute;
+    top: 10px; right: 12px;
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    background: var(--cream);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+    z-index: 2;
+  }
+  .msg-modal-close:hover { color: var(--ink); border-color: var(--ink); }
+  .msg-modal-header {
+    padding: 20px 44px 12px 22px;
+    border-bottom: 2px dashed var(--border);
+    flex-shrink: 0;
+  }
+  .msg-modal-emoji { font-size: 32px; margin-bottom: 4px; }
+  .msg-modal-label {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+  .msg-modal-body {
+    padding: 16px 22px;
+    overflow-y: auto;
+    flex: 1;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg-modal-body::-webkit-scrollbar { width: 6px; }
+  .msg-modal-body::-webkit-scrollbar-thumb {
+    background: #C5C0F0;
+    border-radius: 999px;
+  }
+  .msg-modal-footer {
+    padding: 12px 22px 18px;
+    border-top: 2px dashed var(--border);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
   .memory-note .note-meta-row {
     display: flex;
     flex-wrap: wrap;
@@ -990,7 +1095,7 @@
         <div class="loading">Loading memories...</div>
       </div>
       <div class="add-memory-form" id="memory-form">
-        <textarea id="mem-text" rows="2" placeholder="Write your memory or message..."></textarea>
+        <textarea id="mem-text" rows="4" placeholder="Write your memory — short or long, it all fits!"></textarea>
         <div class="form-row">
           <button class="doodle-btn" id="post-btn" onclick="postMemory()">Post it!</button>
           <button class="cancel-edit-btn" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">Cancel</button>
@@ -1088,7 +1193,7 @@
       </div>
       <div class="goodbye-form">
         <p class="goodbye-form-hint">Write something for her next chapter — your wish is saved for everyone to see.</p>
-        <textarea id="goodbye-text" rows="3" placeholder="Wishing you all the best in your future endeavours..."></textarea>
+        <textarea id="goodbye-text" rows="5" placeholder="Write as much as you want — tap any wish to read the full message..."></textarea>
         <button class="love-btn" onclick="sendGoodbye()">Send your wishes ✨</button>
         <div class="love-sent" id="goodbye-status"></div>
       </div>
@@ -1101,6 +1206,19 @@
 
   <div class="bin-sync-bar" id="bin-sync-bar" aria-live="polite"></div>
 
+</div>
+
+<!-- READ FULL MESSAGE MODAL -->
+<div class="msg-modal-overlay" id="msg-modal" onclick="closeMessageModal(event)">
+  <div class="msg-modal-box" onclick="event.stopPropagation()">
+    <button type="button" class="msg-modal-close" onclick="closeMessageModal()" aria-label="Close">×</button>
+    <div class="msg-modal-header">
+      <div class="msg-modal-emoji" id="modal-emoji"></div>
+      <div class="msg-modal-label" id="modal-label">Memory</div>
+    </div>
+    <div class="msg-modal-body" id="modal-body"></div>
+    <div class="msg-modal-footer" id="modal-author"></div>
+  </div>
 </div>
 
 <script>
@@ -1290,21 +1408,67 @@
     </div>`;
   }
 
+  const PREVIEW_LEN = 100;
+
+  function previewText(text, max) {
+    const t = text || '';
+    if (t.length <= max) return { short: t, isLong: false };
+    return { short: t.slice(0, max).trim() + '…', isLong: true };
+  }
+
+  function openMessageModal(type, id) {
+    let emoji = '', label = '', text = '', author = '';
+    if (type === 'memory') {
+      const m = id === 'starter' ? starterNote : appData.memories.find(x => x.id === id);
+      if (!m) return;
+      emoji = m.emoji || '💛';
+      label = 'Memory';
+      text = m.text;
+      author = m.author || 'Anonymous';
+    } else if (type === 'goodbye') {
+      const g = appData.goodbyes.find(x => x.id === id);
+      if (!g) return;
+      emoji = '✨';
+      label = 'Farewell wish';
+      text = g.text;
+      author = g.author;
+    } else return;
+    document.getElementById('modal-emoji').textContent = emoji;
+    document.getElementById('modal-label').textContent = label;
+    document.getElementById('modal-body').textContent = text;
+    document.getElementById('modal-author').textContent = '— ' + author;
+    document.getElementById('msg-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMessageModal(e) {
+    if (e && e.target !== document.getElementById('msg-modal')) return;
+    document.getElementById('msg-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
   function renderMemories(mems) {
     const grid = document.getElementById('memory-grid');
     const realNotes = stripLegacyDefaults(mems);
     const notes = realNotes.length === 0 ? [starterNote] : realNotes;
-    grid.innerHTML = notes.map(m => `
+    grid.innerHTML = notes.map(m => {
+      const prev = previewText(m.text, PREVIEW_LEN);
+      const canRead = m.id !== 'starter' && prev.isLong;
+      return `
       <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}" data-id="${escAttr(m.id)}">
         <span class="note-emoji">${m.emoji || '💛'}</span>
-        ${escHtml(m.text)}
+        <div class="note-body${canRead ? ' can-read' : ''}" ${canRead ? `data-action="read" data-type="memory" data-read-id="${escAttr(m.id)}"` : ''}>
+          ${escHtml(prev.short)}
+          ${canRead ? '<span class="read-more">Tap to read all →</span>' : ''}
+        </div>
         ${renderNoteMeta(m)}
         ${m.id !== 'starter' ? `
           <div class="note-actions">
             <button class="edit-btn" type="button" data-action="edit" title="Edit">✎</button>
             <button class="delete-btn" type="button" data-action="delete" title="Delete">×</button>
           </div>` : ''}
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function startEdit(id) {
@@ -1412,6 +1576,17 @@
     const id = note.dataset.id;
     if (btn.dataset.action === 'edit') startEdit(id);
     if (btn.dataset.action === 'delete') deleteMemory(id);
+    if (btn.dataset.action === 'read') openMessageModal(btn.dataset.type, btn.dataset.readId);
+  });
+
+  document.getElementById('goodbye-wall').addEventListener('click', (e) => {
+    const el = e.target.closest('[data-action="read"]');
+    if (!el) return;
+    openMessageModal(el.dataset.type, el.dataset.readId);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMessageModal();
   });
 
   /* ── TRAITS / VOTES ── */
@@ -1749,11 +1924,16 @@
       wall.innerHTML = '<div class="goodbye-empty">No wishes yet — be the first to write one!</div>';
       return;
     }
-    wall.innerHTML = msgs.map(g => `
-      <div class="goodbye-msg">
-        <div class="goodbye-msg-text">${escHtml(g.text)}</div>
+    wall.innerHTML = msgs.map(g => {
+      const prev = previewText(g.text, PREVIEW_LEN);
+      const canRead = prev.isLong;
+      return `
+      <div class="goodbye-msg${canRead ? ' can-read' : ''}" ${canRead ? `data-action="read" data-type="goodbye" data-read-id="${escAttr(g.id)}"` : ''}>
+        <div class="goodbye-msg-text">${escHtml(prev.short)}</div>
+        ${canRead ? '<span class="read-more">Tap to read all →</span>' : ''}
         <div class="goodbye-msg-author">— ${escHtml(g.author)}</div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   async function sendGoodbye() {
