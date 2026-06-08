@@ -208,7 +208,129 @@
   }
   .memory-note:hover { background: var(--purple-bg); transform: rotate(-1deg) scale(1.02); }
   .memory-note .note-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
-  .memory-note .note-author { font-size: 13px; color: var(--muted); margin-top: 8px; display: block; }
+  .memory-note .note-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin-top: 10px;
+  }
+  .memory-note .note-author {
+    font-size: 13px;
+    color: var(--muted);
+    display: block;
+  }
+  .meta-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+  .meta-pill {
+    position: relative;
+    font-family: 'Nunito', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    background: #F1EFE8;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 9px;
+    cursor: help;
+    white-space: nowrap;
+    line-height: 1.5;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .meta-pill:hover,
+  .meta-pill:focus-visible {
+    background: #E8E6DF;
+    border-color: #B8B5AB;
+    color: var(--ink);
+    outline: none;
+  }
+  .meta-pill-edited {
+    color: var(--purple-mid);
+    background: var(--purple-bg);
+    border-color: #C5C0F0;
+  }
+  .meta-pill-edited:hover,
+  .meta-pill-edited:focus-visible {
+    background: #D8D5F8;
+    border-color: var(--purple-mid);
+    color: var(--purple-dark);
+  }
+  .meta-pill .meta-tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 140px;
+    max-width: 220px;
+    padding: 8px 10px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.45;
+    border-radius: 8px;
+    white-space: normal;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .meta-pill .meta-tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .meta-pill:hover .meta-tip,
+  .meta-pill:focus-visible .meta-tip {
+    display: block;
+  }
+  .player-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--teal-bg);
+    border: 2px dashed var(--teal-mid);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--teal-dark);
+  }
+  .player-bar label {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .player-bar input {
+    flex: 1;
+    min-width: 160px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border: 2px solid var(--teal-mid);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    outline: none;
+  }
+  .player-bar input:focus { border-color: var(--teal-dark); }
+  .player-bar .player-hint {
+    font-size: 13px;
+    color: var(--teal-mid);
+    width: 100%;
+  }
   .memory-note .note-actions {
     position: absolute;
     top: 6px; right: 6px;
@@ -528,7 +650,12 @@
   <!-- MEMORY WALL -->
   <div class="panel active" id="panel-memories">
     <div class="card">
-      <div class="card-title">Memory Wall</div>
+      <div class="card-title">Memory Wall <span style="font-size:16px;color:var(--muted);font-weight:400;">— everyone's playground</span></div>
+      <div class="player-bar">
+        <label for="player-name">You're playing as</label>
+        <input type="text" id="player-name" placeholder="Your name (required to post & edit)" maxlength="30" oninput="savePlayerName()"/>
+        <span class="player-hint">Your name is saved on this device. Edits are tracked — everyone can see who changed what!</span>
+      </div>
       <div class="memory-wall-toolbar" id="memory-toolbar" style="display:none">
         <button class="clear-wall-btn" onclick="clearWall()">Clear all notes</button>
       </div>
@@ -672,12 +799,82 @@
   const starterNote = {
     id: 'starter',
     emoji: '✏️',
-    text: 'This wall is blank — your move! Write a memory below, add your name & an emoji, then hit Post it! (She\'d probably reply before you finish typing.)',
+    text: 'This wall is yours to play with! Set your name above, write a note below, post it — then edit anyone\'s note and watch who changed what. (She\'d probably reply before you finish typing.)',
     author: 'The wall',
   };
 
   function stripLegacyDefaults(mems) {
     return mems.filter(m => !LEGACY_DEFAULT_IDS.has(m.id));
+  }
+
+  function getPlayerName() {
+    return document.getElementById('player-name').value.trim();
+  }
+
+  function savePlayerName() {
+    const name = getPlayerName();
+    if (name) localStorage.setItem('farewell_username', name);
+    const authorField = document.getElementById('mem-author');
+    if (authorField && !authorField.value.trim()) authorField.placeholder = name || 'Your name';
+  }
+
+  function loadPlayerName() {
+    const saved = localStorage.getItem('farewell_username') || '';
+    const input = document.getElementById('player-name');
+    if (input && saved) input.value = saved;
+    savePlayerName();
+  }
+
+  function requirePlayerName(action) {
+    const name = getPlayerName();
+    if (!name) {
+      setStatus('mem-status', `Set your name above before you ${action}!`, true);
+      document.getElementById('player-name').focus();
+      return null;
+    }
+    return name;
+  }
+
+  function formatWhen(iso) {
+    if (!iso) return '';
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + 'm ago';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'h ago';
+    return new Date(iso).toLocaleDateString();
+  }
+
+  function renderNoteMeta(m) {
+    if (m.id === 'starter') {
+      return `<span class="note-author">— ${escHtml(m.author)}</span>`;
+    }
+    const postedBy = m.createdBy || m.author || 'Anonymous';
+    const postedWhen = m.createdAt ? formatWhen(m.createdAt) : '';
+    const postedTip = `Posted by ${postedBy}${postedWhen ? ' · ' + postedWhen : ''}`;
+
+    let badges = `<span class="meta-pill" tabindex="0">
+      posted · ${escHtml(postedBy)}
+      <span class="meta-tip">${escHtml(postedTip)}</span>
+    </span>`;
+
+    if (m.editedBy) {
+      const when = formatWhen(m.editedAt);
+      let tip = `Last edited by ${m.editedBy}${when ? ' · ' + when : ''}`;
+      if (m.editHistory && m.editHistory.length > 1) {
+        tip += ' — ' + m.editHistory.map(e => e.by).join(' → ');
+      }
+      badges += `<span class="meta-pill meta-pill-edited" tabindex="0">
+        ✏️ ${escHtml(m.editedBy)}
+        <span class="meta-tip">${escHtml(tip)}</span>
+      </span>`;
+    }
+
+    return `<div class="note-meta-row">
+      <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
+      <span class="meta-badges">${badges}</span>
+    </div>`;
   }
 
   function renderMemories(mems) {
@@ -691,7 +888,7 @@
       <div class="memory-note${m.id === 'starter' ? ' starter-note' : ''}" data-id="${escAttr(m.id)}">
         <span class="note-emoji">${m.emoji || '💛'}</span>
         ${escHtml(m.text)}
-        <span class="note-author">— ${escHtml(m.author || 'Anonymous')}</span>
+        ${renderNoteMeta(m)}
         ${m.id !== 'starter' ? `
           <div class="note-actions">
             <button class="edit-btn" type="button" data-action="edit" title="Edit">Edit</button>
@@ -701,6 +898,7 @@
   }
 
   function startEdit(id) {
+    if (!requirePlayerName('edit')) return;
     const mem = appData.memories.find(m => m.id === id);
     if (!mem) return;
     editingMemoryId = id;
@@ -726,30 +924,48 @@
   }
 
   async function postMemory() {
+    const player = requirePlayerName('post');
+    if (!player) return;
     const text = document.getElementById('mem-text').value.trim();
-    const author = document.getElementById('mem-author').value.trim() || 'Anonymous';
+    const author = document.getElementById('mem-author').value.trim() || player;
     const emoji = document.getElementById('mem-emoji').value.trim() || '💛';
     if (!text) { setStatus('mem-status', 'Write something first!', true); return; }
     const btn = document.getElementById('post-btn');
     btn.disabled = true;
     setStatus('mem-status', 'Saving...');
 
-    if (editingMemoryId) {
+    const now = new Date().toISOString();
+    const wasEditing = !!editingMemoryId;
+    if (wasEditing) {
       const mem = appData.memories.find(m => m.id === editingMemoryId);
-      if (mem) { mem.text = text; mem.author = author; mem.emoji = emoji; }
+      if (mem) {
+        mem.text = text;
+        mem.author = author;
+        mem.emoji = emoji;
+        mem.editedBy = player;
+        mem.editedAt = now;
+        if (!mem.editHistory) mem.editHistory = [];
+        mem.editHistory.push({ by: player, at: now });
+      }
     } else {
-      appData.memories.push({ id: 'u_' + Date.now(), emoji, text, author });
+      appData.memories.push({
+        id: 'u_' + Date.now(),
+        emoji, text, author,
+        createdBy: player,
+        createdAt: now,
+      });
     }
 
     await saveData();
     cancelEdit();
     renderMemories(appData.memories);
-    setStatus('mem-status', editingMemoryId ? 'Updated!' : 'Posted!');
+    setStatus('mem-status', wasEditing ? 'Updated!' : 'Posted!');
     btn.disabled = false;
     setTimeout(() => setStatus('mem-status', ''), 2000);
   }
 
   async function deleteMemory(id) {
+    if (!requirePlayerName('delete')) return;
     if (!confirm('Delete this memory?')) return;
     if (editingMemoryId === id) cancelEdit();
     appData.memories = appData.memories.filter(m => m.id !== id);
@@ -758,6 +974,7 @@
   }
 
   async function clearWall() {
+    if (!requirePlayerName('clear the wall')) return;
     if (!confirm('Clear every note on the wall? This cannot be undone.')) return;
     cancelEdit();
     appData.memories = [];
@@ -930,6 +1147,7 @@
 
   /* ── INIT ── */
   checkConfig();
+  loadPlayerName();
   buildTraitGrid();
   buildTimeline();
   loadData();
