@@ -1480,30 +1480,151 @@
 
   /* COUNTDOWN */
   .countdown-bar {
-    background: var(--amber-bg);
-    border: 2px dashed var(--amber-mid);
-    border-radius: 12px;
-    padding: 14px 18px;
+    position: relative;
+    background: linear-gradient(135deg, var(--purple-bg) 0%, var(--pink-bg) 50%, var(--amber-bg) 100%);
+    border-radius: 16px;
+    padding: 20px 18px 18px;
     margin-bottom: 16px;
     text-align: center;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(83, 74, 183, 0.14);
+    animation: countdown-glow 3s ease-in-out infinite;
   }
-  .countdown-inner {
+  .countdown-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--purple-mid), var(--pink-mid), var(--amber-mid), var(--purple-mid));
+    background-size: 300% 300%;
+    animation: countdown-border 4s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  @keyframes countdown-glow {
+    0%, 100% { box-shadow: 0 6px 24px rgba(83, 74, 183, 0.14); }
+    50%      { box-shadow: 0 8px 32px rgba(212, 83, 126, 0.22); }
+  }
+  @keyframes countdown-border {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  .countdown-label {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .countdown-date {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pink-mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .countdown-units {
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
   }
-  .countdown-emoji { font-size: 22px; line-height: 1; }
-  .countdown-text {
+  .cd-unit {
+    background: rgba(255, 254, 247, 0.92);
+    border: 2px solid rgba(83, 74, 183, 0.2);
+    border-radius: 12px;
+    padding: 10px 14px 8px;
+    min-width: 68px;
+    box-shadow: 0 3px 12px rgba(83, 74, 183, 0.1);
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .cd-unit.pop { animation: cd-pop 0.35s ease; }
+  @keyframes cd-pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+  .cd-num {
+    display: block;
     font-family: 'Caveat', cursive;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--amber-dark);
-    line-height: 1.3;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
-  .countdown-text strong { font-weight: 700; font-size: 26px; }
-  .countdown-done .countdown-text { color: var(--purple-dark); }
+  .cd-lbl {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .countdown-sep {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--purple-mid);
+    align-self: center;
+    opacity: 0.5;
+    animation: cd-blink 1s step-end infinite;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes cd-blink {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 0.15; }
+  }
+  .countdown-tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--purple-mid);
+    margin-top: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .countdown-bar.countdown-urgent {
+    animation: countdown-glow 1.2s ease-in-out infinite;
+  }
+  .countdown-bar.countdown-urgent .cd-unit {
+    border-color: var(--pink-mid);
+  }
+  .countdown-bar.countdown-done {
+    animation: none;
+    background: linear-gradient(135deg, var(--purple-bg), var(--teal-bg));
+  }
+  .countdown-done-inner {
+    position: relative;
+    z-index: 1;
+    padding: 8px 0;
+  }
+  .countdown-done-emoji {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 8px;
+    animation: reel-finale-pop 0.8s cubic-bezier(.34,1.56,.64,1);
+  }
+  .countdown-done-text {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.25;
+  }
 
   /* LESSONS */
   .lessons-sub { font-size: 15px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
@@ -2310,6 +2431,10 @@
     .reel-agent.working { animation: none; }
     .reel-intro-emoji { animation: none; }
     .reel-pavi-ring { animation: none; }
+    .countdown-bar { animation: none; }
+    .countdown-bar::before { animation: none; }
+    .countdown-sep { animation: none; }
+    .cd-unit.pop { animation: none; }
   }
 
   @media (max-width: 500px) {
@@ -2334,12 +2459,7 @@
   </div>
 
   <!-- COUNTDOWN -->
-  <div class="countdown-bar" id="countdown-bar" aria-live="polite">
-    <div class="countdown-inner">
-      <span class="countdown-emoji">⏳</span>
-      <span class="countdown-text">Counting down…</span>
-    </div>
-  </div>
+  <div class="countdown-bar" id="countdown-bar" aria-live="polite"></div>
 
   <!-- YOUR NAME (shared) -->
   <div class="player-bar">
@@ -2640,7 +2760,7 @@
   const CACHE_KEY = 'farewell_data_cache';
   const READ_ONLY_KEY = 'farewell_read_only';
   // Change to her actual last day (local time)
-  const COUNTDOWN_TARGET = new Date('2026-06-09T18:45:00');
+  const COUNTDOWN_TARGET = new Date('2026-06-10T17:00:00');
 
   /* ── DATA ── */
   let appData = { memories: [], votePicks: {}, goodbyes: [], lessons: [], chaos: { level: 5, log: [] } };
@@ -3615,23 +3735,74 @@
   }
 
   /* ── COUNTDOWN ── */
+  let countdownBuilt = false;
+  let cdPrev = { d: -1, h: -1, m: -1, s: -1 };
+
+  function padCd(n) { return String(n).padStart(2, '0'); }
+
+  function buildCountdownDOM(bar) {
+    bar.innerHTML = `
+      <div class="countdown-label">Counting down to her last day</div>
+      <div class="countdown-date">✦ June 10 ✦</div>
+      <div class="countdown-units">
+        <div class="cd-unit" id="cd-unit-d"><span class="cd-num" id="cd-days">00</span><span class="cd-lbl">days</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="cd-unit" id="cd-unit-h"><span class="cd-num" id="cd-hrs">00</span><span class="cd-lbl">hrs</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="cd-unit" id="cd-unit-m"><span class="cd-num" id="cd-mins">00</span><span class="cd-lbl">min</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="cd-unit" id="cd-unit-s"><span class="cd-num" id="cd-secs">00</span><span class="cd-lbl">sec</span></div>
+      </div>
+      <div class="countdown-tagline" id="cd-tagline">Every second counts — make it count for her 💜</div>`;
+    countdownBuilt = true;
+  }
+
+  function popCdUnit(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('pop');
+  }
+
+  function showCountdownDone(bar) {
+    bar.className = 'countdown-bar countdown-done';
+    bar.innerHTML = `
+      <div class="countdown-done-inner">
+        <span class="countdown-done-emoji">🎉</span>
+        <div class="countdown-done-text">It's her last day — June 10!<br>Fill the wall with love!</div>
+      </div>`;
+    countdownBuilt = false;
+    celebrateBurst();
+  }
+
   function updateCountdown() {
     const bar = document.getElementById('countdown-bar');
     if (!bar) return;
     const diff = COUNTDOWN_TARGET.getTime() - Date.now();
     if (diff <= 0) {
-      bar.innerHTML = '<div class="countdown-inner countdown-done"><span class="countdown-emoji">🎉</span><span class="countdown-text">Her last day is here — fill the wall with love!</span></div>';
+      if (!bar.classList.contains('countdown-done')) showCountdownDone(bar);
       return;
     }
+    if (!countdownBuilt) buildCountdownDOM(bar);
+
     const days = Math.floor(diff / 86400000);
     const hrs = Math.floor((diff % 86400000) / 3600000);
     const mins = Math.floor((diff % 3600000) / 60000);
-    const dayWord = days === 1 ? 'day' : 'days';
-    const hrWord = hrs === 1 ? 'hr' : 'hrs';
-    bar.innerHTML = `<div class="countdown-inner">
-      <span class="countdown-emoji">⏳</span>
-      <span class="countdown-text"><strong>${days}</strong> ${dayWord} · <strong>${hrs}</strong> ${hrWord} · <strong>${mins}</strong> min until her last day</span>
-    </div>`;
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    if (days !== cdPrev.d) { document.getElementById('cd-days').textContent = padCd(days); popCdUnit('cd-unit-d'); cdPrev.d = days; }
+    if (hrs !== cdPrev.h)  { document.getElementById('cd-hrs').textContent = padCd(hrs); popCdUnit('cd-unit-h'); cdPrev.h = hrs; }
+    if (mins !== cdPrev.m) { document.getElementById('cd-mins').textContent = padCd(mins); popCdUnit('cd-unit-m'); cdPrev.m = mins; }
+    if (secs !== cdPrev.s) { document.getElementById('cd-secs').textContent = padCd(secs); popCdUnit('cd-unit-s'); cdPrev.s = secs; }
+
+    bar.classList.toggle('countdown-urgent', days < 2);
+    const tag = document.getElementById('cd-tagline');
+    if (tag) {
+      if (days === 0) tag.textContent = 'It\'s almost here — she deserves the world today 💜';
+      else if (days === 1) tag.textContent = 'Tomorrow\'s the day — let\'s send her off right ✨';
+      else tag.textContent = 'Every second counts — make it count for her 💜';
+    }
   }
 
   /* ── LESSONS ── */
@@ -4613,7 +4784,7 @@
   buildTraitGrid();
   buildTimeline();
   updateCountdown();
-  setInterval(updateCountdown, 60000);
+  setInterval(updateCountdown, 1000);
   loadData();
   setTimeout(() => { initCelebrateBg(); spawnFloatDeco(); }, 400);
 </script>
