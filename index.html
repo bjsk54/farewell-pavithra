@@ -135,26 +135,6 @@
     transition: background 0.15s, transform 0.1s;
   }
   .confetti-btn:hover { background: #CECBF6; transform: scale(1.04); }
-  .hero-btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-  }
-  .reel-hero-btn {
-    font-family: 'Caveat', cursive;
-    font-size: 19px;
-    font-weight: 700;
-    padding: 10px 24px;
-    border: 2.5px solid var(--teal-mid);
-    border-radius: 999px;
-    background: var(--teal-bg);
-    color: var(--teal-dark);
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-  }
-  .reel-hero-btn:hover { background: #9FE1CB; transform: scale(1.04); }
   #confetti-canvas { display: block; width: 100%; height: 100px; margin-top: 0; }
 
   /* BIN SYNC STATUS — subtle, errors only */
@@ -2349,10 +2329,7 @@
   <div class="hero">
     <div class="hero-title">Farewell, Our Lead!</div>
     <div class="hero-sub">From offshore US to our hearts — always, always there</div>
-    <div class="hero-btns">
-      <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
-      <button class="reel-hero-btn" type="button" onclick="openReelTab()">🎬 Watch the reel (20s)</button>
-    </div>
+    <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
     <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
   </div>
 
@@ -4596,11 +4573,6 @@
 
     document.getElementById('reel-hint').textContent = 'BACKUP-42 made the bots fight harder.';
     reelStartTime -= 3200;
-  }
-
-  function openReelTab() {
-    switchTab('reel');
-    setTimeout(playReel, 350);
   }
 
   /* ── TABS ── */
