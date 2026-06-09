@@ -135,6 +135,26 @@
     transition: background 0.15s, transform 0.1s;
   }
   .confetti-btn:hover { background: #CECBF6; transform: scale(1.04); }
+  .hero-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  .reel-hero-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border: 2.5px solid var(--teal-mid);
+    border-radius: 999px;
+    background: var(--teal-bg);
+    color: var(--teal-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .reel-hero-btn:hover { background: #9FE1CB; transform: scale(1.04); }
   #confetti-canvas { display: block; width: 100%; height: 100px; margin-top: 0; }
 
   /* BIN SYNC STATUS — subtle, errors only */
@@ -1793,6 +1813,285 @@
     z-index: 3;
   }
 
+  /* AI REEL */
+  .reel-card { overflow: hidden; }
+  .reel-sub {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .reel-wrap {
+    max-width: 380px;
+    margin: 0 auto 16px;
+  }
+  .reel-phone {
+    position: relative;
+    background: #1a1a1e;
+    border-radius: 28px;
+    padding: 12px 10px 14px;
+    box-shadow: 0 16px 48px rgba(38, 33, 92, 0.28), inset 0 0 0 2px #333;
+  }
+  .reel-notch {
+    width: 72px;
+    height: 5px;
+    background: #333;
+    border-radius: 999px;
+    margin: 0 auto 10px;
+  }
+  .reel-screen {
+    position: relative;
+    aspect-ratio: 9 / 14;
+    max-height: 420px;
+    background: linear-gradient(180deg, #0f0f14 0%, #1a1830 100%);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .reel-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+  .reel-scene.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .reel-teams-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #464775;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+  .reel-teams-bar span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+  }
+  .reel-chat {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 2px;
+  }
+  .reel-bubble {
+    max-width: 92%;
+    padding: 8px 11px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    font-family: 'Nunito', sans-serif;
+    animation: reel-bubble-in 0.35s ease backwards;
+  }
+  @keyframes reel-bubble-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .reel-bubble.bot {
+    align-self: flex-start;
+    background: #2d2d44;
+    color: #e8e6f0;
+    border-left: 3px solid var(--purple-mid);
+  }
+  .reel-bubble.bot.err {
+    border-left-color: var(--red-mid);
+    background: #3a2228;
+    color: #ffc8c8;
+  }
+  .reel-bubble.bot.ok {
+    border-left-color: var(--teal-mid);
+  }
+  .reel-bubble.sys {
+    align-self: center;
+    background: rgba(255,255,255,0.08);
+    color: #aaa;
+    font-size: 10px;
+    font-style: italic;
+    text-align: center;
+  }
+  .reel-bubble .bot-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--purple-mid);
+    margin-bottom: 3px;
+    display: block;
+  }
+  .reel-bubble.err .bot-name { color: #e88; }
+  .reel-intro-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+  }
+  .reel-intro-emoji { font-size: 48px; margin-bottom: 12px; animation: reel-pulse 1.2s ease infinite; }
+  @keyframes reel-pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
+  }
+  .reel-intro-title {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .reel-intro-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: #b8b4e8;
+  }
+  .reel-agents {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .reel-agent {
+    text-align: center;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    border: 2px solid transparent;
+    min-width: 72px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .reel-agent.working { border-color: var(--amber-mid); animation: reel-agent-shake 0.4s ease infinite; }
+  .reel-agent.fail { border-color: var(--red-mid); opacity: 0.5; transform: scale(0.92); }
+  .reel-agent.dead { filter: grayscale(1); opacity: 0.35; }
+  @keyframes reel-agent-shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+  .reel-agent-icon { font-size: 28px; display: block; margin-bottom: 4px; }
+  .reel-agent-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #aaa;
+    font-family: 'Nunito', sans-serif;
+  }
+  .reel-finale {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    background: radial-gradient(circle at 50% 40%, rgba(83,74,183,0.35) 0%, transparent 65%);
+  }
+  .reel-finale-emoji { font-size: 56px; margin-bottom: 14px; animation: reel-finale-pop 0.8s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes reel-finale-pop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .reel-finale-title {
+    font-family: 'Caveat', cursive;
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    text-shadow: 0 2px 20px rgba(212, 83, 126, 0.5);
+    margin-bottom: 10px;
+  }
+  .reel-finale-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: #f4c0d1;
+  }
+  .reel-chaos-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    margin-top: auto;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .reel-chaos-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--amber-mid), var(--red-mid));
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+  .reel-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .reel-ctrl-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border: 2px solid var(--purple-mid);
+    border-radius: 999px;
+    background: var(--purple-bg);
+    color: var(--purple-dark);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .reel-ctrl-btn:hover { background: #CECBF6; transform: scale(1.03); }
+  .reel-ctrl-btn.deploy {
+    border-color: var(--red-mid);
+    background: var(--red-bg);
+    color: var(--red-mid);
+  }
+  .reel-ctrl-btn.deploy:hover { background: #f7c1c1; }
+  .reel-ctrl-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .reel-progress-wrap {
+    flex: 1;
+    min-width: 120px;
+    height: 6px;
+    background: #F1EFE8;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .reel-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--purple-mid);
+    border-radius: 999px;
+    transition: width 0.15s linear;
+  }
+  .reel-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 22px;
+  }
+  .reel-screen.glitch {
+    animation: reel-glitch 0.35s ease;
+  }
+  @keyframes reel-glitch {
+    0%, 100% { transform: translateX(0); filter: none; }
+    20% { transform: translateX(-3px); filter: hue-rotate(20deg); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); filter: saturate(1.5); }
+  }
+
   /* LOADING */
   .loading {
     text-align: center;
@@ -1810,6 +2109,8 @@
     .sticky { transition: box-shadow 0.15s; }
     .sticky-fresh, .sticky.is-opening { animation: none; }
     .sticky-sparkle { display: none; }
+    .reel-agent.working { animation: none; }
+    .reel-intro-emoji { animation: none; }
   }
 
   @media (max-width: 500px) {
@@ -1829,7 +2130,10 @@
   <div class="hero">
     <div class="hero-title">Farewell, Our Lead!</div>
     <div class="hero-sub">From offshore US to our hearts — always, always there</div>
-    <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
+    <div class="hero-btns">
+      <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
+      <button class="reel-hero-btn" type="button" onclick="openReelTab()">🤖 AI tries her job (12s)</button>
+    </div>
     <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
   </div>
 
@@ -1853,6 +2157,7 @@
     <button class="tab active" onclick="switchTab('memories')">The Corkboard</button>
     <button class="tab" onclick="switchTab('traits')">Her Superpowers</button>
     <button class="tab" onclick="switchTab('timeline')">Her Day</button>
+    <button class="tab" onclick="switchTab('reel')">AI Reel 🤖</button>
     <button class="tab" onclick="switchTab('chaos')">Chaos Meter</button>
     <button class="tab" onclick="switchTab('lessons')">Lessons</button>
     <button class="tab" onclick="switchTab('cloud')">Word Cloud</button>
@@ -1935,6 +2240,79 @@
     <div class="card">
       <div class="card-title">A day in her life <span style="font-size:16px; color:var(--muted);">— her time, start to finish (tap each)</span></div>
       <div class="tl-wrap" id="timeline"></div>
+    </div>
+  </div>
+
+  <!-- AI REEL -->
+  <div class="panel" id="panel-reel">
+    <div class="card reel-card">
+      <div class="card-title">AI Orchestrator: The Failed Takeover</div>
+      <p class="reel-sub">~12 second reel — bots try to run the team like Pavithra. Tap the screen to skip ahead. Hit <strong>Deploy backup agent</strong> if you dare.</p>
+      <div class="reel-wrap">
+        <div class="reel-phone">
+          <div class="reel-notch" aria-hidden="true"></div>
+          <div class="reel-screen" id="reel-screen" onclick="reelTapSkip()" title="Tap to skip scene">
+            <!-- Scene 0: Intro -->
+            <div class="reel-scene active" data-reel-scene="0">
+              <div class="reel-intro-card">
+                <div class="reel-intro-emoji">🤖</div>
+                <div class="reel-intro-title">Pavithra's day off.</div>
+                <div class="reel-intro-sub">Can AI orchestrate the team?</div>
+              </div>
+            </div>
+            <!-- Scene 1: Boot -->
+            <div class="reel-scene" data-reel-scene="1">
+              <div class="reel-teams-bar"><span>💬</span><span>Teams — Skills Standup</span></div>
+              <div class="reel-chat" id="reel-chat-1"></div>
+              <div class="reel-agents" id="reel-agents-1">
+                <div class="reel-agent" id="agent-orch"><span class="reel-agent-icon">🤖</span><span class="reel-agent-label">ORCH-9000</span></div>
+              </div>
+            </div>
+            <!-- Scene 2: Sync attempt -->
+            <div class="reel-scene" data-reel-scene="2">
+              <div class="reel-teams-bar"><span>⚙️</span><span>Foundation ↔ Platform sync</span></div>
+              <div class="reel-chat" id="reel-chat-2"></div>
+              <div class="reel-chaos-bar"><div class="reel-chaos-fill" id="reel-chaos-2" style="width:25%"></div></div>
+            </div>
+            <!-- Scene 3: Bridge fail -->
+            <div class="reel-scene" data-reel-scene="3">
+              <div class="reel-teams-bar"><span>🌉</span><span>Skills bridge</span></div>
+              <div class="reel-chat" id="reel-chat-3"></div>
+              <div class="reel-agents" id="reel-agents-3">
+                <div class="reel-agent working" id="agent-bridge"><span class="reel-agent-icon">🦾</span><span class="reel-agent-label">BRIDGE-BOT</span></div>
+                <div class="reel-agent" id="agent-biz"><span class="reel-agent-icon">📊</span><span class="reel-agent-label">BIZ-AI</span></div>
+              </div>
+              <div class="reel-chaos-bar"><div class="reel-chaos-fill" id="reel-chaos-3" style="width:55%"></div></div>
+            </div>
+            <!-- Scene 4: Meltdown -->
+            <div class="reel-scene" data-reel-scene="4">
+              <div class="reel-teams-bar"><span>🔥</span><span>ALERTS</span></div>
+              <div class="reel-chat" id="reel-chat-4"></div>
+              <div class="reel-agents" id="reel-agents-4">
+                <div class="reel-agent fail dead"><span class="reel-agent-icon">🤖</span><span class="reel-agent-label">OFFLINE</span></div>
+                <div class="reel-agent fail dead"><span class="reel-agent-icon">🦾</span><span class="reel-agent-label">OFFLINE</span></div>
+                <div class="reel-agent fail dead"><span class="reel-agent-icon">📊</span><span class="reel-agent-label">OFFLINE</span></div>
+              </div>
+              <div class="reel-chaos-bar"><div class="reel-chaos-fill" id="reel-chaos-4" style="width:100%"></div></div>
+            </div>
+            <!-- Scene 5: Finale -->
+            <div class="reel-scene" data-reel-scene="5">
+              <div class="reel-finale">
+                <div class="reel-finale-emoji">💜</div>
+                <div class="reel-finale-title">There's no one<br>like Pavithra.</div>
+                <div class="reel-finale-sub">Not even AI. Especially not AI.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reel-controls">
+        <button type="button" class="reel-ctrl-btn" id="reel-play-btn" onclick="toggleReel()">▶ Play</button>
+        <button type="button" class="reel-ctrl-btn deploy" id="reel-deploy-btn" onclick="reelDeployAgent()" disabled>Deploy backup agent</button>
+        <button type="button" class="reel-ctrl-btn" onclick="replayReel()">↺ Replay</button>
+        <div class="reel-progress-wrap"><div class="reel-progress-fill" id="reel-progress"></div></div>
+      </div>
+      <div class="reel-hint" id="reel-hint">Press Play — or tap the phone to skip scenes</div>
     </div>
   </div>
 
@@ -3692,12 +4070,208 @@
     celebrateBurst();
   }
 
+  /* ── AI REEL (~12s) ── */
+  const REEL_DURATION_MS = 12500;
+  const REEL_SCENES = [
+    { end: 1500,  hint: 'Booting AI orchestrator…' },
+    { end: 3500,  hint: 'ORCH-9000 claims it has this.' },
+    { end: 5500,  hint: 'Foundation & Platform… uh oh.' },
+    { end: 8000,  hint: 'Deploy a backup agent if you dare 👇' },
+    { end: 10500, hint: 'Total meltdown. Obviously.' },
+    { end: 12500, hint: 'The truth hits different 💜' },
+  ];
+  let reelPlaying = false;
+  let reelStartTime = 0;
+  let reelRafId = null;
+  let reelSceneIdx = 0;
+  let reelDeployUsed = false;
+
+  const REEL_BUBBLES = {
+    1: [
+      { delay: 0,   html: '<span class="bot-name">ORCH-9000</span>Initializing Pavithra-mode orchestration…', ok: true },
+      { delay: 400, html: '<span class="bot-name">ORCH-9000</span>Checking in with Foundation & Platform ✅', ok: true },
+      { delay: 900, html: '<span class="bot-name">ORCH-9000</span>Skills bridge: CONNECTING…', ok: false },
+    ],
+    2: [
+      { delay: 0,   html: '<span class="bot-name">ORCH-9000</span>Syncing teams without listening first…', ok: false },
+      { delay: 500, html: '<span class="bot-name">SYSTEM</span>⚠️ Trust module not found', err: true },
+      { delay: 1000, html: '<span class="bot-name">ORCH-9000</span>Deploying fix before understanding issue', err: true },
+      { delay: 1500, html: '<span class="bot-name">SYSTEM</span>Foundation & Platform: OUT OF SYNC', err: true },
+    ],
+    3: [
+      { delay: 0,   html: '<span class="bot-name">BRIDGE-BOT</span>Attempting Skills ↔ Business handoff…', ok: false },
+      { delay: 600, html: '<span class="bot-name">BIZ-AI</span>Who\'s on it? CRICKETS.', err: true },
+      { delay: 1200, html: '<span class="bot-name">BRIDGE-BOT</span>Error: No Pavithra-shaped bridge detected', err: true },
+    ],
+    4: [
+      { delay: 0,   html: '<span class="bot-name">ALERT</span>3 agents offline', err: true },
+      { delay: 300, html: '<span class="bot-name">TEAMS</span>Business is asking — nobody listened', err: true },
+      { delay: 700, html: '<span class="bot-name">CHAOS</span>She\'d have connected the dots by now', err: true },
+      { delay: 1100, html: '<span class="bot-name">SYSTEM</span>Rollback to human leadership recommended', err: true },
+    ],
+  };
+
+  function reelBubbleEl(text, isErr, isOk) {
+    const el = document.createElement('div');
+    el.className = 'reel-bubble bot' + (isErr ? ' err' : isOk ? ' ok' : '');
+    el.innerHTML = text;
+    return el;
+  }
+
+  function reelClearChats() {
+    [1, 2, 3, 4].forEach(n => {
+      const c = document.getElementById('reel-chat-' + n);
+      if (c) c.innerHTML = '';
+    });
+  }
+
+  function reelPopulateScene(sceneIdx) {
+    reelClearChats();
+    const bubbles = REEL_BUBBLES[sceneIdx];
+    if (!bubbles) return;
+    const chat = document.getElementById('reel-chat-' + sceneIdx);
+    if (!chat) return;
+    bubbles.forEach(b => {
+      setTimeout(() => {
+        if (!reelPlaying && reelSceneIdx !== sceneIdx) return;
+        chat.appendChild(reelBubbleEl(b.html, b.err, b.ok));
+        chat.scrollTop = chat.scrollHeight;
+      }, b.delay);
+    });
+  }
+
+  function reelSetScene(idx) {
+    reelSceneIdx = idx;
+    document.querySelectorAll('.reel-scene').forEach(s => {
+      s.classList.toggle('active', parseInt(s.dataset.reelScene, 10) === idx);
+    });
+    const deployBtn = document.getElementById('reel-deploy-btn');
+    if (deployBtn) deployBtn.disabled = idx < 3 || idx > 4 || reelDeployUsed;
+    if (idx >= 1 && idx <= 4) reelPopulateScene(idx);
+    const hint = document.getElementById('reel-hint');
+    if (hint && REEL_SCENES[idx]) hint.textContent = REEL_SCENES[idx].hint;
+    if (idx === 5) {
+      celebrateBurst();
+      const btn = document.getElementById('reel-play-btn');
+      if (btn) btn.textContent = '▶ Play';
+      reelPlaying = false;
+    }
+  }
+
+  function reelProgressTick() {
+    if (!reelPlaying) return;
+    const elapsed = Date.now() - reelStartTime;
+    const pct = Math.min(100, (elapsed / REEL_DURATION_MS) * 100);
+    const bar = document.getElementById('reel-progress');
+    if (bar) bar.style.width = pct + '%';
+
+    let scene = 0;
+    for (let i = 0; i < REEL_SCENES.length; i++) {
+      if (elapsed < REEL_SCENES[i].end) { scene = i; break; }
+      scene = i;
+    }
+    if (scene !== reelSceneIdx) reelSetScene(scene);
+
+    if (elapsed >= REEL_DURATION_MS) {
+      reelPlaying = false;
+      cancelAnimationFrame(reelRafId);
+      reelRafId = null;
+      return;
+    }
+    reelRafId = requestAnimationFrame(reelProgressTick);
+  }
+
+  function playReel() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reelSetScene(5);
+      document.getElementById('reel-progress').style.width = '100%';
+      document.getElementById('reel-hint').textContent = 'There\'s no one like Pavithra 💜';
+      return;
+    }
+    stopReel();
+    reelDeployUsed = false;
+    reelPlaying = true;
+    reelStartTime = Date.now();
+    reelSetScene(0);
+    document.getElementById('reel-play-btn').textContent = '⏸ Pause';
+    document.getElementById('reel-progress').style.width = '0%';
+    reelRafId = requestAnimationFrame(reelProgressTick);
+  }
+
+  function stopReel() {
+    reelPlaying = false;
+    if (reelRafId) cancelAnimationFrame(reelRafId);
+    reelRafId = null;
+    const btn = document.getElementById('reel-play-btn');
+    if (btn) btn.textContent = '▶ Play';
+  }
+
+  function toggleReel() {
+    if (reelPlaying) stopReel();
+    else playReel();
+  }
+
+  function replayReel() {
+    stopReel();
+    reelSetScene(0);
+    document.getElementById('reel-progress').style.width = '0%';
+    document.getElementById('reel-hint').textContent = 'Press Play — or tap the phone to skip scenes';
+    setTimeout(playReel, 200);
+  }
+
+  function reelTapSkip() {
+    if (!reelPlaying) {
+      playReel();
+      return;
+    }
+    const elapsed = Date.now() - reelStartTime;
+    let nextEnd = REEL_SCENES[reelSceneIdx].end;
+    if (elapsed >= REEL_DURATION_MS - 100) return;
+    const jumpTo = Math.min(REEL_DURATION_MS - 200, nextEnd + 50);
+    reelStartTime = Date.now() - jumpTo;
+    for (let i = 0; i < REEL_SCENES.length; i++) {
+      if (jumpTo < REEL_SCENES[i].end) {
+        reelSetScene(i);
+        break;
+      }
+    }
+  }
+
+  function reelDeployAgent() {
+    if (reelDeployUsed || reelSceneIdx < 3) return;
+    reelDeployUsed = true;
+    document.getElementById('reel-deploy-btn').disabled = true;
+    const screen = document.getElementById('reel-screen');
+    screen?.classList.add('glitch');
+    setTimeout(() => screen?.classList.remove('glitch'), 400);
+
+    const chat = document.getElementById('reel-chat-' + (reelSceneIdx <= 3 ? 3 : 4));
+    if (chat) {
+      const extra = reelBubbleEl(
+        '<span class="bot-name">BACKUP-42</span>Deployed without context. Making it worse. 🔥',
+        true, false
+      );
+      chat.appendChild(extra);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    const chaos = document.getElementById('reel-chaos-' + (reelSceneIdx <= 3 ? 3 : 4));
+    if (chaos) chaos.style.width = '100%';
+
+    document.getElementById('reel-hint').textContent = 'Yep. That made it worse. Classic.';
+    reelStartTime -= 2000;
+  }
+
+  function openReelTab() {
+    switchTab('reel');
+    setTimeout(playReel, 350);
+  }
+
   /* ── TABS ── */
   function switchTab(name) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById('panel-' + name).classList.add('active');
-    const map = ['memories','traits','timeline','chaos','lessons','cloud','vibes'];
+    const map = ['memories','traits','timeline','reel','chaos','lessons','cloud','vibes'];
     const idx = map.indexOf(name);
     if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
     if (name === 'cloud') {
@@ -3707,6 +4281,7 @@
       stopCloudAnim();
       closeCloudDetail();
     }
+    if (name !== 'reel') stopReel();
   }
 
   /* ── UTILS ── */
