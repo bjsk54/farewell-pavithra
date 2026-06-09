@@ -1813,45 +1813,45 @@
     z-index: 3;
   }
 
-  /* AI REEL — minimalist, site theme */
-  .reel-card { overflow: hidden; }
+  /* AI REEL — Apple-clean */
+  .reel-card { overflow: hidden; background: #fff; }
   .reel-sub {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--muted);
     margin-bottom: 16px;
     line-height: 1.5;
     text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
   }
   .reel-wrap {
-    max-width: 380px;
+    max-width: 340px;
     margin: 0 auto 16px;
   }
   .reel-phone {
     position: relative;
-    background: var(--cream);
-    border: 2.5px solid var(--purple-dark);
-    border-radius: 20px;
-    padding: 12px 10px 14px;
-    box-shadow: 0 8px 28px rgba(83, 74, 183, 0.12);
+    background: #f5f5f7;
+    border: 1px solid #e5e5ea;
+    border-radius: 36px;
+    padding: 14px 10px 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   }
   .reel-notch {
-    width: 72px;
+    width: 64px;
     height: 4px;
-    background: var(--border);
+    background: #d1d1d6;
     border-radius: 999px;
-    margin: 0 auto 10px;
+    margin: 0 auto 12px;
   }
   .reel-screen {
     position: relative;
     aspect-ratio: 9 / 14;
-    max-height: 420px;
-    background: var(--cream);
-    background-image: radial-gradient(circle, #D3D1C7 1px, transparent 1px);
-    background-size: 22px 22px;
-    border: 2px solid var(--border);
-    border-radius: 14px;
+    max-height: 400px;
+    background: #ffffff;
+    border: none;
+    border-radius: 24px;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
   }
   .reel-scene {
     position: absolute;
@@ -1870,26 +1870,27 @@
   .reel-teams-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    background: var(--purple-bg);
-    border: 1.5px solid var(--purple-mid);
-    border-radius: 8px;
-    margin-bottom: 10px;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #f5f5f7;
+    border-radius: 10px;
+    margin-bottom: 8px;
     flex-shrink: 0;
   }
   .reel-teams-bar span {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--purple-dark);
-    font-family: 'Nunito', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #636366;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    letter-spacing: -0.01em;
   }
   .reel-teams-bar .reel-bar-icon {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
-    color: var(--purple-mid);
+    color: #8e8e93;
   }
+  .reel-teams-bar .reel-bar-icon .agent-svg { width: 14px; height: 14px; }
   .reel-chat {
     flex: 1;
     overflow-y: auto;
@@ -1914,52 +1915,52 @@
   }
   .reel-msg-avatar {
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid var(--border);
-    background: var(--cream);
+    border: none;
+    background: #f5f5f7;
   }
   .reel-msg-avatar .agent-svg {
-    width: 16px;
-    height: 16px;
+    width: 11px;
+    height: 11px;
     display: block;
   }
-  .reel-msg-avatar.bot-orch   { border-color: #D97757; background: #FAECE7; color: #C45C3E; }
-  .reel-msg-avatar.bot-bridge { border-color: var(--teal-mid); background: var(--teal-bg); color: var(--teal-dark); }
-  .reel-msg-avatar.bot-biz    { border-color: var(--purple-mid); background: var(--purple-bg); color: var(--purple-dark); }
-  .reel-msg-avatar.bot-backup { border-color: var(--amber-mid); background: var(--amber-bg); color: var(--amber-dark); }
-  .reel-msg-col { min-width: 0; max-width: calc(100% - 38px); }
+  .reel-msg-avatar.bot-orch   { color: #D97757; }
+  .reel-msg-avatar.bot-bridge { color: #0F6E56; }
+  .reel-msg-avatar.bot-biz    { color: #534AB7; }
+  .reel-msg-avatar.bot-backup { color: #BA7517; }
+  .reel-msg-col { min-width: 0; max-width: calc(100% - 30px); }
   .reel-msg-name {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--muted);
-    margin-bottom: 3px;
+    font-size: 8px;
+    font-weight: 600;
+    color: #8e8e93;
+    margin-bottom: 2px;
     display: block;
-    font-family: 'Nunito', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    letter-spacing: -0.01em;
   }
   .from-right .reel-msg-name { text-align: right; }
   .reel-bubble {
-    padding: 7px 10px;
-    border-radius: 10px 10px 10px 3px;
-    font-size: 11px;
-    line-height: 1.45;
-    font-family: 'Nunito', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    border: 1.5px solid var(--border);
+    padding: 6px 9px;
+    border-radius: 14px;
+    font-size: 10px;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    background: #f5f5f7;
+    color: #1c1c1e;
+    border: none;
+    letter-spacing: -0.01em;
   }
   .from-right .reel-bubble {
-    border-radius: 10px 10px 3px 10px;
-    background: #fffef9;
+    background: #e8e8ed;
   }
   .reel-msg.err .reel-bubble {
-    background: var(--red-bg);
-    color: var(--red-mid);
-    border-color: #E8B4B4;
+    background: #fff0f0;
+    color: #c62828;
   }
   .reel-stage-bots {
     flex-direction: row;
@@ -1968,22 +1969,22 @@
   }
   .reel-pavi {
     flex-shrink: 0;
-    width: 88px;
+    width: 72px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
   .reel-pavi-avatar-wrap {
     position: relative;
-    width: 72px;
-    height: 72px;
+    width: 52px;
+    height: 52px;
   }
   .reel-pavi-ring {
     position: absolute;
-    inset: -4px;
+    inset: -3px;
     border-radius: 50%;
-    border: 2px dashed var(--purple-mid);
+    border: 1.5px solid #e5e5ea;
     animation: reel-pavi-ring 2.5s ease infinite;
   }
   @keyframes reel-pavi-ring {
@@ -1994,97 +1995,89 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: var(--purple-bg);
+    background: #f5f5f7;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px;
-    border: 2px solid var(--purple-mid);
-    box-shadow: 0 3px 10px rgba(83, 74, 183, 0.15);
+    font-size: 26px;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   }
   .reel-pavi-shades {
     position: absolute;
-    top: 22px;
+    top: 16px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 22px;
+    font-size: 16px;
     z-index: 2;
     line-height: 1;
   }
   .reel-pavi-crown {
     position: absolute;
-    top: -14px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 20px;
+    font-size: 14px;
     z-index: 3;
     display: none;
   }
   .reel-pavi.finale .reel-pavi-crown { display: block; }
   .reel-pavi.finale .reel-pavi-shades { display: none; }
   .reel-pavi-badge {
-    font-size: 8px;
-    font-weight: 700;
-    font-family: 'Nunito', sans-serif;
-    background: var(--teal-mid);
-    color: #fff;
-    padding: 2px 7px;
+    font-size: 7px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    background: #e5e5ea;
+    color: #636366;
+    padding: 2px 6px;
     border-radius: 999px;
     white-space: nowrap;
+    letter-spacing: 0.02em;
   }
   .reel-pavi-name {
-    font-family: 'Caveat', cursive;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--purple-dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: #1c1c1e;
     text-align: center;
     line-height: 1.1;
+    letter-spacing: -0.02em;
   }
   .reel-pavi-thought {
-    font-family: 'Caveat', cursive;
-    font-size: 11px;
-    color: var(--purple-mid);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 9px;
+    color: #636366;
     text-align: center;
-    line-height: 1.25;
-    background: var(--purple-bg);
-    border: 1.5px dashed #C5C0F0;
+    line-height: 1.3;
+    background: #f5f5f7;
     border-radius: 10px;
-    padding: 6px 5px;
+    padding: 5px 4px;
     position: relative;
-    min-height: 36px;
+    min-height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .reel-pavi-thought::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-bottom-color: #C5C0F0;
+    letter-spacing: -0.01em;
   }
   .reel-agent-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 14px;
+    gap: 8px;
+    margin-top: 12px;
   }
   .reel-agent-chip {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid var(--border);
-    background: var(--cream);
+    background: #f5f5f7;
   }
-  .reel-agent-chip .agent-svg { width: 18px; height: 18px; }
-  .reel-agent-chip.chip-orch   { border-color: #D97757; background: #FAECE7; color: #C45C3E; }
-  .reel-agent-chip.chip-bridge { border-color: var(--teal-mid); background: var(--teal-bg); color: var(--teal-dark); }
-  .reel-agent-chip.chip-biz    { border-color: var(--purple-mid); background: var(--purple-bg); color: var(--purple-dark); }
+  .reel-agent-chip .agent-svg { width: 12px; height: 12px; }
+  .reel-agent-chip.chip-orch   { color: #D97757; }
+  .reel-agent-chip.chip-bridge { color: #0F6E56; }
+  .reel-agent-chip.chip-biz    { color: #534AB7; }
   .reel-chat-col {
     flex: 1;
     min-width: 0;
@@ -2102,10 +2095,10 @@
     filter: grayscale(1);
   }
   .reel-dead-bot {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 999px;
-    border: 1.5px dashed var(--border);
+    background: #f5f5f7;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2119,7 +2112,7 @@
     background: var(--muted);
     transform: rotate(-35deg);
   }
-  .reel-dead-bot .agent-svg { width: 14px; height: 14px; }
+  .reel-dead-bot .agent-svg { width: 10px; height: 10px; }
   .reel-intro-card {
     flex: 1;
     display: flex;
@@ -2131,30 +2124,33 @@
   }
   .reel-intro-pavi {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 72px;
+    height: 72px;
     margin: 0 auto 14px;
   }
-  .reel-intro-pavi .reel-pavi-face { font-size: 52px; inset: 0; }
-  .reel-intro-pavi .reel-pavi-shades { top: 30px; font-size: 28px; }
-  .reel-intro-pavi .reel-pavi-ring { inset: -6px; }
+  .reel-intro-pavi .reel-pavi-face { font-size: 36px; inset: 0; }
+  .reel-intro-pavi .reel-pavi-shades { top: 22px; font-size: 20px; }
+  .reel-intro-pavi .reel-pavi-ring { inset: -4px; }
   .reel-intro-emoji { font-size: 48px; margin-bottom: 12px; animation: reel-pulse 1.2s ease infinite; }
   @keyframes reel-pulse {
     0%, 100% { transform: scale(1); }
     50%      { transform: scale(1.08); }
   }
   .reel-intro-title {
-    font-family: 'Caveat', cursive;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--purple-dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1c1c1e;
     line-height: 1.2;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    letter-spacing: -0.03em;
   }
   .reel-intro-sub {
-    font-family: 'Caveat', cursive;
-    font-size: 17px;
-    color: var(--purple-mid);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #8e8e93;
+    letter-spacing: -0.01em;
   }
   .reel-agents {
     display: flex;
@@ -2195,7 +2191,7 @@
     justify-content: center;
     text-align: center;
     padding: 20px;
-    background: radial-gradient(circle at 50% 40%, var(--purple-bg) 0%, transparent 70%);
+    background: #ffffff;
   }
   .reel-finale-emoji { font-size: 56px; margin-bottom: 14px; animation: reel-finale-pop 0.8s cubic-bezier(.34,1.56,.64,1); }
   @keyframes reel-finale-pop {
@@ -2203,22 +2199,24 @@
     to   { transform: scale(1); opacity: 1; }
   }
   .reel-finale-title {
-    font-family: 'Caveat', cursive;
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--purple-dark);
-    line-height: 1.15;
-    margin-bottom: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1c1c1e;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: -0.03em;
   }
   .reel-finale-sub {
-    font-family: 'Caveat', cursive;
-    font-size: 20px;
-    color: var(--pink-mid);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #8e8e93;
+    letter-spacing: -0.01em;
   }
   .reel-chaos-bar {
-    height: 5px;
-    background: #F1EFE8;
-    border: 1px solid var(--border);
+    height: 3px;
+    background: #e5e5ea;
     border-radius: 999px;
     margin-top: auto;
     overflow: hidden;
@@ -2227,59 +2225,80 @@
   .reel-chaos-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--amber-mid), var(--red-mid));
+    background: #8e8e93;
     border-radius: 999px;
     transition: width 0.6s ease;
   }
   .reel-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+    padding: 10px 12px;
+    background: #f5f5f7;
+    border-radius: 14px;
   }
-  .reel-ctrl-btn {
-    font-family: 'Caveat', cursive;
-    font-size: 18px;
-    font-weight: 700;
-    padding: 8px 20px;
-    border: 2px solid var(--purple-mid);
-    border-radius: 999px;
-    background: var(--purple-bg);
-    color: var(--purple-dark);
+  .reel-play-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #1c1c1e;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.15s, opacity 0.15s;
+    line-height: 1;
+    padding: 0;
+    padding-left: 2px;
   }
-  .reel-ctrl-btn:hover { background: #CECBF6; transform: scale(1.03); }
-  .reel-ctrl-btn.deploy {
-    border-color: var(--red-mid);
-    background: var(--red-bg);
-    color: var(--red-mid);
+  .reel-play-circle:hover { transform: scale(1.05); opacity: 0.9; }
+  .reel-play-circle.is-pause { padding-left: 0; }
+  .reel-ctrl-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    background: #fff;
+    color: #1c1c1e;
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: -0.01em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .reel-ctrl-btn.deploy:hover { background: #f7c1c1; }
-  .reel-ctrl-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .reel-ctrl-btn:hover { background: #ebebed; }
+  .reel-ctrl-btn.deploy { color: #c62828; }
+  .reel-ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .reel-progress-wrap {
     flex: 1;
-    min-width: 120px;
-    height: 6px;
-    background: #F1EFE8;
+    min-width: 100px;
+    height: 3px;
+    background: #e5e5ea;
     border-radius: 999px;
     overflow: hidden;
   }
   .reel-progress-fill {
     height: 100%;
     width: 0%;
-    background: var(--purple-mid);
+    background: #1c1c1e;
     border-radius: 999px;
-    transition: width 0.15s linear;
+    transition: none;
   }
   .reel-hint {
-    font-family: 'Caveat', cursive;
-    font-size: 15px;
-    color: var(--muted);
+    font-family: -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif;
+    font-size: 12px;
+    color: #8e8e93;
     text-align: center;
-    min-height: 22px;
+    min-height: 18px;
+    letter-spacing: -0.01em;
   }
   .reel-screen.glitch {
     animation: reel-glitch 0.35s ease;
@@ -2503,10 +2522,10 @@
         </div>
       </div>
       <div class="reel-controls">
-        <button type="button" class="reel-ctrl-btn" id="reel-play-btn" onclick="toggleReel()">▶ Play</button>
-        <button type="button" class="reel-ctrl-btn deploy" id="reel-deploy-btn" onclick="reelDeployAgent()" disabled>Deploy backup agent</button>
-        <button type="button" class="reel-ctrl-btn" onclick="replayReel()">↺ Replay</button>
+        <button type="button" class="reel-play-circle" id="reel-play-btn" onclick="toggleReel()" aria-label="Play">▶</button>
         <div class="reel-progress-wrap"><div class="reel-progress-fill" id="reel-progress"></div></div>
+        <button type="button" class="reel-ctrl-btn deploy" id="reel-deploy-btn" onclick="reelDeployAgent()" disabled>Deploy agent</button>
+        <button type="button" class="reel-ctrl-btn" onclick="replayReel()">Replay</button>
       </div>
       <div class="reel-hint" id="reel-hint">Press Play — bots only, Pavithra's on PTO</div>
     </div>
@@ -4310,11 +4329,14 @@
     }
   }
   let reelPlaying = false;
+  let reelPaused = false;
+  let reelEnded = false;
   let reelStartTime = 0;
+  let reelElapsedMs = 0;
   let reelRafId = null;
   let reelSceneIdx = 0;
   let reelDeployUsed = false;
-  let reelPopulatedScenes = new Set();
+  let reelShownBubbles = new Set();
 
   const REEL_BUBBLES = {
     1: [
@@ -4357,26 +4379,49 @@
     return el;
   }
 
+  function reelSceneStart(idx) {
+    if (idx <= 0) return 0;
+    return REEL_SCENES[idx - 1].end;
+  }
+
   function reelClearChat() {
     const c = document.getElementById('reel-chat-main');
     if (c) c.innerHTML = '';
-    reelPopulatedScenes.clear();
+    reelShownBubbles.clear();
   }
 
-  function reelPopulateScene(sceneIdx) {
-    if (reelPopulatedScenes.has(sceneIdx)) return;
-    reelPopulatedScenes.add(sceneIdx);
-    const bubbles = REEL_BUBBLES[sceneIdx];
-    if (!bubbles) return;
+  function reelEnsureBubbles(elapsed) {
     const chat = document.getElementById('reel-chat-main');
     if (!chat) return;
-    bubbles.forEach(b => {
-      setTimeout(() => {
-        if (!reelPlaying || reelSceneIdx !== sceneIdx) return;
-        chat.appendChild(reelBubbleEl(b.bot, b.text, b.err, b.right));
-        chat.scrollTop = chat.scrollHeight;
-      }, b.delay);
-    });
+    for (let s = 1; s <= 4; s++) {
+      const sceneStart = reelSceneStart(s);
+      if (elapsed < sceneStart) continue;
+      const bubbles = REEL_BUBBLES[s];
+      if (!bubbles) continue;
+      bubbles.forEach((b, bi) => {
+        const key = s + '-' + bi;
+        if (reelShownBubbles.has(key)) return;
+        if (elapsed >= sceneStart + b.delay) {
+          reelShownBubbles.add(key);
+          chat.appendChild(reelBubbleEl(b.bot, b.text, b.err, b.right));
+        }
+      });
+    }
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function reelUpdatePlayBtn() {
+    const btn = document.getElementById('reel-play-btn');
+    if (!btn) return;
+    if (reelPlaying) {
+      btn.textContent = '❚❚';
+      btn.classList.add('is-pause');
+      btn.setAttribute('aria-label', 'Pause');
+    } else {
+      btn.textContent = '▶';
+      btn.classList.remove('is-pause');
+      btn.setAttribute('aria-label', reelEnded ? 'Replay' : 'Play');
+    }
   }
 
   function reelSetScene(idx) {
@@ -4398,96 +4443,131 @@
 
     const deployBtn = document.getElementById('reel-deploy-btn');
     if (deployBtn) deployBtn.disabled = idx < 3 || idx > 4 || reelDeployUsed;
-    if (idx >= 1 && idx <= 4) reelPopulateScene(idx);
     const hint = document.getElementById('reel-hint');
     if (hint) hint.textContent = scene.hint;
     if (idx === 5) {
       celebrateBurst();
-      const btn = document.getElementById('reel-play-btn');
-      if (btn) btn.textContent = '▶ Play';
       reelPlaying = false;
+      reelPaused = false;
+      reelEnded = true;
+      reelElapsedMs = REEL_DURATION_MS;
+      reelUpdatePlayBtn();
     }
   }
 
-  function reelProgressTick() {
-    if (!reelPlaying) return;
-    const elapsed = Date.now() - reelStartTime;
+  function reelSyncUI(elapsed) {
+    reelEnsureBubbles(elapsed);
     const pct = Math.min(100, (elapsed / REEL_DURATION_MS) * 100);
     const bar = document.getElementById('reel-progress');
     if (bar) bar.style.width = pct + '%';
-
     let scene = 0;
     for (let i = 0; i < REEL_SCENES.length; i++) {
       if (elapsed < REEL_SCENES[i].end) { scene = i; break; }
       scene = i;
     }
     if (scene !== reelSceneIdx) reelSetScene(scene);
+  }
 
+  function reelProgressTick() {
+    if (!reelPlaying) return;
+    const elapsed = Date.now() - reelStartTime;
+    reelElapsedMs = elapsed;
+    reelSyncUI(elapsed);
     if (elapsed >= REEL_DURATION_MS) {
       reelPlaying = false;
+      reelEnded = true;
       cancelAnimationFrame(reelRafId);
       reelRafId = null;
+      reelSetScene(5);
+      reelUpdatePlayBtn();
       return;
     }
     reelRafId = requestAnimationFrame(reelProgressTick);
   }
 
-  function playReel() {
+  function startReel() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       reelSetScene(5);
       document.getElementById('reel-progress').style.width = '100%';
       document.getElementById('reel-hint').textContent = 'There\'s no one like Pavithra 💜';
+      reelEnded = true;
+      reelUpdatePlayBtn();
       return;
     }
-    stopReel();
     reelClearChat();
     reelDeployUsed = false;
+    reelPaused = false;
+    reelEnded = false;
     reelPlaying = true;
+    reelElapsedMs = 0;
     reelStartTime = Date.now();
     reelSetScene(0);
-    document.getElementById('reel-play-btn').textContent = '⏸ Pause';
+    reelUpdatePlayBtn();
     document.getElementById('reel-progress').style.width = '0%';
+    if (reelRafId) cancelAnimationFrame(reelRafId);
+    reelRafId = requestAnimationFrame(reelProgressTick);
+  }
+
+  function pauseReel() {
+    if (!reelPlaying) return;
+    reelPlaying = false;
+    reelPaused = true;
+    reelElapsedMs = Date.now() - reelStartTime;
+    if (reelRafId) cancelAnimationFrame(reelRafId);
+    reelRafId = null;
+    reelUpdatePlayBtn();
+  }
+
+  function resumeReel() {
+    if (!reelPaused || reelEnded) return;
+    reelPaused = false;
+    reelPlaying = true;
+    reelStartTime = Date.now() - reelElapsedMs;
+    reelUpdatePlayBtn();
     reelRafId = requestAnimationFrame(reelProgressTick);
   }
 
   function stopReel() {
     reelPlaying = false;
+    reelPaused = false;
     if (reelRafId) cancelAnimationFrame(reelRafId);
     reelRafId = null;
-    const btn = document.getElementById('reel-play-btn');
-    if (btn) btn.textContent = '▶ Play';
+    reelUpdatePlayBtn();
   }
 
   function toggleReel() {
-    if (reelPlaying) stopReel();
-    else playReel();
+    if (reelPlaying) pauseReel();
+    else if (reelPaused) resumeReel();
+    else startReel();
   }
+
+  function playReel() { startReel(); }
 
   function replayReel() {
     stopReel();
     reelClearChat();
     reelSetScene(0);
+    reelEnded = false;
+    reelElapsedMs = 0;
     document.getElementById('reel-progress').style.width = '0%';
-    document.getElementById('reel-hint').textContent = 'Press Play — bots only, Pavithra\'s on PTO';
-    setTimeout(playReel, 200);
+    document.getElementById('reel-hint').textContent = 'Tap play — agents only, Pavithra\'s on PTO';
+    setTimeout(startReel, 150);
   }
 
   function reelTapSkip() {
-    if (!reelPlaying) {
-      playReel();
+    if (reelPaused) { resumeReel(); return; }
+    if (!reelPlaying && !reelEnded) {
+      startReel();
       return;
     }
+    if (!reelPlaying) return;
     const elapsed = Date.now() - reelStartTime;
     let nextEnd = REEL_SCENES[reelSceneIdx].end;
     if (elapsed >= REEL_DURATION_MS - 100) return;
     const jumpTo = Math.min(REEL_DURATION_MS - 200, nextEnd + 50);
     reelStartTime = Date.now() - jumpTo;
-    for (let i = 0; i < REEL_SCENES.length; i++) {
-      if (jumpTo < REEL_SCENES[i].end) {
-        reelSetScene(i);
-        break;
-      }
-    }
+    reelElapsedMs = jumpTo;
+    reelSyncUI(jumpTo);
   }
 
   function reelDeployAgent() {
