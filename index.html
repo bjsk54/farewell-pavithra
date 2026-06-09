@@ -334,17 +334,97 @@
     25%      { transform: translate(var(--drag-x,0), var(--drag-y,0)) rotate(calc(var(--sticky-rot) + 4deg)) scale(1.06); }
     75%      { transform: translate(var(--drag-x,0), var(--drag-y,0)) rotate(calc(var(--sticky-rot) - 3deg)) scale(1.06); }
   }
-  .sticky.sticky-yellow { background: linear-gradient(145deg, #fff9a8, #fdf59a); --sticky-rot: -1.5deg; }
-  .sticky.sticky-pink   { background: linear-gradient(145deg, #ffc8d6, #ffb3c6); --sticky-rot:  1.2deg; }
-  .sticky.sticky-blue   { background: linear-gradient(145deg, #bce8fa, #a8d8f0); --sticky-rot: -0.8deg; }
-  .sticky.sticky-green  { background: linear-gradient(145deg, #c8f5ce, #b8f0c0); --sticky-rot:  1.8deg; }
-  .sticky.sticky-orange { background: linear-gradient(145deg, #ffd99a, #ffcc88); --sticky-rot: -1.2deg; }
-  .sticky.sticky-lavender { background: linear-gradient(145deg, #e4d4ff, #d8c8f8); --sticky-rot: 0.9deg; }
-  .sticky.sticky-mint   { background: linear-gradient(145deg, #c0f5e8, #b0f0e0); --sticky-rot: -1.6deg; }
-  .sticky.sticky-wish   {
-    background: linear-gradient(145deg, #ffd4ec, #ffc8e8);
+  /* Theme sticky colors — matched to site palette */
+  .sticky.sticky-theme-purple {
+    background: linear-gradient(152deg, #f5f4ff 0%, var(--purple-bg) 55%, #ddd8fc 100%);
+    border: 2px solid var(--purple-mid);
+    --sticky-rot: -1.5deg;
+    --sticky-accent: var(--purple-dark);
+    --sticky-badge-bg: rgba(83, 74, 183, 0.12);
+  }
+  .sticky.sticky-theme-teal {
+    background: linear-gradient(152deg, #f0faf6 0%, var(--teal-bg) 55%, #c5ebe0 100%);
+    border: 2px solid var(--teal-mid);
+    --sticky-rot: 1.2deg;
+    --sticky-accent: var(--teal-dark);
+    --sticky-badge-bg: rgba(15, 110, 86, 0.12);
+  }
+  .sticky.sticky-theme-pink {
+    background: linear-gradient(152deg, #fff5f8 0%, var(--pink-bg) 55%, #f5d0dc 100%);
+    border: 2px solid var(--pink-mid);
+    --sticky-rot: -0.9deg;
+    --sticky-accent: var(--pink-dark);
+    --sticky-badge-bg: rgba(153, 53, 86, 0.12);
+  }
+  .sticky.sticky-theme-amber {
+    background: linear-gradient(152deg, #fffbf0 0%, var(--amber-bg) 55%, #f5dfa8 100%);
+    border: 2px solid var(--amber-mid);
+    --sticky-rot: 1.6deg;
+    --sticky-accent: var(--amber-dark);
+    --sticky-badge-bg: rgba(186, 117, 23, 0.12);
+  }
+  .sticky.sticky-theme-coral {
+    background: linear-gradient(152deg, #fff6f2 0%, var(--coral-bg) 55%, #f5d4c8 100%);
+    border: 2px solid var(--coral-mid);
+    --sticky-rot: -1.3deg;
+    --sticky-accent: #4A1B0C;
+    --sticky-badge-bg: rgba(153, 60, 29, 0.12);
+  }
+  .sticky.sticky-theme-lilac {
+    background: linear-gradient(152deg, #faf8ff 0%, #e8e4fc 55%, #d4ccf8 100%);
+    border: 2px solid #7F77DD;
+    --sticky-rot: 0.8deg;
+    --sticky-accent: var(--purple-dark);
+    --sticky-badge-bg: rgba(127, 119, 221, 0.14);
+  }
+  .sticky.sticky-theme-sky {
+    background: linear-gradient(152deg, #f4fbff 0%, #dceef8 55%, #c4e4f5 100%);
+    border: 2px solid #5ba8c9;
+    --sticky-rot: -1.7deg;
+    --sticky-accent: #1a4a5e;
+    --sticky-badge-bg: rgba(91, 168, 201, 0.14);
+  }
+  .sticky.sticky-theme-sage {
+    background: linear-gradient(152deg, #f6fdf9 0%, #d4f0e4 55%, #b8e8d4 100%);
+    border: 2px solid #5DCAA5;
+    --sticky-rot: 1.4deg;
+    --sticky-accent: var(--teal-dark);
+    --sticky-badge-bg: rgba(93, 202, 165, 0.14);
+  }
+  .sticky.sticky-theme-rose {
+    background: linear-gradient(152deg, #fff8fa 0%, #fce4ec 55%, #f4c0d1 100%);
+    border: 2px solid #D4537E;
+    --sticky-rot: -0.6deg;
+    --sticky-accent: var(--pink-dark);
+    --sticky-badge-bg: rgba(212, 83, 126, 0.14);
+  }
+  .sticky.sticky-theme-gold {
+    background: linear-gradient(152deg, #fffdf5 0%, #fef3d4 55%, #fce8a8 100%);
+    border: 2px solid #EF9F27;
     --sticky-rot: 1.1deg;
-    border: 2px dashed #d4537e;
+    --sticky-accent: var(--amber-dark);
+    --sticky-badge-bg: rgba(239, 159, 39, 0.14);
+  }
+  .sticky[class*="sticky-theme-"] {
+    color: var(--sticky-accent, var(--ink));
+  }
+  .sticky[class*="sticky-theme-"] .sticky-author {
+    color: var(--sticky-accent, var(--ink));
+    opacity: 0.85;
+  }
+  .sticky[class*="sticky-theme-"] .sticky-type-badge {
+    background: var(--sticky-badge-bg, rgba(0,0,0,0.08));
+    color: var(--sticky-accent, var(--muted));
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .sticky.sticky-wish-accent {
+    box-shadow:
+      2px 5px 12px rgba(0,0,0,0.2),
+      0 0 0 2px rgba(212, 83, 126, 0.25),
+      0 1px 0 rgba(255,255,255,0.45) inset;
+  }
+  .sticky.sticky-wish-accent .sticky-type-badge::before {
+    content: '✨ ';
   }
   .sticky-pin {
     position: absolute;
@@ -2352,16 +2432,21 @@
   }
 
   /* ── STICKY NOTE COLORS & INTERACTIONS ── */
-  const STICKY_COLORS = ['sticky-yellow','sticky-pink','sticky-blue','sticky-green','sticky-orange','sticky-lavender','sticky-mint'];
+  const STICKY_THEMES = [
+    'sticky-theme-purple', 'sticky-theme-teal', 'sticky-theme-pink',
+    'sticky-theme-amber', 'sticky-theme-coral', 'sticky-theme-lilac',
+    'sticky-theme-sky', 'sticky-theme-sage', 'sticky-theme-rose', 'sticky-theme-gold',
+  ];
   let freshStickyId = null;
   let stickyDragState = null;
   let stickyDidDrag = false;
   let stickyBoardBound = false;
 
   function stickyColor(seed) {
+    const s = String(seed || 'anon');
     let h = 0;
-    for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    return STICKY_COLORS[h % STICKY_COLORS.length];
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return STICKY_THEMES[h % STICKY_THEMES.length];
   }
   function stickyPinSide(seed) {
     let h = 0;
@@ -2462,7 +2547,7 @@
 
     grid.innerHTML = notes.map(m => {
       const isStarter = m.id === 'starter';
-      const colorClass = isStarter ? 'sticky-starter' : stickyColor(m.id);
+      const colorClass = isStarter ? 'sticky-starter' : stickyColor(m.author || m.id);
       const pinSide = isStarter ? 'pin-left' : stickyPinSide(m.id);
       const isFresh = m.id === freshStickyId;
       const prev = previewText(m.text, 90);
@@ -2504,8 +2589,9 @@
       const prev = previewText(g.text, 90);
       const pinSide = stickyPinSide(g.id);
       const isFresh = g.id === freshStickyId;
+      const wishColor = stickyColor(g.author || g.id);
       return `
-      <div class="sticky sticky-wish ${pinSide}${isFresh ? ' sticky-fresh' : ''}"
+      <div class="sticky ${wishColor} sticky-wish-accent ${pinSide}${isFresh ? ' sticky-fresh' : ''}"
            data-sticky-type="goodbye" data-sticky-id="${escAttr(g.id)}"
            title="Drag to play · tap to read">
         ${stickyPinHtml()}
