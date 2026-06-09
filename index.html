@@ -1813,7 +1813,7 @@
     z-index: 3;
   }
 
-  /* AI REEL */
+  /* AI REEL — minimalist, site theme */
   .reel-card { overflow: hidden; }
   .reel-sub {
     font-size: 15px;
@@ -1828,15 +1828,16 @@
   }
   .reel-phone {
     position: relative;
-    background: #1a1a1e;
-    border-radius: 28px;
+    background: var(--cream);
+    border: 2.5px solid var(--purple-dark);
+    border-radius: 20px;
     padding: 12px 10px 14px;
-    box-shadow: 0 16px 48px rgba(38, 33, 92, 0.28), inset 0 0 0 2px #333;
+    box-shadow: 0 8px 28px rgba(83, 74, 183, 0.12);
   }
   .reel-notch {
     width: 72px;
-    height: 5px;
-    background: #333;
+    height: 4px;
+    background: var(--border);
     border-radius: 999px;
     margin: 0 auto 10px;
   }
@@ -1844,8 +1845,11 @@
     position: relative;
     aspect-ratio: 9 / 14;
     max-height: 420px;
-    background: linear-gradient(180deg, #0f0f14 0%, #1a1830 100%);
-    border-radius: 18px;
+    background: var(--cream);
+    background-image: radial-gradient(circle, #D3D1C7 1px, transparent 1px);
+    background-size: 22px 22px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
   }
@@ -1867,17 +1871,24 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    background: #464775;
+    padding: 7px 10px;
+    background: var(--purple-bg);
+    border: 1.5px solid var(--purple-mid);
     border-radius: 8px;
     margin-bottom: 10px;
     flex-shrink: 0;
   }
   .reel-teams-bar span {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    color: #fff;
+    color: var(--purple-dark);
     font-family: 'Nunito', sans-serif;
+  }
+  .reel-teams-bar .reel-bar-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--purple-mid);
   }
   .reel-chat {
     flex: 1;
@@ -1903,25 +1914,29 @@
   }
   .reel-msg-avatar {
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    border: 2px solid;
-    background: #2a2a3e;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
   }
-  .reel-msg-avatar.bot-orch   { border-color: var(--purple-mid); background: #2e2858; }
-  .reel-msg-avatar.bot-bridge { border-color: var(--teal-mid); background: #1a3d34; }
-  .reel-msg-avatar.bot-biz    { border-color: var(--amber-mid); background: #3d3018; }
-  .reel-msg-avatar.bot-backup { border-color: var(--coral-mid); background: #3d2218; }
+  .reel-msg-avatar .agent-svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+  .reel-msg-avatar.bot-orch   { border-color: #D97757; background: #FAECE7; color: #C45C3E; }
+  .reel-msg-avatar.bot-bridge { border-color: var(--teal-mid); background: var(--teal-bg); color: var(--teal-dark); }
+  .reel-msg-avatar.bot-biz    { border-color: var(--purple-mid); background: var(--purple-bg); color: var(--purple-dark); }
+  .reel-msg-avatar.bot-backup { border-color: var(--amber-mid); background: var(--amber-bg); color: var(--amber-dark); }
   .reel-msg-col { min-width: 0; max-width: calc(100% - 38px); }
   .reel-msg-name {
     font-size: 9px;
     font-weight: 700;
-    color: #888;
+    color: var(--muted);
     margin-bottom: 3px;
     display: block;
     font-family: 'Nunito', sans-serif;
@@ -1929,22 +1944,22 @@
   .from-right .reel-msg-name { text-align: right; }
   .reel-bubble {
     padding: 7px 10px;
-    border-radius: 12px 12px 12px 4px;
+    border-radius: 10px 10px 10px 3px;
     font-size: 11px;
-    line-height: 1.4;
+    line-height: 1.45;
     font-family: 'Nunito', sans-serif;
-    background: #2d2d44;
-    color: #e8e6f0;
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--cream);
+    color: var(--ink);
+    border: 1.5px solid var(--border);
   }
   .from-right .reel-bubble {
-    border-radius: 12px 12px 4px 12px;
-    background: #2a3544;
+    border-radius: 10px 10px 3px 10px;
+    background: #fffef9;
   }
   .reel-msg.err .reel-bubble {
-    background: #3a2228;
-    color: #ffc8c8;
-    border-color: rgba(226, 75, 74, 0.35);
+    background: var(--red-bg);
+    color: var(--red-mid);
+    border-color: #E8B4B4;
   }
   .reel-stage-bots {
     flex-direction: row;
@@ -1968,7 +1983,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 50%;
-    border: 3px solid var(--pink-mid);
+    border: 2px dashed var(--purple-mid);
     animation: reel-pavi-ring 2.5s ease infinite;
   }
   @keyframes reel-pavi-ring {
@@ -1979,13 +1994,13 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: linear-gradient(145deg, var(--purple-bg), var(--pink-bg));
+    background: var(--purple-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 36px;
-    border: 2.5px solid var(--purple-mid);
-    box-shadow: 0 4px 14px rgba(83, 74, 183, 0.35);
+    border: 2px solid var(--purple-mid);
+    box-shadow: 0 3px 10px rgba(83, 74, 183, 0.15);
   }
   .reel-pavi-shades {
     position: absolute;
@@ -2021,17 +2036,18 @@
     font-family: 'Caveat', cursive;
     font-size: 14px;
     font-weight: 700;
-    color: #f4c0d1;
+    color: var(--purple-dark);
     text-align: center;
     line-height: 1.1;
   }
   .reel-pavi-thought {
     font-family: 'Caveat', cursive;
     font-size: 11px;
-    color: #c8c0f0;
+    color: var(--purple-mid);
     text-align: center;
     line-height: 1.25;
-    background: rgba(255,255,255,0.07);
+    background: var(--purple-bg);
+    border: 1.5px dashed #C5C0F0;
     border-radius: 10px;
     padding: 6px 5px;
     position: relative;
@@ -2047,8 +2063,28 @@
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-bottom-color: rgba(255,255,255,0.07);
+    border-bottom-color: #C5C0F0;
   }
+  .reel-agent-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .reel-agent-chip {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+  }
+  .reel-agent-chip .agent-svg { width: 18px; height: 18px; }
+  .reel-agent-chip.chip-orch   { border-color: #D97757; background: #FAECE7; color: #C45C3E; }
+  .reel-agent-chip.chip-bridge { border-color: var(--teal-mid); background: var(--teal-bg); color: var(--teal-dark); }
+  .reel-agent-chip.chip-biz    { border-color: var(--purple-mid); background: var(--purple-bg); color: var(--purple-dark); }
   .reel-chat-col {
     flex: 1;
     min-width: 0;
@@ -2062,10 +2098,28 @@
     justify-content: center;
     gap: 8px;
     margin-top: 10px;
-    opacity: 0.45;
+    opacity: 0.35;
     filter: grayscale(1);
   }
-  .reel-dead-bot { font-size: 22px; text-decoration: line-through; }
+  .reel-dead-bot {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1.5px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .reel-dead-bot::after {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 2px;
+    background: var(--muted);
+    transform: rotate(-35deg);
+  }
+  .reel-dead-bot .agent-svg { width: 14px; height: 14px; }
   .reel-intro-card {
     flex: 1;
     display: flex;
@@ -2093,14 +2147,14 @@
     font-family: 'Caveat', cursive;
     font-size: 26px;
     font-weight: 700;
-    color: #fff;
+    color: var(--purple-dark);
     line-height: 1.2;
     margin-bottom: 8px;
   }
   .reel-intro-sub {
     font-family: 'Caveat', cursive;
     font-size: 17px;
-    color: #b8b4e8;
+    color: var(--purple-mid);
   }
   .reel-agents {
     display: flex;
@@ -2141,7 +2195,7 @@
     justify-content: center;
     text-align: center;
     padding: 20px;
-    background: radial-gradient(circle at 50% 40%, rgba(83,74,183,0.35) 0%, transparent 65%);
+    background: radial-gradient(circle at 50% 40%, var(--purple-bg) 0%, transparent 70%);
   }
   .reel-finale-emoji { font-size: 56px; margin-bottom: 14px; animation: reel-finale-pop 0.8s cubic-bezier(.34,1.56,.64,1); }
   @keyframes reel-finale-pop {
@@ -2152,19 +2206,19 @@
     font-family: 'Caveat', cursive;
     font-size: 34px;
     font-weight: 700;
-    color: #fff;
+    color: var(--purple-dark);
     line-height: 1.15;
-    text-shadow: 0 2px 20px rgba(212, 83, 126, 0.5);
     margin-bottom: 10px;
   }
   .reel-finale-sub {
     font-family: 'Caveat', cursive;
     font-size: 20px;
-    color: #f4c0d1;
+    color: var(--pink-mid);
   }
   .reel-chaos-bar {
-    height: 6px;
-    background: rgba(255,255,255,0.1);
+    height: 5px;
+    background: #F1EFE8;
+    border: 1px solid var(--border);
     border-radius: 999px;
     margin-top: auto;
     overflow: hidden;
@@ -2278,7 +2332,7 @@
     <div class="hero-sub">From offshore US to our hearts — always, always there</div>
     <div class="hero-btns">
       <button class="confetti-btn" onclick="launchConfetti()">Celebrate her!</button>
-      <button class="reel-hero-btn" type="button" onclick="openReelTab()">🤖 AI tries her job (12s)</button>
+      <button class="reel-hero-btn" type="button" onclick="openReelTab()">🎬 Watch the reel (20s)</button>
     </div>
     <canvas id="confetti-canvas" height="100" style="display:none;"></canvas>
   </div>
@@ -2407,8 +2461,8 @@
                   <div class="reel-pavi-shades">🕶️</div>
                 </div>
                 <div class="reel-intro-title">Pavithra's on PTO.</div>
-                <div class="reel-intro-sub">The bots are in charge. What could go wrong?</div>
-                <div style="font-size:28px;margin-top:12px;opacity:0.7">🤖 💬 🦾 📊</div>
+                <div class="reel-intro-sub">The agents are in charge. What could go wrong?</div>
+                <div class="reel-agent-row" id="reel-intro-agents" aria-hidden="true"></div>
               </div>
             </div>
             <!-- Bot war room (scenes 1–4) -->
@@ -2425,7 +2479,7 @@
                 <div class="reel-pavi-thought" id="reel-pavi-thought">Enjoying PTO…</div>
               </div>
               <div class="reel-chat-col">
-                <div class="reel-teams-bar"><span>🤖</span><span id="reel-bar-title">Bot War Room — no humans</span></div>
+                <div class="reel-teams-bar"><span class="reel-bar-icon" id="reel-bar-icon"></span><span id="reel-bar-title">Agent war room — no humans</span></div>
                 <div class="reel-chat" id="reel-chat-main"></div>
                 <div class="reel-chaos-bar"><div class="reel-chaos-fill" id="reel-chaos-fill" style="width:10%"></div></div>
               </div>
@@ -2442,12 +2496,7 @@
                 </div>
                 <div class="reel-finale-title">There's no one<br>like Pavithra.</div>
                 <div class="reel-finale-sub">The bots agree. Reluctantly.</div>
-                <div class="reel-dead-bots">
-                  <span class="reel-dead-bot">🤖</span>
-                  <span class="reel-dead-bot">🦾</span>
-                  <span class="reel-dead-bot">📊</span>
-                  <span class="reel-dead-bot">🪲</span>
-                </div>
+                <div class="reel-dead-bots" id="reel-dead-bots"></div>
               </div>
             </div>
           </div>
@@ -4217,22 +4266,49 @@
     celebrateBurst();
   }
 
-  /* ── AI REEL (~12s) — bots talk to bots, Pavithra watches ── */
-  const REEL_DURATION_MS = 12500;
+  /* ── AI REEL (~20s) — agents talk to agents, Pavithra watches ── */
+  const REEL_DURATION_MS = 20000;
   const REEL_SCENES = [
-    { end: 1500,  hint: 'Pavithra\'s on PTO. Bots take the wheel…', bar: '', chaos: 10, pavi: 'Beach mode ON 🏖️' },
-    { end: 3500,  hint: 'ORCH-9000 vs BIZ-AI — round 1', bar: 'Bot standup — Pavithra muted', chaos: 22, pavi: 'They argued in 3 sec…' },
-    { end: 5500,  hint: 'Foundation & Platform sync goes wrong', bar: 'Foundation ↔ Platform', chaos: 48, pavi: 'She\'d have listened first.' },
-    { end: 8000,  hint: 'Deploy backup agent? 👇', bar: 'Skills bridge — help', chaos: 72, pavi: 'Nobody\'s bridging anything.' },
-    { end: 10500, hint: 'Bots meltdown — Pavithra unbothered', bar: '🔥 Bot meltdown', chaos: 100, pavi: 'One Teams ping would fix this.' },
-    { end: 12500, hint: 'No one like Pavithra 💜', bar: '', chaos: 0, pavi: 'Told you. 💅' },
+    { end: 2500,  hint: 'Pavithra\'s on PTO. Agents take the wheel…', bar: '', chaos: 10, pavi: 'Beach mode ON 🏖️' },
+    { end: 5500,  hint: 'Orchestrator vs Biz agent — round 1', bar: 'Agent standup — Pavithra muted', chaos: 22, pavi: 'They argued already…' },
+    { end: 9000,  hint: 'Foundation & Platform sync goes wrong', bar: 'Foundation ↔ Platform', chaos: 48, pavi: 'She\'d have listened first.' },
+    { end: 13000, hint: 'Deploy backup agent? 👇', bar: 'Skills bridge — help', chaos: 72, pavi: 'Nobody\'s bridging anything.' },
+    { end: 17000, hint: 'Agent meltdown — Pavithra unbothered', bar: 'Agent meltdown', chaos: 100, pavi: 'One Teams ping would fix this.' },
+    { end: 20000, hint: 'No one like Pavithra 💜', bar: '', chaos: 0, pavi: 'Told you. 💅' },
   ];
   const REEL_BOTS = {
-    orch:   { name: 'ORCH-9000',  icon: '🤖' },
-    bridge: { name: 'BRIDGE-BOT', icon: '🦾' },
-    biz:    { name: 'BIZ-AI',     icon: '📊' },
-    backup: { name: 'BACKUP-42',  icon: '🪲' },
+    orch:   { name: 'Orchestrator', tag: 'claude-style' },
+    bridge: { name: 'Bridge Agent', tag: 'gpt-style' },
+    biz:    { name: 'Biz Agent',    tag: 'gemini-style' },
+    backup: { name: 'Backup-42',    tag: 'generic' },
   };
+  const AGENT_SVGS = {
+    orch: '<svg class="agent-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path fill="currentColor" d="M12 3.5c.4 2.8 2.5 5 5.3 5.5-2.8.5-5 2.7-5.5 5.5-.5-2.8-2.7-5-5.5-5.5 2.8-.5 5-2.7 5.5-5.5Z"/><path fill="currentColor" opacity=".55" d="M12 12.5c.3 2.1 1.9 3.7 4 4-.3 2.1-1.9 3.7-4 4-.3-2.1-1.9-3.7-4-4 2.1-.3 3.7-1.9 4-4Z"/></svg>',
+    bridge: '<svg class="agent-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8.5 12c1.8-2.5 5.2-2.5 7 0"/></svg>',
+    biz: '<svg class="agent-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path fill="currentColor" d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.4L12 16.8 5.7 21.2 8 13.8l-6-4.4h7.6L12 2Z"/></svg>',
+    backup: '<svg class="agent-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="5" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="13" y="5" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="5" y="13" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="13" y="13" width="6" height="6" rx="1.5" fill="currentColor" opacity=".45"/></svg>',
+  };
+
+  function reelAgentSvg(botKey) {
+    return AGENT_SVGS[botKey] || AGENT_SVGS.backup;
+  }
+
+  function initReelStaticIcons() {
+    const intro = document.getElementById('reel-intro-agents');
+    if (intro) {
+      intro.innerHTML = ['orch', 'bridge', 'biz'].map(k =>
+        `<span class="reel-agent-chip chip-${k}">${reelAgentSvg(k)}</span>`
+      ).join('');
+    }
+    const barIcon = document.getElementById('reel-bar-icon');
+    if (barIcon) barIcon.innerHTML = reelAgentSvg('orch');
+    const dead = document.getElementById('reel-dead-bots');
+    if (dead) {
+      dead.innerHTML = ['orch', 'bridge', 'biz', 'backup'].map(k =>
+        `<span class="reel-dead-bot">${reelAgentSvg(k)}</span>`
+      ).join('');
+    }
+  }
   let reelPlaying = false;
   let reelStartTime = 0;
   let reelRafId = null;
@@ -4242,29 +4318,29 @@
 
   const REEL_BUBBLES = {
     1: [
-      { delay: 0,   bot: 'orch',   right: false, text: 'Pavithra.dll not found. Proceeding without empathy module.', err: false },
-      { delay: 550, bot: 'biz',    right: true,  text: 'She always listened first. Weird concept.', err: false },
-      { delay: 1100, bot: 'orch',  right: false, text: 'Listening deprecated in v2. Deploying confidence instead.', err: false },
-      { delay: 1700, bot: 'bridge', right: true, text: 'Guys. Foundation & Platform are waving at us.', err: false },
+      { delay: 0,    bot: 'orch',   right: false, text: 'Pavithra.dll not found. Proceeding without empathy module.', err: false },
+      { delay: 900,  bot: 'biz',    right: true,  text: 'She always listened first. Weird concept.', err: false },
+      { delay: 1800, bot: 'orch',   right: false, text: 'Listening deprecated in v2. Deploying confidence instead.', err: false },
+      { delay: 2700, bot: 'bridge', right: true,  text: 'Foundation & Platform are waving at us.', err: false },
     ],
     2: [
-      { delay: 0,   bot: 'orch',   right: false, text: '@BRIDGE-BOT sync them. Skip the questions.', err: false },
-      { delay: 500, bot: 'bridge', right: true,  text: 'Copy. Running sync with zero context. Classic.', err: false },
-      { delay: 1000, bot: 'biz',   right: false, text: 'That\'s literally how we got here last time.', err: true },
-      { delay: 1500, bot: 'orch',  right: true,  text: 'Outcome: OUT OF SYNC. Blaming the weather.', err: true },
+      { delay: 0,    bot: 'orch',   right: false, text: '@Bridge Agent — sync them. Skip the questions.', err: false },
+      { delay: 800,  bot: 'bridge', right: true,  text: 'Copy. Running sync with zero context. Classic.', err: false },
+      { delay: 1600, bot: 'biz',    right: false, text: 'That\'s literally how we got here last time.', err: true },
+      { delay: 2400, bot: 'orch',   right: true,  text: 'Outcome: OUT OF SYNC. Blaming the weather.', err: true },
     ],
     3: [
-      { delay: 0,   bot: 'bridge', right: false, text: 'Who bridges Skills to Business now? Asking for a friend.', err: false },
-      { delay: 550, bot: 'biz',    right: true,  text: 'You. You\'re the friend. You\'re also the bridge.', err: false },
-      { delay: 1100, bot: 'bridge', right: false, text: 'Error: Pavithra-shaped object not found.', err: true },
-      { delay: 1650, bot: 'orch',  right: true,  text: 'Can we npm install pavithra?', err: true },
+      { delay: 0,    bot: 'bridge', right: false, text: 'Who bridges Skills to Business now? Asking for a friend.', err: false },
+      { delay: 900,  bot: 'biz',    right: true,  text: 'You. You\'re the friend. You\'re also the bridge.', err: false },
+      { delay: 1800, bot: 'bridge', right: false, text: 'Error: Pavithra-shaped object not found.', err: true },
+      { delay: 2700, bot: 'orch',   right: true,  text: 'Can we npm install pavithra?', err: true },
     ],
     4: [
-      { delay: 0,   bot: 'biz',    right: false, text: 'Business is asking. Who\'s on it?', err: true },
-      { delay: 400, bot: 'orch',   right: true,  text: 'Routing to BRIDGE-BOT. Good luck BRIDGE-BOT.', err: true },
-      { delay: 850, bot: 'bridge', right: false, text: 'I\'m not Pavithra. I can\'t be Pavithra. I\'m a robot.', err: true },
-      { delay: 1300, bot: 'biz',   right: true,  text: 'She\'d have connected the dots by now. With one cheeky Teams ping.', err: true },
-      { delay: 1800, bot: 'orch',  right: false, text: 'All agents: shutting down. Resume when human returns.', err: true },
+      { delay: 0,    bot: 'biz',    right: false, text: 'Business is asking. Who\'s on it?', err: true },
+      { delay: 700,  bot: 'orch',   right: true,  text: 'Routing to Bridge Agent. Good luck.', err: true },
+      { delay: 1400, bot: 'bridge', right: false, text: 'I\'m not Pavithra. I can\'t be Pavithra.', err: true },
+      { delay: 2100, bot: 'biz',    right: true,  text: 'She\'d have connected the dots. One cheeky Teams ping.', err: true },
+      { delay: 2900, bot: 'orch',   right: false, text: 'All agents: shutting down. Resume when human returns.', err: true },
     ],
   };
 
@@ -4273,7 +4349,7 @@
     const el = document.createElement('div');
     el.className = 'reel-msg' + (isErr ? ' err' : '') + (fromRight ? ' from-right' : '');
     el.innerHTML = `
-      <div class="reel-msg-avatar bot-${botKey}">${bot.icon}</div>
+      <div class="reel-msg-avatar bot-${botKey}">${reelAgentSvg(botKey)}</div>
       <div class="reel-msg-col">
         <span class="reel-msg-name">${bot.name}</span>
         <div class="reel-bubble">${text}</div>
@@ -4439,7 +4515,7 @@
     if (thought) thought.textContent = '…called it. 💅';
 
     document.getElementById('reel-hint').textContent = 'BACKUP-42 made the bots fight harder.';
-    reelStartTime -= 2000;
+    reelStartTime -= 3200;
   }
 
   function openReelTab() {
@@ -4480,6 +4556,7 @@
 
   /* ── INIT ── */
   bindStickyBoard();
+  initReelStaticIcons();
   loadPlayerName();
   buildTraitGrid();
   buildTimeline();
